@@ -1,5 +1,6 @@
 import copy
 import hashlib
+import json
 import math
 import random
 from collections.abc import Callable
@@ -47,6 +48,29 @@ class InterventionPolicy:
 
 def state_hash(model: nn.Module) -> str:
     digest = hashlib.sha256()
+    # Tensor equality alone is insufficient: fake activation precision and
+    # geometry routing are behavioral configuration stored outside state_dict.
+    for name, module in model.named_modules():
+        metadata: dict[str, Any] = {
+            "name": name,
+            "type": type(module).__module__ + "." + type(module).__qualname__,
+        }
+        for attribute in (
+            "precision",
+            "geometry",
+            "dimension",
+            "width",
+            "num_heads",
+            "norm_first",
+            "batch_first",
+            "eps",
+            "p",
+            "_forced",
+        ):
+            value = getattr(module, attribute, None)
+            if isinstance(value, (str, int, float, bool)) or value is None:
+                metadata[attribute] = value
+        digest.update(json.dumps(metadata, sort_keys=True).encode())
     for name, tensor in model.state_dict().items():
         digest.update(name.encode())
         digest.update(str((tensor.shape, tensor.dtype)).encode())

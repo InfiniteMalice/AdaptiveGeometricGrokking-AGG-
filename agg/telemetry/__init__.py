@@ -95,6 +95,8 @@ class TelemetryCollector:
         metrics: Mapping[str, Any],
         hidden: Sequence[Tensor] | None = None,
         component: str = "model",
+        *,
+        derivatives: bool = True,
     ) -> list[TelemetrySnapshot]:
         if hidden is None or len(hidden) == 0:
             return [TelemetrySnapshot(step, checkpoint, component=component, raw=dict(metrics))]
@@ -104,7 +106,7 @@ class TelemetryCollector:
             raw["dimension"] = spectral_statistics(tensor)
             raw["geometry"] = geometry_statistics(tensor)
             snapshots.append(TelemetrySnapshot(step, checkpoint, layer, component, raw))
-        if len(snapshots) >= 3:
+        if derivatives and len(snapshots) >= 3:
             ranks = torch.tensor([s.raw["dimension"]["effective_rank"] for s in snapshots])
             first, second = depth_derivatives(ranks)
             for i, snapshot in enumerate(snapshots):

@@ -1,0 +1,91 @@
+import math
+from dataclasses import dataclass, field
+from typing import Any
+
+from agg.evaluation import Constraints
+from agg.training import TrainConfig
+
+
+@dataclass
+class Features:
+    telemetry: bool = True
+    consolidation: bool = True
+    geometry: bool = True
+    dimension: bool = True
+    gating: bool = True
+    distillation: bool = True
+    epiplexity: bool = True
+    pruning: bool = True
+    quantization: bool = True
+    storage: bool = True
+    executable: bool = True
+    teacher: bool = True
+    process: bool = True
+    verified: bool = True
+
+    @classmethod
+    def baseline(cls) -> "Features":
+        return cls(**dict.fromkeys(cls.__dataclass_fields__, False))
+
+
+@dataclass
+class ExperimentConfig:
+    task: str = "modular"
+    training: TrainConfig = field(default_factory=TrainConfig)
+    features: Features = field(default_factory=Features)
+    constraints: Constraints = field(default_factory=Constraints)
+    modulus: int = 17
+    tree_depth: int = 3
+    samples: int = 128
+    context_length: int = 12
+    distance: int = 3
+    density: float = 0.5
+    hard_distractors: bool = False
+    gate: float = 0.5
+    learned_gate: bool = False
+    curvature: float = 1.0
+    learned_curvature: bool = False
+    dimensions: tuple[int, ...] = (8, 16, 32)
+    geometries: tuple[str, ...] = ("euclidean", "hyperbolic", "product")
+    candidate_steps: int = 10
+    prune_fraction: float = 0.2
+    precisions: tuple[str, ...] = ("FP16", "BF16", "INT8", "INT4", "ternary")
+    activation_precisions: tuple[str, ...] = ("INT8", "INT4")
+    gamma: float = 0.9
+    telemetry_mode: str = "full"
+    adapt_during_training: bool = False
+    storage_objective: str = "bytes"
+
+    def __post_init__(self) -> None:
+        if self.task not in {"modular", "hierarchy", "retrieval"}:
+            raise ValueError("task must be modular, hierarchy, or retrieval")
+        if not self.dimensions or any(d < 1 or d > self.training.width for d in self.dimensions):
+            raise ValueError("candidate dimensions must fit model width")
+        if not self.geometries or set(self.geometries) - {"euclidean", "hyperbolic", "product"}:
+            raise ValueError("unknown candidate geometry")
+        if self.candidate_steps < 1 or not 0 <= self.gate <= 1 or not 0 <= self.gamma <= 1:
+            raise ValueError("invalid candidate budget, gate, or gamma")
+        if not math.isfinite(self.curvature) or self.curvature <= 0:
+            raise ValueError("curvature must be positive and finite")
+        if not 0 <= self.prune_fraction <= 1 or self.storage_objective not in {"bytes", "latency"}:
+            raise ValueError("invalid pruning or storage objective")
+        if self.telemetry_mode not in {
+            "full",
+            "task",
+            "geometry",
+            "geometry_derivatives",
+            "attribution",
+            "gates_horizon",
+        }:
+            raise ValueError("unknown telemetry mode")
+
+    @classmethod
+    def from_dict(cls, values: dict[str, Any]) -> "ExperimentConfig":
+        raw = dict(values)
+        raw["training"] = TrainConfig(**raw.get("training", {}))
+        raw["features"] = Features(**raw.get("features", {}))
+        raw["constraints"] = Constraints(**raw.get("constraints", {}))
+        for key in ("dimensions", "geometries", "precisions", "activation_precisions"):
+            if key in raw:
+                raw[key] = tuple(raw[key])
+        return cls(**raw)

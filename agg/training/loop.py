@@ -56,10 +56,15 @@ def evaluate(model: nn.Module, split: Split) -> dict[str, float]:
     model.eval()
     try:
         logits = model(split.x)
+        if not bool(torch.isfinite(logits).all()):
+            raise FloatingPointError("nonfinite evaluation logits")
+        loss = F.cross_entropy(logits, split.y)
+        if not bool(torch.isfinite(loss)):
+            raise FloatingPointError("nonfinite evaluation loss")
         predicted = logits.argmax(-1)
         recalls = [(predicted[split.y == c] == c).float().mean() for c in split.y.unique()]
         return {
-            "loss": float(F.cross_entropy(logits, split.y)),
+            "loss": float(loss),
             "accuracy": float((predicted == split.y).float().mean()),
             "balanced_accuracy": float(torch.stack(recalls).mean()),
         }

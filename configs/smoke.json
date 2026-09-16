@@ -1,0 +1,8 @@
+{
+  "task": "modular",
+  "training": {"steps": 12, "eval_every": 4, "width": 32, "layers": 2, "heads": 4, "seed": 0},
+  "modulus": 11,
+  "dimensions": [8, 16],
+  "geometries": ["euclidean", "hyperbolic", "product"],
+  "candidate_steps": 3
+}

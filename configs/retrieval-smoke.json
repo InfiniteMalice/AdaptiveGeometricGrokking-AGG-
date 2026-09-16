@@ -1,0 +1,13 @@
+{
+  "task": "retrieval",
+  "training": {"steps": 12, "eval_every": 4, "width": 32, "layers": 2, "heads": 4, "seed": 0},
+  "samples": 128,
+  "context_length": 12,
+  "distance": 3,
+  "density": 0.5,
+  "gate": 0.5,
+  "dimensions": [8, 16],
+  "geometries": ["euclidean"],
+  "candidate_steps": 3,
+  "adapt_during_training": true
+}

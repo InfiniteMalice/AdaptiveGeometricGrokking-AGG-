@@ -2,8 +2,8 @@ import pytest
 import torch
 
 from agg.models import TinyTransformer
-from agg.tasks import hierarchy, modular_addition, retrieval
-from agg.training import TrainConfig, train
+from agg.tasks import Split, hierarchy, modular_addition, retrieval
+from agg.training import TrainConfig, evaluate, train
 
 
 def test_modular_labels_disjoint_and_seeded():
@@ -66,6 +66,28 @@ def test_causal_hidden_states_cannot_see_future():
     assert len(hidden) == 3
     for h, h2 in zip(hidden, other, strict=True):
         torch.testing.assert_close(h[:, :2], h2[:, :2])
+
+
+def test_evaluation_rejects_nonfinite_outputs_even_when_argmax_is_correct():
+    class Nonfinite(torch.nn.Module):
+        def forward(self, x):
+            return torch.full((len(x), 2), float("nan"))
+
+    with pytest.raises(FloatingPointError):
+        evaluate(
+            Nonfinite(), Split(torch.ones(3, 2, dtype=torch.long), torch.zeros(3, dtype=torch.long))
+        )
+
+
+def test_evaluation_rejects_overflowed_loss_from_finite_logits():
+    class Overflow(torch.nn.Module):
+        def forward(self, x):
+            return torch.tensor([[3e38, -3e38]])
+
+    with pytest.raises(FloatingPointError):
+        evaluate(
+            Overflow(), Split(torch.ones(1, 2, dtype=torch.long), torch.ones(1, dtype=torch.long))
+        )
 
 
 def test_training_is_reproducible_and_checkpoint_has_optimizer_rng(tmp_path):

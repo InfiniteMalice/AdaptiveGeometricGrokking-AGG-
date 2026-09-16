@@ -1,0 +1,13 @@
+{
+  "task": "modular",
+  "modulus": 31,
+  "training": {"steps": 10000, "eval_every": 100, "width": 64, "layers": 2,
+               "heads": 4, "seed": 0, "learning_rate": 0.001, "weight_decay": 1.0,
+               "batch_size": 512},
+  "dimensions": [8, 16, 32, 64],
+  "features": {"telemetry": true, "consolidation": false, "geometry": false,
+               "dimension": false, "gating": false, "distillation": false,
+               "epiplexity": false, "pruning": false, "quantization": false,
+               "storage": false, "executable": false, "teacher": false,
+               "process": false, "verified": false}
+}
