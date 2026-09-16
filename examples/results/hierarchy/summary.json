@@ -1,0 +1,27 @@
+{
+  "task": "hierarchy",
+  "seed": 0,
+  "baseline": {
+    "id_accuracy": 0.5,
+    "ood_accuracy": 0.5,
+    "mechanism_score": 1.0,
+    "cost": 17826.0,
+    "execution_score": null,
+    "stable": true,
+    "reproducible": true
+  },
+  "selected": {
+    "id_accuracy": 0.5,
+    "ood_accuracy": 0.5,
+    "mechanism_score": 0.9022586994520575,
+    "cost": 11825.0,
+    "execution_score": null,
+    "stable": true,
+    "reproducible": true
+  },
+  "interventions": 88,
+  "accepted": 79,
+  "crossing": null,
+  "cost_definition": "active parameter count, not deployment bytes",
+  "scientific_status": "software smoke/research run; hypotheses unestablished"
+}

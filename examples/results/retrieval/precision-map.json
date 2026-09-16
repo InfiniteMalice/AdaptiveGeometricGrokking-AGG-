@@ -1,0 +1,17 @@
+{
+  "base.embedding.weight": "INT4",
+  "base.position.weight": "ternary",
+  "base.blocks.0.self_attn.in_proj_weight": "ternary",
+  "base.blocks.0.self_attn.out_proj.weight": "ternary",
+  "base.blocks.0.linear1.weight": "ternary",
+  "base.blocks.0.linear2.weight": "ternary",
+  "base.blocks.1.self_attn.in_proj_weight": "ternary",
+  "base.blocks.1.self_attn.out_proj.weight": "ternary",
+  "base.blocks.1.linear1.weight": "ternary",
+  "base.blocks.1.linear2.weight": "ternary",
+  "base.readout.weight": "ternary",
+  "adapter.prototypes": "ternary",
+  "adapter.project.weight": "ternary",
+  "adapter.lift.weight": "ternary",
+  "final_hidden": "INT4"
+}

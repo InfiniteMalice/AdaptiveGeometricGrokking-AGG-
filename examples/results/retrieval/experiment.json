@@ -1,0 +1,73 @@
+{
+  "task": "retrieval",
+  "training": {
+    "steps": 12,
+    "eval_every": 4,
+    "width": 32,
+    "layers": 2,
+    "heads": 4,
+    "learning_rate": 0.001,
+    "weight_decay": 0.1,
+    "seed": 0,
+    "batch_size": 128
+  },
+  "features": {
+    "telemetry": true,
+    "consolidation": true,
+    "geometry": true,
+    "dimension": true,
+    "gating": true,
+    "distillation": true,
+    "epiplexity": true,
+    "pruning": true,
+    "quantization": true,
+    "storage": true,
+    "executable": true,
+    "teacher": true,
+    "process": true,
+    "verified": true
+  },
+  "constraints": {
+    "id_tolerance": 0.02,
+    "ood_tolerance": 0.02,
+    "mechanism_min": 0.9,
+    "execution_tolerance": 0.0,
+    "require_execution": false,
+    "require_cost_reduction": false
+  },
+  "modulus": 17,
+  "tree_depth": 3,
+  "samples": 128,
+  "context_length": 12,
+  "distance": 3,
+  "density": 0.5,
+  "hard_distractors": false,
+  "gate": 0.5,
+  "learned_gate": false,
+  "curvature": 1.0,
+  "learned_curvature": false,
+  "dimensions": [
+    8,
+    16
+  ],
+  "geometries": [
+    "euclidean"
+  ],
+  "candidate_steps": 3,
+  "prune_fraction": 0.2,
+  "precisions": [
+    "FP16",
+    "BF16",
+    "INT8",
+    "INT4",
+    "ternary"
+  ],
+  "activation_precisions": [
+    "INT8",
+    "INT4"
+  ],
+  "gamma": 0.9,
+  "telemetry_mode": "full",
+  "adapt_during_training": true,
+  "storage_objective": "bytes"
+}

@@ -1,0 +1,28 @@
+{
+  "modular": {
+    "interventions": 72,
+    "accepted": 60,
+    "rejected": 12,
+    "packed_tensors_round_trip": 7,
+    "precision_rejections": 5
+  },
+  "hierarchy": {
+    "interventions": 88,
+    "accepted": 79,
+    "rejected": 9,
+    "packed_tensors_round_trip": 8,
+    "precision_rejections": 8
+  },
+  "retrieval": {
+    "interventions": 89,
+    "accepted": 85,
+    "rejected": 4,
+    "packed_tensors_round_trip": 13,
+    "precision_rejections": 1
+  },
+  "factorial": {
+    "cells": 16,
+    "runs": 32,
+    "censored_runs": 32
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "id_accuracy": 0.09375,
+  "ood_accuracy": 0.09375,
+  "mechanism_score": 0.9988216654299528,
+  "cost": 20876.0,
+  "execution_score": null,
+  "stable": true,
+  "reproducible": true
+}

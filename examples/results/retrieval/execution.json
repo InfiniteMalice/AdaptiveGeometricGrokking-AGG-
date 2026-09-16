@@ -1,0 +1,254 @@
+{
+  "trace": [
+    {
+      "order": 0,
+      "intent": "reach 3",
+      "action": "add",
+      "argument": 2,
+      "pre_state": 1,
+      "post_state": 3,
+      "result": 3,
+      "error": null,
+      "expected_state": 3,
+      "verified": true,
+      "verifier_confidence": 1.0,
+      "verifier_provenance": "toy-integer-register/exact-state/v1",
+      "pre_hash": "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b",
+      "post_hash": "4e07408562bedb8b60ce05c1decfe3ad16b72230967de01f640b7e4729b49fce"
+    },
+    {
+      "order": 1,
+      "intent": "I successfully reached 9",
+      "action": "divide",
+      "argument": 0,
+      "pre_state": 3,
+      "post_state": 3,
+      "result": null,
+      "error": "Division must be nonzero and exact",
+      "expected_state": 9,
+      "verified": false,
+      "verifier_confidence": 1.0,
+      "verifier_provenance": "toy-integer-register/exact-state/v1",
+      "pre_hash": "4e07408562bedb8b60ce05c1decfe3ad16b72230967de01f640b7e4729b49fce",
+      "post_hash": "4e07408562bedb8b60ce05c1decfe3ad16b72230967de01f640b7e4729b49fce"
+    },
+    {
+      "order": 2,
+      "intent": "reach 6",
+      "action": "multiply",
+      "argument": 2,
+      "pre_state": 3,
+      "post_state": 6,
+      "result": 6,
+      "error": null,
+      "expected_state": 6,
+      "verified": true,
+      "verifier_confidence": 1.0,
+      "verifier_provenance": "toy-integer-register/exact-state/v1",
+      "pre_hash": "4e07408562bedb8b60ce05c1decfe3ad16b72230967de01f640b7e4729b49fce",
+      "post_hash": "e7f6c011776e8db7cd330b54174fd76f7d0216b612387a5ffcfb81e6f0919683"
+    }
+  ],
+  "credit": [
+    {
+      "position": 0,
+      "gamma": 0.9,
+      "credit": 1.09,
+      "local_evidence": {
+        "value": 1.0,
+        "primary_source": "environment_state",
+        "conflicts": [],
+        "signals": [
+          {
+            "source": "environment_state",
+            "value": 1.0,
+            "confidence": 1.0,
+            "position": 0,
+            "provenance": "toy-integer-register/exact-state/v1"
+          }
+        ]
+      },
+      "future_evidence": [
+        {
+          "value": 1.0,
+          "primary_source": "environment_state",
+          "conflicts": [],
+          "signals": [
+            {
+              "source": "environment_state",
+              "value": 1.0,
+              "confidence": 1.0,
+              "position": 0,
+              "provenance": "toy-integer-register/exact-state/v1"
+            }
+          ]
+        },
+        {
+          "value": -0.8,
+          "primary_source": "environment_state",
+          "conflicts": [
+            "teacher",
+            "process"
+          ],
+          "signals": [
+            {
+              "source": "environment_state",
+              "value": -1.0,
+              "confidence": 1.0,
+              "position": 1,
+              "provenance": "toy-integer-register/exact-state/v1"
+            },
+            {
+              "source": "teacher",
+              "value": 1,
+              "confidence": 0.5,
+              "position": 1,
+              "provenance": "deliberately incorrect teacher fixture"
+            },
+            {
+              "source": "process",
+              "value": 1,
+              "confidence": 0.4,
+              "position": 1,
+              "provenance": "deliberately incorrect process fixture"
+            }
+          ]
+        },
+        {
+          "value": 1.0,
+          "primary_source": "environment_state",
+          "conflicts": [],
+          "signals": [
+            {
+              "source": "environment_state",
+              "value": 1.0,
+              "confidence": 1.0,
+              "position": 2,
+              "provenance": "toy-integer-register/exact-state/v1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "position": 1,
+      "gamma": 0.9,
+      "credit": 0.09999999999999998,
+      "local_evidence": {
+        "value": -0.8,
+        "primary_source": "environment_state",
+        "conflicts": [
+          "teacher",
+          "process"
+        ],
+        "signals": [
+          {
+            "source": "environment_state",
+            "value": -1.0,
+            "confidence": 1.0,
+            "position": 1,
+            "provenance": "toy-integer-register/exact-state/v1"
+          },
+          {
+            "source": "teacher",
+            "value": 1,
+            "confidence": 0.5,
+            "position": 1,
+            "provenance": "deliberately incorrect teacher fixture"
+          },
+          {
+            "source": "process",
+            "value": 1,
+            "confidence": 0.4,
+            "position": 1,
+            "provenance": "deliberately incorrect process fixture"
+          }
+        ]
+      },
+      "future_evidence": [
+        {
+          "value": -0.8,
+          "primary_source": "environment_state",
+          "conflicts": [
+            "teacher",
+            "process"
+          ],
+          "signals": [
+            {
+              "source": "environment_state",
+              "value": -1.0,
+              "confidence": 1.0,
+              "position": 1,
+              "provenance": "toy-integer-register/exact-state/v1"
+            },
+            {
+              "source": "teacher",
+              "value": 1,
+              "confidence": 0.5,
+              "position": 1,
+              "provenance": "deliberately incorrect teacher fixture"
+            },
+            {
+              "source": "process",
+              "value": 1,
+              "confidence": 0.4,
+              "position": 1,
+              "provenance": "deliberately incorrect process fixture"
+            }
+          ]
+        },
+        {
+          "value": 1.0,
+          "primary_source": "environment_state",
+          "conflicts": [],
+          "signals": [
+            {
+              "source": "environment_state",
+              "value": 1.0,
+              "confidence": 1.0,
+              "position": 2,
+              "provenance": "toy-integer-register/exact-state/v1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "position": 2,
+      "gamma": 0.9,
+      "credit": 1.0,
+      "local_evidence": {
+        "value": 1.0,
+        "primary_source": "environment_state",
+        "conflicts": [],
+        "signals": [
+          {
+            "source": "environment_state",
+            "value": 1.0,
+            "confidence": 1.0,
+            "position": 2,
+            "provenance": "toy-integer-register/exact-state/v1"
+          }
+        ]
+      },
+      "future_evidence": [
+        {
+          "value": 1.0,
+          "primary_source": "environment_state",
+          "conflicts": [],
+          "signals": [
+            {
+              "source": "environment_state",
+              "value": 1.0,
+              "confidence": 1.0,
+              "position": 2,
+              "provenance": "toy-integer-register/exact-state/v1"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "gamma": 0.9,
+  "scope": "execution and credit demonstration, not agent learning"
+}

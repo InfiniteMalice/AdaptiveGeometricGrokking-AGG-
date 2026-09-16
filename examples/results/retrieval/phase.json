@@ -1,0 +1,38 @@
+{
+  "observations": [
+    {
+      "step": 0,
+      "M": 0.234375,
+      "R": 0.0,
+      "G": 0.078125
+    },
+    {
+      "step": 4,
+      "M": 0.203125,
+      "R": 0.0,
+      "G": 0.125
+    },
+    {
+      "step": 8,
+      "M": 0.328125,
+      "R": 0.0,
+      "G": 0.09375
+    },
+    {
+      "step": 12,
+      "M": 0.328125,
+      "R": 0.0,
+      "G": 0.09375
+    }
+  ],
+  "crossing": {
+    "first_crossing": null,
+    "stable_crossing": null,
+    "confirmation_step": null,
+    "interval": null,
+    "last_step": 12,
+    "censored": true
+  },
+  "proxy": true,
+  "warning": "kNN agreement may fail to separate mechanisms"
+}

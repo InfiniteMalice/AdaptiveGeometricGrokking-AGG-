@@ -1,0 +1,27 @@
+{
+  "task": "modular",
+  "seed": 0,
+  "baseline": {
+    "id_accuracy": 0.05970149114727974,
+    "ood_accuracy": 0.0,
+    "mechanism_score": 1.0,
+    "cost": 17995.0,
+    "execution_score": null,
+    "stable": true,
+    "reproducible": true
+  },
+  "selected": {
+    "id_accuracy": 0.05970149114727974,
+    "ood_accuracy": 0.0,
+    "mechanism_score": 0.9090553626191624,
+    "cost": 11560.0,
+    "execution_score": null,
+    "stable": true,
+    "reproducible": true
+  },
+  "interventions": 72,
+  "accepted": 60,
+  "crossing": null,
+  "cost_definition": "active parameter count, not deployment bytes",
+  "scientific_status": "software smoke/research run; hypotheses unestablished"
+}

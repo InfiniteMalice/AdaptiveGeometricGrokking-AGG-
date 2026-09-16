@@ -1,0 +1,14 @@
+{
+  "embedding.weight": "INT4",
+  "position.weight": "ternary",
+  "blocks.0.self_attn.in_proj_weight": "INT4",
+  "blocks.0.self_attn.out_proj.weight": "ternary",
+  "blocks.0.linear1.weight": "ternary",
+  "blocks.0.linear2.weight": "INT4",
+  "blocks.1.self_attn.in_proj_weight": "INT8",
+  "blocks.1.self_attn.out_proj.weight": "ternary",
+  "blocks.1.linear1.weight": "ternary",
+  "blocks.1.linear2.weight": "ternary",
+  "readout.weight": "ternary",
+  "final_hidden": "INT8"
+}

@@ -1,0 +1,602 @@
+[
+  {
+    "candidate": {
+      "geometry": "euclidean",
+      "dimension": 8,
+      "gate": 0.5,
+      "curvature": 1.0,
+      "steps": 3
+    },
+    "gate": 0.0,
+    "id": {
+      "loss": 0.3927533030509949,
+      "accuracy": 0.8600000143051147,
+      "balanced_accuracy": 0.5
+    },
+    "ood": {
+      "loss": 0.5009687542915344,
+      "accuracy": 0.800000011920929,
+      "balanced_accuracy": 0.5
+    }
+  },
+  {
+    "candidate": {
+      "geometry": "euclidean",
+      "dimension": 8,
+      "gate": 0.5,
+      "curvature": 1.0,
+      "steps": 3
+    },
+    "gate": 0.25,
+    "id": {
+      "loss": 0.3925231993198395,
+      "accuracy": 0.8600000143051147,
+      "balanced_accuracy": 0.5
+    },
+    "ood": {
+      "loss": 0.5006266832351685,
+      "accuracy": 0.800000011920929,
+      "balanced_accuracy": 0.5
+    }
+  },
+  {
+    "candidate": {
+      "geometry": "euclidean",
+      "dimension": 8,
+      "gate": 0.5,
+      "curvature": 1.0,
+      "steps": 3
+    },
+    "gate": 0.5,
+    "id": {
+      "loss": 0.39201897382736206,
+      "accuracy": 0.8600000143051147,
+      "balanced_accuracy": 0.5
+    },
+    "ood": {
+      "loss": 0.4992550313472748,
+      "accuracy": 0.800000011920929,
+      "balanced_accuracy": 0.5
+    }
+  },
+  {
+    "candidate": {
+      "geometry": "euclidean",
+      "dimension": 8,
+      "gate": 0.5,
+      "curvature": 1.0,
+      "steps": 3
+    },
+    "gate": 0.75,
+    "id": {
+      "loss": 0.391338586807251,
+      "accuracy": 0.8600000143051147,
+      "balanced_accuracy": 0.5
+    },
+    "ood": {
+      "loss": 0.49112117290496826,
+      "accuracy": 0.800000011920929,
+      "balanced_accuracy": 0.5
+    }
+  },
+  {
+    "candidate": {
+      "geometry": "euclidean",
+      "dimension": 8,
+      "gate": 0.5,
+      "curvature": 1.0,
+      "steps": 3
+    },
+    "gate": 1.0,
+    "id": {
+      "loss": 0.8483203053474426,
+      "accuracy": 0.14000000059604645,
+      "balanced_accuracy": 0.5
+    },
+    "ood": {
+      "loss": 0.8276497721672058,
+      "accuracy": 0.20000000298023224,
+      "balanced_accuracy": 0.5
+    }
+  },
+  {
+    "candidate": {
+      "geometry": "euclidean",
+      "dimension": 16,
+      "gate": 0.5,
+      "curvature": 1.0,
+      "steps": 3
+    },
+    "gate": 0.0,
+    "id": {
+      "loss": 0.39223435521125793,
+      "accuracy": 0.8600000143051147,
+      "balanced_accuracy": 0.5
+    },
+    "ood": {
+      "loss": 0.4997768998146057,
+      "accuracy": 0.800000011920929,
+      "balanced_accuracy": 0.5
+    }
+  },
+  {
+    "candidate": {
+      "geometry": "euclidean",
+      "dimension": 16,
+      "gate": 0.5,
+      "curvature": 1.0,
+      "steps": 3
+    },
+    "gate": 0.25,
+    "id": {
+      "loss": 0.3920692503452301,
+      "accuracy": 0.8600000143051147,
+      "balanced_accuracy": 0.5
+    },
+    "ood": {
+      "loss": 0.49838316440582275,
+      "accuracy": 0.800000011920929,
+      "balanced_accuracy": 0.5
+    }
+  },
+  {
+    "candidate": {
+      "geometry": "euclidean",
+      "dimension": 16,
+      "gate": 0.5,
+      "curvature": 1.0,
+      "steps": 3
+    },
+    "gate": 0.5,
+    "id": {
+      "loss": 0.3919185400009155,
+      "accuracy": 0.8600000143051147,
+      "balanced_accuracy": 0.5
+    },
+    "ood": {
+      "loss": 0.4955071806907654,
+      "accuracy": 0.800000011920929,
+      "balanced_accuracy": 0.5
+    }
+  },
+  {
+    "candidate": {
+      "geometry": "euclidean",
+      "dimension": 16,
+      "gate": 0.5,
+      "curvature": 1.0,
+      "steps": 3
+    },
+    "gate": 0.75,
+    "id": {
+      "loss": 0.39379847049713135,
+      "accuracy": 0.8600000143051147,
+      "balanced_accuracy": 0.5
+    },
+    "ood": {
+      "loss": 0.4876522421836853,
+      "accuracy": 0.800000011920929,
+      "balanced_accuracy": 0.5
+    }
+  },
+  {
+    "candidate": {
+      "geometry": "euclidean",
+      "dimension": 16,
+      "gate": 0.5,
+      "curvature": 1.0,
+      "steps": 3
+    },
+    "gate": 1.0,
+    "id": {
+      "loss": 0.8944255113601685,
+      "accuracy": 0.14000000059604645,
+      "balanced_accuracy": 0.5
+    },
+    "ood": {
+      "loss": 0.865157961845398,
+      "accuracy": 0.20000000298023224,
+      "balanced_accuracy": 0.5
+    }
+  },
+  {
+    "candidate": {
+      "geometry": "hyperbolic",
+      "dimension": 8,
+      "gate": 0.5,
+      "curvature": 1.0,
+      "steps": 3
+    },
+    "gate": 0.0,
+    "id": {
+      "loss": 0.39268994331359863,
+      "accuracy": 0.8600000143051147,
+      "balanced_accuracy": 0.5
+    },
+    "ood": {
+      "loss": 0.5008926391601562,
+      "accuracy": 0.800000011920929,
+      "balanced_accuracy": 0.5
+    }
+  },
+  {
+    "candidate": {
+      "geometry": "hyperbolic",
+      "dimension": 8,
+      "gate": 0.5,
+      "curvature": 1.0,
+      "steps": 3
+    },
+    "gate": 0.25,
+    "id": {
+      "loss": 0.3925361931324005,
+      "accuracy": 0.8600000143051147,
+      "balanced_accuracy": 0.5
+    },
+    "ood": {
+      "loss": 0.5005932450294495,
+      "accuracy": 0.800000011920929,
+      "balanced_accuracy": 0.5
+    }
+  },
+  {
+    "candidate": {
+      "geometry": "hyperbolic",
+      "dimension": 8,
+      "gate": 0.5,
+      "curvature": 1.0,
+      "steps": 3
+    },
+    "gate": 0.5,
+    "id": {
+      "loss": 0.3921971619129181,
+      "accuracy": 0.8600000143051147,
+      "balanced_accuracy": 0.5
+    },
+    "ood": {
+      "loss": 0.4993899166584015,
+      "accuracy": 0.800000011920929,
+      "balanced_accuracy": 0.5
+    }
+  },
+  {
+    "candidate": {
+      "geometry": "hyperbolic",
+      "dimension": 8,
+      "gate": 0.5,
+      "curvature": 1.0,
+      "steps": 3
+    },
+    "gate": 0.75,
+    "id": {
+      "loss": 0.3918638527393341,
+      "accuracy": 0.8600000143051147,
+      "balanced_accuracy": 0.5
+    },
+    "ood": {
+      "loss": 0.4923081696033478,
+      "accuracy": 0.800000011920929,
+      "balanced_accuracy": 0.5
+    }
+  },
+  {
+    "candidate": {
+      "geometry": "hyperbolic",
+      "dimension": 8,
+      "gate": 0.5,
+      "curvature": 1.0,
+      "steps": 3
+    },
+    "gate": 1.0,
+    "id": {
+      "loss": 0.8044959306716919,
+      "accuracy": 0.14000000059604645,
+      "balanced_accuracy": 0.5
+    },
+    "ood": {
+      "loss": 0.7885252833366394,
+      "accuracy": 0.20000000298023224,
+      "balanced_accuracy": 0.5
+    }
+  },
+  {
+    "candidate": {
+      "geometry": "hyperbolic",
+      "dimension": 16,
+      "gate": 0.5,
+      "curvature": 1.0,
+      "steps": 3
+    },
+    "gate": 0.0,
+    "id": {
+      "loss": 0.3919467628002167,
+      "accuracy": 0.8600000143051147,
+      "balanced_accuracy": 0.5
+    },
+    "ood": {
+      "loss": 0.4990464150905609,
+      "accuracy": 0.800000011920929,
+      "balanced_accuracy": 0.5
+    }
+  },
+  {
+    "candidate": {
+      "geometry": "hyperbolic",
+      "dimension": 16,
+      "gate": 0.5,
+      "curvature": 1.0,
+      "steps": 3
+    },
+    "gate": 0.25,
+    "id": {
+      "loss": 0.39178916811943054,
+      "accuracy": 0.8600000143051147,
+      "balanced_accuracy": 0.5
+    },
+    "ood": {
+      "loss": 0.49782446026802063,
+      "accuracy": 0.800000011920929,
+      "balanced_accuracy": 0.5
+    }
+  },
+  {
+    "candidate": {
+      "geometry": "hyperbolic",
+      "dimension": 16,
+      "gate": 0.5,
+      "curvature": 1.0,
+      "steps": 3
+    },
+    "gate": 0.5,
+    "id": {
+      "loss": 0.3916133940219879,
+      "accuracy": 0.8600000143051147,
+      "balanced_accuracy": 0.5
+    },
+    "ood": {
+      "loss": 0.49524229764938354,
+      "accuracy": 0.800000011920929,
+      "balanced_accuracy": 0.5
+    }
+  },
+  {
+    "candidate": {
+      "geometry": "hyperbolic",
+      "dimension": 16,
+      "gate": 0.5,
+      "curvature": 1.0,
+      "steps": 3
+    },
+    "gate": 0.75,
+    "id": {
+      "loss": 0.39304429292678833,
+      "accuracy": 0.8600000143051147,
+      "balanced_accuracy": 0.5
+    },
+    "ood": {
+      "loss": 0.4877302050590515,
+      "accuracy": 0.800000011920929,
+      "balanced_accuracy": 0.5
+    }
+  },
+  {
+    "candidate": {
+      "geometry": "hyperbolic",
+      "dimension": 16,
+      "gate": 0.5,
+      "curvature": 1.0,
+      "steps": 3
+    },
+    "gate": 1.0,
+    "id": {
+      "loss": 0.901328980922699,
+      "accuracy": 0.14000000059604645,
+      "balanced_accuracy": 0.5
+    },
+    "ood": {
+      "loss": 0.8711104989051819,
+      "accuracy": 0.20000000298023224,
+      "balanced_accuracy": 0.5
+    }
+  },
+  {
+    "candidate": {
+      "geometry": "product",
+      "dimension": 8,
+      "gate": 0.5,
+      "curvature": 1.0,
+      "steps": 3
+    },
+    "gate": 0.0,
+    "id": {
+      "loss": 0.3929792642593384,
+      "accuracy": 0.8600000143051147,
+      "balanced_accuracy": 0.5
+    },
+    "ood": {
+      "loss": 0.5009365677833557,
+      "accuracy": 0.800000011920929,
+      "balanced_accuracy": 0.5
+    }
+  },
+  {
+    "candidate": {
+      "geometry": "product",
+      "dimension": 8,
+      "gate": 0.5,
+      "curvature": 1.0,
+      "steps": 3
+    },
+    "gate": 0.25,
+    "id": {
+      "loss": 0.3927997350692749,
+      "accuracy": 0.8600000143051147,
+      "balanced_accuracy": 0.5
+    },
+    "ood": {
+      "loss": 0.5007894039154053,
+      "accuracy": 0.800000011920929,
+      "balanced_accuracy": 0.5
+    }
+  },
+  {
+    "candidate": {
+      "geometry": "product",
+      "dimension": 8,
+      "gate": 0.5,
+      "curvature": 1.0,
+      "steps": 3
+    },
+    "gate": 0.5,
+    "id": {
+      "loss": 0.3923991322517395,
+      "accuracy": 0.8600000143051147,
+      "balanced_accuracy": 0.5
+    },
+    "ood": {
+      "loss": 0.49984505772590637,
+      "accuracy": 0.800000011920929,
+      "balanced_accuracy": 0.5
+    }
+  },
+  {
+    "candidate": {
+      "geometry": "product",
+      "dimension": 8,
+      "gate": 0.5,
+      "curvature": 1.0,
+      "steps": 3
+    },
+    "gate": 0.75,
+    "id": {
+      "loss": 0.3917310833930969,
+      "accuracy": 0.8600000143051147,
+      "balanced_accuracy": 0.5
+    },
+    "ood": {
+      "loss": 0.49291327595710754,
+      "accuracy": 0.800000011920929,
+      "balanced_accuracy": 0.5
+    }
+  },
+  {
+    "candidate": {
+      "geometry": "product",
+      "dimension": 8,
+      "gate": 0.5,
+      "curvature": 1.0,
+      "steps": 3
+    },
+    "gate": 1.0,
+    "id": {
+      "loss": 0.8103051781654358,
+      "accuracy": 0.14000000059604645,
+      "balanced_accuracy": 0.5
+    },
+    "ood": {
+      "loss": 0.7944371700286865,
+      "accuracy": 0.20000000298023224,
+      "balanced_accuracy": 0.5
+    }
+  },
+  {
+    "candidate": {
+      "geometry": "product",
+      "dimension": 16,
+      "gate": 0.5,
+      "curvature": 1.0,
+      "steps": 3
+    },
+    "gate": 0.0,
+    "id": {
+      "loss": 0.392254114151001,
+      "accuracy": 0.8600000143051147,
+      "balanced_accuracy": 0.5
+    },
+    "ood": {
+      "loss": 0.4997735023498535,
+      "accuracy": 0.800000011920929,
+      "balanced_accuracy": 0.5
+    }
+  },
+  {
+    "candidate": {
+      "geometry": "product",
+      "dimension": 16,
+      "gate": 0.5,
+      "curvature": 1.0,
+      "steps": 3
+    },
+    "gate": 0.25,
+    "id": {
+      "loss": 0.3920709490776062,
+      "accuracy": 0.8600000143051147,
+      "balanced_accuracy": 0.5
+    },
+    "ood": {
+      "loss": 0.4983653724193573,
+      "accuracy": 0.800000011920929,
+      "balanced_accuracy": 0.5
+    }
+  },
+  {
+    "candidate": {
+      "geometry": "product",
+      "dimension": 16,
+      "gate": 0.5,
+      "curvature": 1.0,
+      "steps": 3
+    },
+    "gate": 0.5,
+    "id": {
+      "loss": 0.39188477396965027,
+      "accuracy": 0.8600000143051147,
+      "balanced_accuracy": 0.5
+    },
+    "ood": {
+      "loss": 0.49545517563819885,
+      "accuracy": 0.800000011920929,
+      "balanced_accuracy": 0.5
+    }
+  },
+  {
+    "candidate": {
+      "geometry": "product",
+      "dimension": 16,
+      "gate": 0.5,
+      "curvature": 1.0,
+      "steps": 3
+    },
+    "gate": 0.75,
+    "id": {
+      "loss": 0.3937048017978668,
+      "accuracy": 0.8600000143051147,
+      "balanced_accuracy": 0.5
+    },
+    "ood": {
+      "loss": 0.48746854066848755,
+      "accuracy": 0.800000011920929,
+      "balanced_accuracy": 0.5
+    }
+  },
+  {
+    "candidate": {
+      "geometry": "product",
+      "dimension": 16,
+      "gate": 0.5,
+      "curvature": 1.0,
+      "steps": 3
+    },
+    "gate": 1.0,
+    "id": {
+      "loss": 0.92159104347229,
+      "accuracy": 0.14000000059604645,
+      "balanced_accuracy": 0.5
+    },
+    "ood": {
+      "loss": 0.8878092169761658,
+      "accuracy": 0.20000000298023224,
+      "balanced_accuracy": 0.5
+    }
+  }
+]

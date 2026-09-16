@@ -1,0 +1,1263 @@
+{
+  "objective": "bytes",
+  "illustrative": {
+    "tiny": {
+      "records": [
+        {
+          "codec": "fixed_ternary",
+          "shape": [
+            1,
+            1
+          ],
+          "zero_density": 0.0,
+          "theoretical_bits_per_weight": 1.6,
+          "serialized_bytes": 121,
+          "encode_seconds": 7.569999434053898e-05,
+          "decode_seconds": 3.029999788850546e-05,
+          "matmul_seconds": 3.4500000765547156e-05,
+          "throughput_weights_per_second": 28985.50660319501,
+          "hardware": {
+            "device": "cpu",
+            "model": "AMD64 Family 23 Model 160 Stepping 0, AuthenticAMD",
+            "architecture": "AMD64",
+            "os": "Windows-11-10.0.26200-SP0",
+            "python": "3.12.13",
+            "torch": "2.14.0+cpu",
+            "torch_threads": "1"
+          },
+          "kernel": "Python decode + torch CPU FP32 dense matmul",
+          "measured": true
+        },
+        {
+          "codec": "bitcos_like",
+          "shape": [
+            1,
+            1
+          ],
+          "zero_density": 0.0,
+          "theoretical_bits_per_weight": 2.0,
+          "serialized_bytes": 120,
+          "encode_seconds": 7.23000121070072e-05,
+          "decode_seconds": 3.2100011594593525e-05,
+          "matmul_seconds": 3.500000457279384e-05,
+          "throughput_weights_per_second": 28571.424838536128,
+          "hardware": {
+            "device": "cpu",
+            "model": "AMD64 Family 23 Model 160 Stepping 0, AuthenticAMD",
+            "architecture": "AMD64",
+            "os": "Windows-11-10.0.26200-SP0",
+            "python": "3.12.13",
+            "torch": "2.14.0+cpu",
+            "torch_threads": "1"
+          },
+          "kernel": "Python decode + torch CPU FP32 dense matmul",
+          "measured": true
+        },
+        {
+          "codec": "dense",
+          "shape": [
+            1,
+            1
+          ],
+          "zero_density": 0.0,
+          "theoretical_bits_per_weight": 8.0,
+          "serialized_bytes": 113,
+          "encode_seconds": 6.420000863727182e-05,
+          "decode_seconds": 2.7000001864507794e-05,
+          "matmul_seconds": 3.070000093430281e-05,
+          "throughput_weights_per_second": 32573.28891096693,
+          "hardware": {
+            "device": "cpu",
+            "model": "AMD64 Family 23 Model 160 Stepping 0, AuthenticAMD",
+            "architecture": "AMD64",
+            "os": "Windows-11-10.0.26200-SP0",
+            "python": "3.12.13",
+            "torch": "2.14.0+cpu",
+            "torch_threads": "1"
+          },
+          "kernel": "Python decode + torch CPU FP32 dense matmul",
+          "measured": true
+        }
+      ],
+      "selected_bytes": "dense",
+      "selected_latency": "dense",
+      "scope": "illustrative exact ternary fixture, not a compressed model"
+    },
+    "sparse": {
+      "records": [
+        {
+          "codec": "fixed_ternary",
+          "shape": [
+            32,
+            32
+          ],
+          "zero_density": 0.998046875,
+          "theoretical_bits_per_weight": 1.6,
+          "serialized_bytes": 332,
+          "encode_seconds": 0.0005147000047145411,
+          "decode_seconds": 0.0004101999948034063,
+          "matmul_seconds": 0.00046129999100230634,
+          "throughput_weights_per_second": 2219813.6136423214,
+          "hardware": {
+            "device": "cpu",
+            "model": "AMD64 Family 23 Model 160 Stepping 0, AuthenticAMD",
+            "architecture": "AMD64",
+            "os": "Windows-11-10.0.26200-SP0",
+            "python": "3.12.13",
+            "torch": "2.14.0+cpu",
+            "torch_threads": "1"
+          },
+          "kernel": "Python decode + torch CPU FP32 dense matmul",
+          "measured": true
+        },
+        {
+          "codec": "bitcos_like",
+          "shape": [
+            32,
+            32
+          ],
+          "zero_density": 0.998046875,
+          "theoretical_bits_per_weight": 1.001953125,
+          "serialized_bytes": 254,
+          "encode_seconds": 0.00038139999378472567,
+          "decode_seconds": 0.00024030001077335328,
+          "matmul_seconds": 0.0002339999919058755,
+          "throughput_weights_per_second": 4376068.527437792,
+          "hardware": {
+            "device": "cpu",
+            "model": "AMD64 Family 23 Model 160 Stepping 0, AuthenticAMD",
+            "architecture": "AMD64",
+            "os": "Windows-11-10.0.26200-SP0",
+            "python": "3.12.13",
+            "torch": "2.14.0+cpu",
+            "torch_threads": "1"
+          },
+          "kernel": "Python decode + torch CPU FP32 dense matmul",
+          "measured": true
+        },
+        {
+          "codec": "dense",
+          "shape": [
+            32,
+            32
+          ],
+          "zero_density": 0.998046875,
+          "theoretical_bits_per_weight": 8.0,
+          "serialized_bytes": 1144,
+          "encode_seconds": 0.00017430000298190862,
+          "decode_seconds": 0.00017079999088309705,
+          "matmul_seconds": 0.00017729999672155827,
+          "throughput_weights_per_second": 5775521.821402773,
+          "hardware": {
+            "device": "cpu",
+            "model": "AMD64 Family 23 Model 160 Stepping 0, AuthenticAMD",
+            "architecture": "AMD64",
+            "os": "Windows-11-10.0.26200-SP0",
+            "python": "3.12.13",
+            "torch": "2.14.0+cpu",
+            "torch_threads": "1"
+          },
+          "kernel": "Python decode + torch CPU FP32 dense matmul",
+          "measured": true
+        }
+      ],
+      "selected_bytes": "bitcos_like",
+      "selected_latency": "dense",
+      "scope": "illustrative exact ternary fixture, not a compressed model"
+    }
+  },
+  "accepted_model_tensors": [
+    {
+      "component": "base.position.weight",
+      "scale": 4.080685138702393,
+      "filename": "accepted-tensor-0.aggt",
+      "selected": "bitcos_like",
+      "records": [
+        {
+          "codec": "fixed_ternary",
+          "shape": [
+            12,
+            32
+          ],
+          "zero_density": 0.96875,
+          "theoretical_bits_per_weight": 1.6,
+          "serialized_bytes": 202,
+          "encode_seconds": 0.00016830000095069408,
+          "decode_seconds": 0.00011309998808428645,
+          "matmul_seconds": 0.00011900000390596688,
+          "throughput_weights_per_second": 3226890.650385479,
+          "hardware": {
+            "device": "cpu",
+            "model": "AMD64 Family 23 Model 160 Stepping 0, AuthenticAMD",
+            "architecture": "AMD64",
+            "os": "Windows-11-10.0.26200-SP0",
+            "python": "3.12.13",
+            "torch": "2.14.0+cpu",
+            "torch_threads": "1"
+          },
+          "kernel": "Python decode + torch CPU FP32 dense matmul",
+          "measured": true
+        },
+        {
+          "codec": "bitcos_like",
+          "shape": [
+            12,
+            32
+          ],
+          "zero_density": 0.96875,
+          "theoretical_bits_per_weight": 1.03125,
+          "serialized_bytes": 173,
+          "encode_seconds": 0.0003929999948013574,
+          "decode_seconds": 0.000247900010435842,
+          "matmul_seconds": 0.0002423999976599589,
+          "throughput_weights_per_second": 1584158.4311344712,
+          "hardware": {
+            "device": "cpu",
+            "model": "AMD64 Family 23 Model 160 Stepping 0, AuthenticAMD",
+            "architecture": "AMD64",
+            "os": "Windows-11-10.0.26200-SP0",
+            "python": "3.12.13",
+            "torch": "2.14.0+cpu",
+            "torch_threads": "1"
+          },
+          "kernel": "Python decode + torch CPU FP32 dense matmul",
+          "measured": true
+        },
+        {
+          "codec": "dense",
+          "shape": [
+            12,
+            32
+          ],
+          "zero_density": 0.96875,
+          "theoretical_bits_per_weight": 8.0,
+          "serialized_bytes": 502,
+          "encode_seconds": 0.0002606999914860353,
+          "decode_seconds": 0.00023350000265054405,
+          "matmul_seconds": 0.00019890000112354755,
+          "throughput_weights_per_second": 1930618.3903009475,
+          "hardware": {
+            "device": "cpu",
+            "model": "AMD64 Family 23 Model 160 Stepping 0, AuthenticAMD",
+            "architecture": "AMD64",
+            "os": "Windows-11-10.0.26200-SP0",
+            "python": "3.12.13",
+            "torch": "2.14.0+cpu",
+            "torch_threads": "1"
+          },
+          "kernel": "Python decode + torch CPU FP32 dense matmul",
+          "measured": true
+        }
+      ],
+      "scope": "jointly validated model tensor; lossless symbol packing"
+    },
+    {
+      "component": "base.blocks.0.self_attn.in_proj_weight",
+      "scale": 0.23132002353668213,
+      "filename": "accepted-tensor-1.aggt",
+      "selected": "bitcos_like",
+      "records": [
+        {
+          "codec": "fixed_ternary",
+          "shape": [
+            96,
+            32
+          ],
+          "zero_density": 0.5361328125,
+          "theoretical_bits_per_weight": 1.6,
+          "serialized_bytes": 742,
+          "encode_seconds": 0.0008041999972192571,
+          "decode_seconds": 0.000738000002456829,
+          "matmul_seconds": 0.0006720999954268336,
+          "throughput_weights_per_second": 4570748.431636353,
+          "hardware": {
+            "device": "cpu",
+            "model": "AMD64 Family 23 Model 160 Stepping 0, AuthenticAMD",
+            "architecture": "AMD64",
+            "os": "Windows-11-10.0.26200-SP0",
+            "python": "3.12.13",
+            "torch": "2.14.0+cpu",
+            "torch_threads": "1"
+          },
+          "kernel": "Python decode + torch CPU FP32 dense matmul",
+          "measured": true
+        },
+        {
+          "codec": "bitcos_like",
+          "shape": [
+            96,
+            32
+          ],
+          "zero_density": 0.5361328125,
+          "theoretical_bits_per_weight": 1.4638671875,
+          "serialized_bytes": 688,
+          "encode_seconds": 0.0012343999987933785,
+          "decode_seconds": 0.0008380000072065741,
+          "matmul_seconds": 0.0008156999974744394,
+          "throughput_weights_per_second": 3766090.486099656,
+          "hardware": {
+            "device": "cpu",
+            "model": "AMD64 Family 23 Model 160 Stepping 0, AuthenticAMD",
+            "architecture": "AMD64",
+            "os": "Windows-11-10.0.26200-SP0",
+            "python": "3.12.13",
+            "torch": "2.14.0+cpu",
+            "torch_threads": "1"
+          },
+          "kernel": "Python decode + torch CPU FP32 dense matmul",
+          "measured": true
+        },
+        {
+          "codec": "dense",
+          "shape": [
+            96,
+            32
+          ],
+          "zero_density": 0.5361328125,
+          "theoretical_bits_per_weight": 8.0,
+          "serialized_bytes": 3192,
+          "encode_seconds": 0.0004388000088511035,
+          "decode_seconds": 0.0008139999990817159,
+          "matmul_seconds": 0.0007390999962808564,
+          "throughput_weights_per_second": 4156406.4611801817,
+          "hardware": {
+            "device": "cpu",
+            "model": "AMD64 Family 23 Model 160 Stepping 0, AuthenticAMD",
+            "architecture": "AMD64",
+            "os": "Windows-11-10.0.26200-SP0",
+            "python": "3.12.13",
+            "torch": "2.14.0+cpu",
+            "torch_threads": "1"
+          },
+          "kernel": "Python decode + torch CPU FP32 dense matmul",
+          "measured": true
+        }
+      ],
+      "scope": "jointly validated model tensor; lossless symbol packing"
+    },
+    {
+      "component": "base.blocks.0.self_attn.out_proj.weight",
+      "scale": 0.1908450424671173,
+      "filename": "accepted-tensor-2.aggt",
+      "selected": "bitcos_like",
+      "records": [
+        {
+          "codec": "fixed_ternary",
+          "shape": [
+            32,
+            32
+          ],
+          "zero_density": 0.5361328125,
+          "theoretical_bits_per_weight": 1.6,
+          "serialized_bytes": 332,
+          "encode_seconds": 0.000345199994626455,
+          "decode_seconds": 0.0002886000002035871,
+          "matmul_seconds": 0.0002663000050233677,
+          "throughput_weights_per_second": 3845287.197460415,
+          "hardware": {
+            "device": "cpu",
+            "model": "AMD64 Family 23 Model 160 Stepping 0, AuthenticAMD",
+            "architecture": "AMD64",
+            "os": "Windows-11-10.0.26200-SP0",
+            "python": "3.12.13",
+            "torch": "2.14.0+cpu",
+            "torch_threads": "1"
+          },
+          "kernel": "Python decode + torch CPU FP32 dense matmul",
+          "measured": true
+        },
+        {
+          "codec": "bitcos_like",
+          "shape": [
+            32,
+            32
+          ],
+          "zero_density": 0.5361328125,
+          "theoretical_bits_per_weight": 1.4638671875,
+          "serialized_bytes": 313,
+          "encode_seconds": 0.0005110000056447461,
+          "decode_seconds": 0.00031489999673794955,
+          "matmul_seconds": 0.000309199996991083,
+          "throughput_weights_per_second": 3311772.3478811383,
+          "hardware": {
+            "device": "cpu",
+            "model": "AMD64 Family 23 Model 160 Stepping 0, AuthenticAMD",
+            "architecture": "AMD64",
+            "os": "Windows-11-10.0.26200-SP0",
+            "python": "3.12.13",
+            "torch": "2.14.0+cpu",
+            "torch_threads": "1"
+          },
+          "kernel": "Python decode + torch CPU FP32 dense matmul",
+          "measured": true
+        },
+        {
+          "codec": "dense",
+          "shape": [
+            32,
+            32
+          ],
+          "zero_density": 0.5361328125,
+          "theoretical_bits_per_weight": 8.0,
+          "serialized_bytes": 1144,
+          "encode_seconds": 0.00020549999317154288,
+          "decode_seconds": 0.0002314000012120232,
+          "matmul_seconds": 0.00020900000527035445,
+          "throughput_weights_per_second": 4899521.407549213,
+          "hardware": {
+            "device": "cpu",
+            "model": "AMD64 Family 23 Model 160 Stepping 0, AuthenticAMD",
+            "architecture": "AMD64",
+            "os": "Windows-11-10.0.26200-SP0",
+            "python": "3.12.13",
+            "torch": "2.14.0+cpu",
+            "torch_threads": "1"
+          },
+          "kernel": "Python decode + torch CPU FP32 dense matmul",
+          "measured": true
+        }
+      ],
+      "scope": "jointly validated model tensor; lossless symbol packing"
+    },
+    {
+      "component": "base.blocks.0.linear1.weight",
+      "scale": 0.1910182386636734,
+      "filename": "accepted-tensor-3.aggt",
+      "selected": "bitcos_like",
+      "records": [
+        {
+          "codec": "fixed_ternary",
+          "shape": [
+            64,
+            32
+          ],
+          "zero_density": 0.53564453125,
+          "theoretical_bits_per_weight": 1.6,
+          "serialized_bytes": 537,
+          "encode_seconds": 0.0007149000011850148,
+          "decode_seconds": 0.0005705000075977296,
+          "matmul_seconds": 0.0006777999951737002,
+          "throughput_weights_per_second": 3021540.298882944,
+          "hardware": {
+            "device": "cpu",
+            "model": "AMD64 Family 23 Model 160 Stepping 0, AuthenticAMD",
+            "architecture": "AMD64",
+            "os": "Windows-11-10.0.26200-SP0",
+            "python": "3.12.13",
+            "torch": "2.14.0+cpu",
+            "torch_threads": "1"
+          },
+          "kernel": "Python decode + torch CPU FP32 dense matmul",
+          "measured": true
+        },
+        {
+          "codec": "bitcos_like",
+          "shape": [
+            64,
+            32
+          ],
+          "zero_density": 0.53564453125,
+          "theoretical_bits_per_weight": 1.46435546875,
+          "serialized_bytes": 500,
+          "encode_seconds": 0.0008362999942619354,
+          "decode_seconds": 0.0005930000043008476,
+          "matmul_seconds": 0.000570099990000017,
+          "throughput_weights_per_second": 3592352.2819215255,
+          "hardware": {
+            "device": "cpu",
+            "model": "AMD64 Family 23 Model 160 Stepping 0, AuthenticAMD",
+            "architecture": "AMD64",
+            "os": "Windows-11-10.0.26200-SP0",
+            "python": "3.12.13",
+            "torch": "2.14.0+cpu",
+            "torch_threads": "1"
+          },
+          "kernel": "Python decode + torch CPU FP32 dense matmul",
+          "measured": true
+        },
+        {
+          "codec": "dense",
+          "shape": [
+            64,
+            32
+          ],
+          "zero_density": 0.53564453125,
+          "theoretical_bits_per_weight": 8.0,
+          "serialized_bytes": 2168,
+          "encode_seconds": 0.00024649999977555126,
+          "decode_seconds": 0.00033290000283159316,
+          "matmul_seconds": 0.00031829999352339655,
+          "throughput_weights_per_second": 6434181.720614651,
+          "hardware": {
+            "device": "cpu",
+            "model": "AMD64 Family 23 Model 160 Stepping 0, AuthenticAMD",
+            "architecture": "AMD64",
+            "os": "Windows-11-10.0.26200-SP0",
+            "python": "3.12.13",
+            "torch": "2.14.0+cpu",
+            "torch_threads": "1"
+          },
+          "kernel": "Python decode + torch CPU FP32 dense matmul",
+          "measured": true
+        }
+      ],
+      "scope": "jointly validated model tensor; lossless symbol packing"
+    },
+    {
+      "component": "base.blocks.0.linear2.weight",
+      "scale": 0.1398785412311554,
+      "filename": "accepted-tensor-4.aggt",
+      "selected": "bitcos_like",
+      "records": [
+        {
+          "codec": "fixed_ternary",
+          "shape": [
+            32,
+            64
+          ],
+          "zero_density": 0.56005859375,
+          "theoretical_bits_per_weight": 1.6,
+          "serialized_bytes": 537,
+          "encode_seconds": 0.0006104000058257952,
+          "decode_seconds": 0.0004927999980282038,
+          "matmul_seconds": 0.0004695000097854063,
+          "throughput_weights_per_second": 4362087.236028124,
+          "hardware": {
+            "device": "cpu",
+            "model": "AMD64 Family 23 Model 160 Stepping 0, AuthenticAMD",
+            "architecture": "AMD64",
+            "os": "Windows-11-10.0.26200-SP0",
+            "python": "3.12.13",
+            "torch": "2.14.0+cpu",
+            "torch_threads": "1"
+          },
+          "kernel": "Python decode + torch CPU FP32 dense matmul",
+          "measured": true
+        },
+        {
+          "codec": "bitcos_like",
+          "shape": [
+            32,
+            64
+          ],
+          "zero_density": 0.56005859375,
+          "theoretical_bits_per_weight": 1.43994140625,
+          "serialized_bytes": 494,
+          "encode_seconds": 0.0009693999891169369,
+          "decode_seconds": 0.000534699996933341,
+          "matmul_seconds": 0.0005744999943999574,
+          "throughput_weights_per_second": 3564839.0251753707,
+          "hardware": {
+            "device": "cpu",
+            "model": "AMD64 Family 23 Model 160 Stepping 0, AuthenticAMD",
+            "architecture": "AMD64",
+            "os": "Windows-11-10.0.26200-SP0",
+            "python": "3.12.13",
+            "torch": "2.14.0+cpu",
+            "torch_threads": "1"
+          },
+          "kernel": "Python decode + torch CPU FP32 dense matmul",
+          "measured": true
+        },
+        {
+          "codec": "dense",
+          "shape": [
+            32,
+            64
+          ],
+          "zero_density": 0.56005859375,
+          "theoretical_bits_per_weight": 8.0,
+          "serialized_bytes": 2168,
+          "encode_seconds": 0.00021050000214017928,
+          "decode_seconds": 0.0002905000001192093,
+          "matmul_seconds": 0.0002928999892901629,
+          "throughput_weights_per_second": 6992147.746277785,
+          "hardware": {
+            "device": "cpu",
+            "model": "AMD64 Family 23 Model 160 Stepping 0, AuthenticAMD",
+            "architecture": "AMD64",
+            "os": "Windows-11-10.0.26200-SP0",
+            "python": "3.12.13",
+            "torch": "2.14.0+cpu",
+            "torch_threads": "1"
+          },
+          "kernel": "Python decode + torch CPU FP32 dense matmul",
+          "measured": true
+        }
+      ],
+      "scope": "jointly validated model tensor; lossless symbol packing"
+    },
+    {
+      "component": "base.blocks.1.self_attn.in_proj_weight",
+      "scale": 0.23095257580280304,
+      "filename": "accepted-tensor-5.aggt",
+      "selected": "bitcos_like",
+      "records": [
+        {
+          "codec": "fixed_ternary",
+          "shape": [
+            96,
+            32
+          ],
+          "zero_density": 0.5198567509651184,
+          "theoretical_bits_per_weight": 1.6,
+          "serialized_bytes": 742,
+          "encode_seconds": 0.000760499999159947,
+          "decode_seconds": 0.0007044000085443258,
+          "matmul_seconds": 0.0007621999975526705,
+          "throughput_weights_per_second": 4030438.2181367227,
+          "hardware": {
+            "device": "cpu",
+            "model": "AMD64 Family 23 Model 160 Stepping 0, AuthenticAMD",
+            "architecture": "AMD64",
+            "os": "Windows-11-10.0.26200-SP0",
+            "python": "3.12.13",
+            "torch": "2.14.0+cpu",
+            "torch_threads": "1"
+          },
+          "kernel": "Python decode + torch CPU FP32 dense matmul",
+          "measured": true
+        },
+        {
+          "codec": "bitcos_like",
+          "shape": [
+            96,
+            32
+          ],
+          "zero_density": 0.5198567509651184,
+          "theoretical_bits_per_weight": 1.4801432490348816,
+          "serialized_bytes": 694,
+          "encode_seconds": 0.0014731999981449917,
+          "decode_seconds": 0.0008317999891005456,
+          "matmul_seconds": 0.0010609000019030645,
+          "throughput_weights_per_second": 2895654.627664608,
+          "hardware": {
+            "device": "cpu",
+            "model": "AMD64 Family 23 Model 160 Stepping 0, AuthenticAMD",
+            "architecture": "AMD64",
+            "os": "Windows-11-10.0.26200-SP0",
+            "python": "3.12.13",
+            "torch": "2.14.0+cpu",
+            "torch_threads": "1"
+          },
+          "kernel": "Python decode + torch CPU FP32 dense matmul",
+          "measured": true
+        },
+        {
+          "codec": "dense",
+          "shape": [
+            96,
+            32
+          ],
+          "zero_density": 0.5198567509651184,
+          "theoretical_bits_per_weight": 8.0,
+          "serialized_bytes": 3192,
+          "encode_seconds": 0.0003335000074002892,
+          "decode_seconds": 0.0004594000056385994,
+          "matmul_seconds": 0.0004515000036917627,
+          "throughput_weights_per_second": 6803986.655329559,
+          "hardware": {
+            "device": "cpu",
+            "model": "AMD64 Family 23 Model 160 Stepping 0, AuthenticAMD",
+            "architecture": "AMD64",
+            "os": "Windows-11-10.0.26200-SP0",
+            "python": "3.12.13",
+            "torch": "2.14.0+cpu",
+            "torch_threads": "1"
+          },
+          "kernel": "Python decode + torch CPU FP32 dense matmul",
+          "measured": true
+        }
+      ],
+      "scope": "jointly validated model tensor; lossless symbol packing"
+    },
+    {
+      "component": "base.blocks.1.self_attn.out_proj.weight",
+      "scale": 0.1906651258468628,
+      "filename": "accepted-tensor-6.aggt",
+      "selected": "bitcos_like",
+      "records": [
+        {
+          "codec": "fixed_ternary",
+          "shape": [
+            32,
+            32
+          ],
+          "zero_density": 0.5185546875,
+          "theoretical_bits_per_weight": 1.6,
+          "serialized_bytes": 332,
+          "encode_seconds": 0.0003782999992836267,
+          "decode_seconds": 0.00036270001146476716,
+          "matmul_seconds": 0.00032220000866800547,
+          "throughput_weights_per_second": 3178150.1317559816,
+          "hardware": {
+            "device": "cpu",
+            "model": "AMD64 Family 23 Model 160 Stepping 0, AuthenticAMD",
+            "architecture": "AMD64",
+            "os": "Windows-11-10.0.26200-SP0",
+            "python": "3.12.13",
+            "torch": "2.14.0+cpu",
+            "torch_threads": "1"
+          },
+          "kernel": "Python decode + torch CPU FP32 dense matmul",
+          "measured": true
+        },
+        {
+          "codec": "bitcos_like",
+          "shape": [
+            32,
+            32
+          ],
+          "zero_density": 0.5185546875,
+          "theoretical_bits_per_weight": 1.4814453125,
+          "serialized_bytes": 315,
+          "encode_seconds": 0.0006030000076862052,
+          "decode_seconds": 0.00036589999217540026,
+          "matmul_seconds": 0.0003324000135762617,
+          "throughput_weights_per_second": 3080625.6262834547,
+          "hardware": {
+            "device": "cpu",
+            "model": "AMD64 Family 23 Model 160 Stepping 0, AuthenticAMD",
+            "architecture": "AMD64",
+            "os": "Windows-11-10.0.26200-SP0",
+            "python": "3.12.13",
+            "torch": "2.14.0+cpu",
+            "torch_threads": "1"
+          },
+          "kernel": "Python decode + torch CPU FP32 dense matmul",
+          "measured": true
+        },
+        {
+          "codec": "dense",
+          "shape": [
+            32,
+            32
+          ],
+          "zero_density": 0.5185546875,
+          "theoretical_bits_per_weight": 8.0,
+          "serialized_bytes": 1144,
+          "encode_seconds": 0.00018879999697674066,
+          "decode_seconds": 0.00017919999663718045,
+          "matmul_seconds": 0.00019279999833088368,
+          "throughput_weights_per_second": 5311203.3654824495,
+          "hardware": {
+            "device": "cpu",
+            "model": "AMD64 Family 23 Model 160 Stepping 0, AuthenticAMD",
+            "architecture": "AMD64",
+            "os": "Windows-11-10.0.26200-SP0",
+            "python": "3.12.13",
+            "torch": "2.14.0+cpu",
+            "torch_threads": "1"
+          },
+          "kernel": "Python decode + torch CPU FP32 dense matmul",
+          "measured": true
+        }
+      ],
+      "scope": "jointly validated model tensor; lossless symbol packing"
+    },
+    {
+      "component": "base.blocks.1.linear1.weight",
+      "scale": 0.1912137120962143,
+      "filename": "accepted-tensor-7.aggt",
+      "selected": "bitcos_like",
+      "records": [
+        {
+          "codec": "fixed_ternary",
+          "shape": [
+            64,
+            32
+          ],
+          "zero_density": 0.556640625,
+          "theoretical_bits_per_weight": 1.6,
+          "serialized_bytes": 537,
+          "encode_seconds": 0.000598999991780147,
+          "decode_seconds": 0.0004982999962521717,
+          "matmul_seconds": 0.0005285999941406772,
+          "throughput_weights_per_second": 3874385.211315312,
+          "hardware": {
+            "device": "cpu",
+            "model": "AMD64 Family 23 Model 160 Stepping 0, AuthenticAMD",
+            "architecture": "AMD64",
+            "os": "Windows-11-10.0.26200-SP0",
+            "python": "3.12.13",
+            "torch": "2.14.0+cpu",
+            "torch_threads": "1"
+          },
+          "kernel": "Python decode + torch CPU FP32 dense matmul",
+          "measured": true
+        },
+        {
+          "codec": "bitcos_like",
+          "shape": [
+            64,
+            32
+          ],
+          "zero_density": 0.556640625,
+          "theoretical_bits_per_weight": 1.443359375,
+          "serialized_bytes": 495,
+          "encode_seconds": 0.0013346999912755564,
+          "decode_seconds": 0.0008667999936733395,
+          "matmul_seconds": 0.0009174000006169081,
+          "throughput_weights_per_second": 2232395.899959469,
+          "hardware": {
+            "device": "cpu",
+            "model": "AMD64 Family 23 Model 160 Stepping 0, AuthenticAMD",
+            "architecture": "AMD64",
+            "os": "Windows-11-10.0.26200-SP0",
+            "python": "3.12.13",
+            "torch": "2.14.0+cpu",
+            "torch_threads": "1"
+          },
+          "kernel": "Python decode + torch CPU FP32 dense matmul",
+          "measured": true
+        },
+        {
+          "codec": "dense",
+          "shape": [
+            64,
+            32
+          ],
+          "zero_density": 0.556640625,
+          "theoretical_bits_per_weight": 8.0,
+          "serialized_bytes": 2168,
+          "encode_seconds": 0.0003470000083325431,
+          "decode_seconds": 0.0003735000063898042,
+          "matmul_seconds": 0.0003294999914942309,
+          "throughput_weights_per_second": 6215478.157412509,
+          "hardware": {
+            "device": "cpu",
+            "model": "AMD64 Family 23 Model 160 Stepping 0, AuthenticAMD",
+            "architecture": "AMD64",
+            "os": "Windows-11-10.0.26200-SP0",
+            "python": "3.12.13",
+            "torch": "2.14.0+cpu",
+            "torch_threads": "1"
+          },
+          "kernel": "Python decode + torch CPU FP32 dense matmul",
+          "measured": true
+        }
+      ],
+      "scope": "jointly validated model tensor; lossless symbol packing"
+    },
+    {
+      "component": "base.blocks.1.linear2.weight",
+      "scale": 0.13911184668540955,
+      "filename": "accepted-tensor-8.aggt",
+      "selected": "bitcos_like",
+      "records": [
+        {
+          "codec": "fixed_ternary",
+          "shape": [
+            32,
+            64
+          ],
+          "zero_density": 0.548828125,
+          "theoretical_bits_per_weight": 1.6,
+          "serialized_bytes": 537,
+          "encode_seconds": 0.0006076999998185784,
+          "decode_seconds": 0.0005210000090301037,
+          "matmul_seconds": 0.0005432999896584079,
+          "throughput_weights_per_second": 3769556.486256609,
+          "hardware": {
+            "device": "cpu",
+            "model": "AMD64 Family 23 Model 160 Stepping 0, AuthenticAMD",
+            "architecture": "AMD64",
+            "os": "Windows-11-10.0.26200-SP0",
+            "python": "3.12.13",
+            "torch": "2.14.0+cpu",
+            "torch_threads": "1"
+          },
+          "kernel": "Python decode + torch CPU FP32 dense matmul",
+          "measured": true
+        },
+        {
+          "codec": "bitcos_like",
+          "shape": [
+            32,
+            64
+          ],
+          "zero_density": 0.548828125,
+          "theoretical_bits_per_weight": 1.451171875,
+          "serialized_bytes": 497,
+          "encode_seconds": 0.0009128000092459843,
+          "decode_seconds": 0.000640199999907054,
+          "matmul_seconds": 0.0005997999978717417,
+          "throughput_weights_per_second": 3414471.5026123333,
+          "hardware": {
+            "device": "cpu",
+            "model": "AMD64 Family 23 Model 160 Stepping 0, AuthenticAMD",
+            "architecture": "AMD64",
+            "os": "Windows-11-10.0.26200-SP0",
+            "python": "3.12.13",
+            "torch": "2.14.0+cpu",
+            "torch_threads": "1"
+          },
+          "kernel": "Python decode + torch CPU FP32 dense matmul",
+          "measured": true
+        },
+        {
+          "codec": "dense",
+          "shape": [
+            32,
+            64
+          ],
+          "zero_density": 0.548828125,
+          "theoretical_bits_per_weight": 8.0,
+          "serialized_bytes": 2168,
+          "encode_seconds": 0.00022390000231098384,
+          "decode_seconds": 0.00029880000511184335,
+          "matmul_seconds": 0.00031380000291392207,
+          "throughput_weights_per_second": 6526449.907528469,
+          "hardware": {
+            "device": "cpu",
+            "model": "AMD64 Family 23 Model 160 Stepping 0, AuthenticAMD",
+            "architecture": "AMD64",
+            "os": "Windows-11-10.0.26200-SP0",
+            "python": "3.12.13",
+            "torch": "2.14.0+cpu",
+            "torch_threads": "1"
+          },
+          "kernel": "Python decode + torch CPU FP32 dense matmul",
+          "measured": true
+        }
+      ],
+      "scope": "jointly validated model tensor; lossless symbol packing"
+    },
+    {
+      "component": "base.readout.weight",
+      "scale": 0.19068172574043274,
+      "filename": "accepted-tensor-9.aggt",
+      "selected": "bitcos_like",
+      "records": [
+        {
+          "codec": "fixed_ternary",
+          "shape": [
+            4,
+            32
+          ],
+          "zero_density": 0.6015625,
+          "theoretical_bits_per_weight": 1.6,
+          "serialized_bytes": 150,
+          "encode_seconds": 0.00014150000060908496,
+          "decode_seconds": 6.120000034570694e-05,
+          "matmul_seconds": 6.579999171663076e-05,
+          "throughput_weights_per_second": 1945288.9986861255,
+          "hardware": {
+            "device": "cpu",
+            "model": "AMD64 Family 23 Model 160 Stepping 0, AuthenticAMD",
+            "architecture": "AMD64",
+            "os": "Windows-11-10.0.26200-SP0",
+            "python": "3.12.13",
+            "torch": "2.14.0+cpu",
+            "torch_threads": "1"
+          },
+          "kernel": "Python decode + torch CPU FP32 dense matmul",
+          "measured": true
+        },
+        {
+          "codec": "bitcos_like",
+          "shape": [
+            4,
+            32
+          ],
+          "zero_density": 0.6015625,
+          "theoretical_bits_per_weight": 1.3984375,
+          "serialized_bytes": 145,
+          "encode_seconds": 0.0001075999898603186,
+          "decode_seconds": 5.910001345910132e-05,
+          "matmul_seconds": 6.400000711437315e-05,
+          "throughput_weights_per_second": 1999999.7776758638,
+          "hardware": {
+            "device": "cpu",
+            "model": "AMD64 Family 23 Model 160 Stepping 0, AuthenticAMD",
+            "architecture": "AMD64",
+            "os": "Windows-11-10.0.26200-SP0",
+            "python": "3.12.13",
+            "torch": "2.14.0+cpu",
+            "torch_threads": "1"
+          },
+          "kernel": "Python decode + torch CPU FP32 dense matmul",
+          "measured": true
+        },
+        {
+          "codec": "dense",
+          "shape": [
+            4,
+            32
+          ],
+          "zero_density": 0.6015625,
+          "theoretical_bits_per_weight": 8.0,
+          "serialized_bytes": 245,
+          "encode_seconds": 7.029999687802047e-05,
+          "decode_seconds": 4.449998959898949e-05,
+          "matmul_seconds": 4.839999019168317e-05,
+          "throughput_weights_per_second": 2644628.6351106516,
+          "hardware": {
+            "device": "cpu",
+            "model": "AMD64 Family 23 Model 160 Stepping 0, AuthenticAMD",
+            "architecture": "AMD64",
+            "os": "Windows-11-10.0.26200-SP0",
+            "python": "3.12.13",
+            "torch": "2.14.0+cpu",
+            "torch_threads": "1"
+          },
+          "kernel": "Python decode + torch CPU FP32 dense matmul",
+          "measured": true
+        }
+      ],
+      "scope": "jointly validated model tensor; lossless symbol packing"
+    },
+    {
+      "component": "adapter.prototypes",
+      "scale": 1.1061644554138184,
+      "filename": "accepted-tensor-10.aggt",
+      "selected": "bitcos_like",
+      "records": [
+        {
+          "codec": "fixed_ternary",
+          "shape": [
+            8,
+            8
+          ],
+          "zero_density": 0.84375,
+          "theoretical_bits_per_weight": 1.6,
+          "serialized_bytes": 135,
+          "encode_seconds": 0.00014099999680183828,
+          "decode_seconds": 7.399999594781548e-05,
+          "matmul_seconds": 9.229998977389187e-05,
+          "throughput_weights_per_second": 693391.1927485733,
+          "hardware": {
+            "device": "cpu",
+            "model": "AMD64 Family 23 Model 160 Stepping 0, AuthenticAMD",
+            "architecture": "AMD64",
+            "os": "Windows-11-10.0.26200-SP0",
+            "python": "3.12.13",
+            "torch": "2.14.0+cpu",
+            "torch_threads": "1"
+          },
+          "kernel": "Python decode + torch CPU FP32 dense matmul",
+          "measured": true
+        },
+        {
+          "codec": "bitcos_like",
+          "shape": [
+            8,
+            8
+          ],
+          "zero_density": 0.84375,
+          "theoretical_bits_per_weight": 1.15625,
+          "serialized_bytes": 130,
+          "encode_seconds": 8.840000373311341e-05,
+          "decode_seconds": 4.329999501351267e-05,
+          "matmul_seconds": 4.990000161342323e-05,
+          "throughput_weights_per_second": 1282565.0887911762,
+          "hardware": {
+            "device": "cpu",
+            "model": "AMD64 Family 23 Model 160 Stepping 0, AuthenticAMD",
+            "architecture": "AMD64",
+            "os": "Windows-11-10.0.26200-SP0",
+            "python": "3.12.13",
+            "torch": "2.14.0+cpu",
+            "torch_threads": "1"
+          },
+          "kernel": "Python decode + torch CPU FP32 dense matmul",
+          "measured": true
+        },
+        {
+          "codec": "dense",
+          "shape": [
+            8,
+            8
+          ],
+          "zero_density": 0.84375,
+          "theoretical_bits_per_weight": 8.0,
+          "serialized_bytes": 178,
+          "encode_seconds": 6.819999543949962e-05,
+          "decode_seconds": 3.749999450519681e-05,
+          "matmul_seconds": 4.090000584255904e-05,
+          "throughput_weights_per_second": 1564791.9525088174,
+          "hardware": {
+            "device": "cpu",
+            "model": "AMD64 Family 23 Model 160 Stepping 0, AuthenticAMD",
+            "architecture": "AMD64",
+            "os": "Windows-11-10.0.26200-SP0",
+            "python": "3.12.13",
+            "torch": "2.14.0+cpu",
+            "torch_threads": "1"
+          },
+          "kernel": "Python decode + torch CPU FP32 dense matmul",
+          "measured": true
+        }
+      ],
+      "scope": "jointly validated model tensor; lossless symbol packing"
+    },
+    {
+      "component": "adapter.project.weight",
+      "scale": 0.18474824726581573,
+      "filename": "accepted-tensor-11.aggt",
+      "selected": "bitcos_like",
+      "records": [
+        {
+          "codec": "fixed_ternary",
+          "shape": [
+            8,
+            32
+          ],
+          "zero_density": 0.55859375,
+          "theoretical_bits_per_weight": 1.6,
+          "serialized_bytes": 176,
+          "encode_seconds": 0.00012129999231547117,
+          "decode_seconds": 7.950000872369856e-05,
+          "matmul_seconds": 8.379999781027436e-05,
+          "throughput_weights_per_second": 3054892.68125748,
+          "hardware": {
+            "device": "cpu",
+            "model": "AMD64 Family 23 Model 160 Stepping 0, AuthenticAMD",
+            "architecture": "AMD64",
+            "os": "Windows-11-10.0.26200-SP0",
+            "python": "3.12.13",
+            "torch": "2.14.0+cpu",
+            "torch_threads": "1"
+          },
+          "kernel": "Python decode + torch CPU FP32 dense matmul",
+          "measured": true
+        },
+        {
+          "codec": "bitcos_like",
+          "shape": [
+            8,
+            32
+          ],
+          "zero_density": 0.55859375,
+          "theoretical_bits_per_weight": 1.44140625,
+          "serialized_bytes": 169,
+          "encode_seconds": 0.0002497000095900148,
+          "decode_seconds": 0.00018489999638404697,
+          "matmul_seconds": 0.00017120000848080963,
+          "throughput_weights_per_second": 1495327.0287290663,
+          "hardware": {
+            "device": "cpu",
+            "model": "AMD64 Family 23 Model 160 Stepping 0, AuthenticAMD",
+            "architecture": "AMD64",
+            "os": "Windows-11-10.0.26200-SP0",
+            "python": "3.12.13",
+            "torch": "2.14.0+cpu",
+            "torch_threads": "1"
+          },
+          "kernel": "Python decode + torch CPU FP32 dense matmul",
+          "measured": true
+        },
+        {
+          "codec": "dense",
+          "shape": [
+            8,
+            32
+          ],
+          "zero_density": 0.55859375,
+          "theoretical_bits_per_weight": 8.0,
+          "serialized_bytes": 373,
+          "encode_seconds": 8.38999985717237e-05,
+          "decode_seconds": 6.310000026132911e-05,
+          "matmul_seconds": 6.730000313837081e-05,
+          "throughput_weights_per_second": 3803863.121278856,
+          "hardware": {
+            "device": "cpu",
+            "model": "AMD64 Family 23 Model 160 Stepping 0, AuthenticAMD",
+            "architecture": "AMD64",
+            "os": "Windows-11-10.0.26200-SP0",
+            "python": "3.12.13",
+            "torch": "2.14.0+cpu",
+            "torch_threads": "1"
+          },
+          "kernel": "Python decode + torch CPU FP32 dense matmul",
+          "measured": true
+        }
+      ],
+      "scope": "jointly validated model tensor; lossless symbol packing"
+    },
+    {
+      "component": "adapter.lift.weight",
+      "scale": 0.36104676127433777,
+      "filename": "accepted-tensor-12.aggt",
+      "selected": "bitcos_like",
+      "records": [
+        {
+          "codec": "fixed_ternary",
+          "shape": [
+            32,
+            8
+          ],
+          "zero_density": 0.5234375,
+          "theoretical_bits_per_weight": 1.6,
+          "serialized_bytes": 176,
+          "encode_seconds": 0.0001218999968841672,
+          "decode_seconds": 8.040000102482736e-05,
+          "matmul_seconds": 8.469999011140317e-05,
+          "throughput_weights_per_second": 3022432.466205621,
+          "hardware": {
+            "device": "cpu",
+            "model": "AMD64 Family 23 Model 160 Stepping 0, AuthenticAMD",
+            "architecture": "AMD64",
+            "os": "Windows-11-10.0.26200-SP0",
+            "python": "3.12.13",
+            "torch": "2.14.0+cpu",
+            "torch_threads": "1"
+          },
+          "kernel": "Python decode + torch CPU FP32 dense matmul",
+          "measured": true
+        },
+        {
+          "codec": "bitcos_like",
+          "shape": [
+            32,
+            8
+          ],
+          "zero_density": 0.5234375,
+          "theoretical_bits_per_weight": 1.4765625,
+          "serialized_bytes": 170,
+          "encode_seconds": 0.00015160000475589186,
+          "decode_seconds": 8.72999953571707e-05,
+          "matmul_seconds": 9.06000059330836e-05,
+          "throughput_weights_per_second": 2825606.8789783465,
+          "hardware": {
+            "device": "cpu",
+            "model": "AMD64 Family 23 Model 160 Stepping 0, AuthenticAMD",
+            "architecture": "AMD64",
+            "os": "Windows-11-10.0.26200-SP0",
+            "python": "3.12.13",
+            "torch": "2.14.0+cpu",
+            "torch_threads": "1"
+          },
+          "kernel": "Python decode + torch CPU FP32 dense matmul",
+          "measured": true
+        },
+        {
+          "codec": "dense",
+          "shape": [
+            32,
+            8
+          ],
+          "zero_density": 0.5234375,
+          "theoretical_bits_per_weight": 8.0,
+          "serialized_bytes": 373,
+          "encode_seconds": 7.869998808018863e-05,
+          "decode_seconds": 5.9600002714432776e-05,
+          "matmul_seconds": 6.44999963697046e-05,
+          "throughput_weights_per_second": 3968992.471451397,
+          "hardware": {
+            "device": "cpu",
+            "model": "AMD64 Family 23 Model 160 Stepping 0, AuthenticAMD",
+            "architecture": "AMD64",
+            "os": "Windows-11-10.0.26200-SP0",
+            "python": "3.12.13",
+            "torch": "2.14.0+cpu",
+            "torch_threads": "1"
+          },
+          "kernel": "Python decode + torch CPU FP32 dense matmul",
+          "measured": true
+        }
+      ],
+      "scope": "jointly validated model tensor; lossless symbol packing"
+    }
+  ]
+}

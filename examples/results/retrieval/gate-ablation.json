@@ -1,0 +1,137 @@
+[
+  {
+    "gate": 0.0,
+    "id": {
+      "loss": 1.6802597045898438,
+      "accuracy": 0.09375,
+      "balanced_accuracy": 0.07500000298023224
+    },
+    "ood": {
+      "loss": 1.6931657791137695,
+      "accuracy": 0.09375,
+      "balanced_accuracy": 0.1071428582072258
+    }
+  },
+  {
+    "gate": 0.25,
+    "id": {
+      "loss": 1.6762093305587769,
+      "accuracy": 0.09375,
+      "balanced_accuracy": 0.07500000298023224
+    },
+    "ood": {
+      "loss": 1.6964640617370605,
+      "accuracy": 0.09375,
+      "balanced_accuracy": 0.1071428582072258
+    }
+  },
+  {
+    "gate": 0.5,
+    "id": {
+      "loss": 1.667361855506897,
+      "accuracy": 0.09375,
+      "balanced_accuracy": 0.07500000298023224
+    },
+    "ood": {
+      "loss": 1.7021586894989014,
+      "accuracy": 0.09375,
+      "balanced_accuracy": 0.1071428582072258
+    }
+  },
+  {
+    "gate": 0.75,
+    "id": {
+      "loss": 1.6415231227874756,
+      "accuracy": 0.0,
+      "balanced_accuracy": 0.0
+    },
+    "ood": {
+      "loss": 1.715393304824829,
+      "accuracy": 0.0,
+      "balanced_accuracy": 0.0
+    }
+  },
+  {
+    "gate": 1.0,
+    "id": {
+      "loss": 1.5390881299972534,
+      "accuracy": 0.28125,
+      "balanced_accuracy": 0.25
+    },
+    "ood": {
+      "loss": 1.7079626321792603,
+      "accuracy": 0.21875,
+      "balanced_accuracy": 0.25
+    }
+  },
+  {
+    "unaccepted_probe": true,
+    "gate": 0.0,
+    "id": {
+      "loss": 1.6802597045898438,
+      "accuracy": 0.09375,
+      "balanced_accuracy": 0.07500000298023224
+    },
+    "ood": {
+      "loss": 1.6931657791137695,
+      "accuracy": 0.09375,
+      "balanced_accuracy": 0.1071428582072258
+    }
+  },
+  {
+    "unaccepted_probe": true,
+    "gate": 0.25,
+    "id": {
+      "loss": 1.6835416555404663,
+      "accuracy": 0.09375,
+      "balanced_accuracy": 0.07500000298023224
+    },
+    "ood": {
+      "loss": 1.7058801651000977,
+      "accuracy": 0.09375,
+      "balanced_accuracy": 0.1071428582072258
+    }
+  },
+  {
+    "unaccepted_probe": true,
+    "gate": 0.5,
+    "id": {
+      "loss": 1.6908992528915405,
+      "accuracy": 0.09375,
+      "balanced_accuracy": 0.07500000298023224
+    },
+    "ood": {
+      "loss": 1.7327184677124023,
+      "accuracy": 0.09375,
+      "balanced_accuracy": 0.1071428582072258
+    }
+  },
+  {
+    "unaccepted_probe": true,
+    "gate": 0.75,
+    "id": {
+      "loss": 1.7164428234100342,
+      "accuracy": 0.21875,
+      "balanced_accuracy": 0.17499999701976776
+    },
+    "ood": {
+      "loss": 1.8150546550750732,
+      "accuracy": 0.203125,
+      "balanced_accuracy": 0.2321428507566452
+    }
+  },
+  {
+    "unaccepted_probe": true,
+    "gate": 1.0,
+    "id": {
+      "loss": 1.5385452508926392,
+      "accuracy": 0.3125,
+      "balanced_accuracy": 0.25
+    },
+    "ood": {
+      "loss": 1.7394907474517822,
+      "accuracy": 0.21875,
+      "balanced_accuracy": 0.25
+    }
+  }
+]

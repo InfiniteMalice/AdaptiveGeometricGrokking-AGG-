@@ -1,0 +1,290 @@
+[
+  {
+    "gate": 0.0,
+    "distance": 1,
+    "density": 0.0,
+    "context_length": 8,
+    "seed_steps": {
+      "0": null,
+      "1": null
+    },
+    "censored_seeds": 2,
+    "observed_median_step": null,
+    "observed_range": null,
+    "censor_steps": {
+      "0": 12,
+      "1": 12
+    },
+    "inference": "observed-only summary; no confidence interval or survival estimate"
+  },
+  {
+    "gate": 0.0,
+    "distance": 1,
+    "density": 0.0,
+    "context_length": 16,
+    "seed_steps": {
+      "0": null,
+      "1": null
+    },
+    "censored_seeds": 2,
+    "observed_median_step": null,
+    "observed_range": null,
+    "censor_steps": {
+      "0": 12,
+      "1": 12
+    },
+    "inference": "observed-only summary; no confidence interval or survival estimate"
+  },
+  {
+    "gate": 0.0,
+    "distance": 1,
+    "density": 0.5,
+    "context_length": 8,
+    "seed_steps": {
+      "0": null,
+      "1": null
+    },
+    "censored_seeds": 2,
+    "observed_median_step": null,
+    "observed_range": null,
+    "censor_steps": {
+      "0": 12,
+      "1": 12
+    },
+    "inference": "observed-only summary; no confidence interval or survival estimate"
+  },
+  {
+    "gate": 0.0,
+    "distance": 1,
+    "density": 0.5,
+    "context_length": 16,
+    "seed_steps": {
+      "0": null,
+      "1": null
+    },
+    "censored_seeds": 2,
+    "observed_median_step": null,
+    "observed_range": null,
+    "censor_steps": {
+      "0": 12,
+      "1": 12
+    },
+    "inference": "observed-only summary; no confidence interval or survival estimate"
+  },
+  {
+    "gate": 0.0,
+    "distance": 3,
+    "density": 0.0,
+    "context_length": 8,
+    "seed_steps": {
+      "0": null,
+      "1": null
+    },
+    "censored_seeds": 2,
+    "observed_median_step": null,
+    "observed_range": null,
+    "censor_steps": {
+      "0": 12,
+      "1": 12
+    },
+    "inference": "observed-only summary; no confidence interval or survival estimate"
+  },
+  {
+    "gate": 0.0,
+    "distance": 3,
+    "density": 0.0,
+    "context_length": 16,
+    "seed_steps": {
+      "0": null,
+      "1": null
+    },
+    "censored_seeds": 2,
+    "observed_median_step": null,
+    "observed_range": null,
+    "censor_steps": {
+      "0": 12,
+      "1": 12
+    },
+    "inference": "observed-only summary; no confidence interval or survival estimate"
+  },
+  {
+    "gate": 0.0,
+    "distance": 3,
+    "density": 0.5,
+    "context_length": 8,
+    "seed_steps": {
+      "0": null,
+      "1": null
+    },
+    "censored_seeds": 2,
+    "observed_median_step": null,
+    "observed_range": null,
+    "censor_steps": {
+      "0": 12,
+      "1": 12
+    },
+    "inference": "observed-only summary; no confidence interval or survival estimate"
+  },
+  {
+    "gate": 0.0,
+    "distance": 3,
+    "density": 0.5,
+    "context_length": 16,
+    "seed_steps": {
+      "0": null,
+      "1": null
+    },
+    "censored_seeds": 2,
+    "observed_median_step": null,
+    "observed_range": null,
+    "censor_steps": {
+      "0": 12,
+      "1": 12
+    },
+    "inference": "observed-only summary; no confidence interval or survival estimate"
+  },
+  {
+    "gate": 1.0,
+    "distance": 1,
+    "density": 0.0,
+    "context_length": 8,
+    "seed_steps": {
+      "0": null,
+      "1": null
+    },
+    "censored_seeds": 2,
+    "observed_median_step": null,
+    "observed_range": null,
+    "censor_steps": {
+      "0": 12,
+      "1": 12
+    },
+    "inference": "observed-only summary; no confidence interval or survival estimate"
+  },
+  {
+    "gate": 1.0,
+    "distance": 1,
+    "density": 0.0,
+    "context_length": 16,
+    "seed_steps": {
+      "0": null,
+      "1": null
+    },
+    "censored_seeds": 2,
+    "observed_median_step": null,
+    "observed_range": null,
+    "censor_steps": {
+      "0": 12,
+      "1": 12
+    },
+    "inference": "observed-only summary; no confidence interval or survival estimate"
+  },
+  {
+    "gate": 1.0,
+    "distance": 1,
+    "density": 0.5,
+    "context_length": 8,
+    "seed_steps": {
+      "0": null,
+      "1": null
+    },
+    "censored_seeds": 2,
+    "observed_median_step": null,
+    "observed_range": null,
+    "censor_steps": {
+      "0": 12,
+      "1": 12
+    },
+    "inference": "observed-only summary; no confidence interval or survival estimate"
+  },
+  {
+    "gate": 1.0,
+    "distance": 1,
+    "density": 0.5,
+    "context_length": 16,
+    "seed_steps": {
+      "0": null,
+      "1": null
+    },
+    "censored_seeds": 2,
+    "observed_median_step": null,
+    "observed_range": null,
+    "censor_steps": {
+      "0": 12,
+      "1": 12
+    },
+    "inference": "observed-only summary; no confidence interval or survival estimate"
+  },
+  {
+    "gate": 1.0,
+    "distance": 3,
+    "density": 0.0,
+    "context_length": 8,
+    "seed_steps": {
+      "0": null,
+      "1": null
+    },
+    "censored_seeds": 2,
+    "observed_median_step": null,
+    "observed_range": null,
+    "censor_steps": {
+      "0": 12,
+      "1": 12
+    },
+    "inference": "observed-only summary; no confidence interval or survival estimate"
+  },
+  {
+    "gate": 1.0,
+    "distance": 3,
+    "density": 0.0,
+    "context_length": 16,
+    "seed_steps": {
+      "0": null,
+      "1": null
+    },
+    "censored_seeds": 2,
+    "observed_median_step": null,
+    "observed_range": null,
+    "censor_steps": {
+      "0": 12,
+      "1": 12
+    },
+    "inference": "observed-only summary; no confidence interval or survival estimate"
+  },
+  {
+    "gate": 1.0,
+    "distance": 3,
+    "density": 0.5,
+    "context_length": 8,
+    "seed_steps": {
+      "0": null,
+      "1": null
+    },
+    "censored_seeds": 2,
+    "observed_median_step": null,
+    "observed_range": null,
+    "censor_steps": {
+      "0": 12,
+      "1": 12
+    },
+    "inference": "observed-only summary; no confidence interval or survival estimate"
+  },
+  {
+    "gate": 1.0,
+    "distance": 3,
+    "density": 0.5,
+    "context_length": 16,
+    "seed_steps": {
+      "0": null,
+      "1": null
+    },
+    "censored_seeds": 2,
+    "observed_median_step": null,
+    "observed_range": null,
+    "censor_steps": {
+      "0": 12,
+      "1": 12
+    },
+    "inference": "observed-only summary; no confidence interval or survival estimate"
+  }
+]

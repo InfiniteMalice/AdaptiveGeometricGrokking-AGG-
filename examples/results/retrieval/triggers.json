@@ -1,0 +1,92 @@
+[
+  {
+    "step": 12,
+    "reason": "periodic",
+    "signals": {
+      "task": {
+        "loss": 1.1864513158798218,
+        "accuracy": 0.4765625,
+        "balanced_accuracy": 0.460336297750473
+      },
+      "id": {
+        "loss": 1.667361855506897,
+        "accuracy": 0.09375,
+        "balanced_accuracy": 0.07500000298023224
+      },
+      "ood": {
+        "loss": 1.7021586894989014,
+        "accuracy": 0.09375,
+        "balanced_accuracy": 0.1071428582072258
+      },
+      "generalization": {
+        "score": 0.09375,
+        "method": "held-out structural OOD accuracy"
+      },
+      "sparsity": {
+        "parameters": 20876,
+        "active_parameters": 20876
+      },
+      "memorization": {
+        "score": 0.328125,
+        "method": "training-representation 1NN agreement proxy"
+      },
+      "gates": {
+        "adapter.gate": {
+          "value": 0.5,
+          "entropy": 0.6931471805599453,
+          "saturated": false
+        }
+      },
+      "retrieval": {
+        "score": 0.0,
+        "method": "relevant-memory ablation accuracy delta proxy"
+      },
+      "attribution": {
+        "relevant_ablation_accuracy_delta": 0.0,
+        "counterfactual_replacement_accuracy": 0.21875,
+        "distractor_removal_accuracy_delta": 0.0,
+        "counterfactual_changed_prediction_fraction": 0.0625
+      },
+      "horizon": {
+        "nominal_horizon": 11,
+        "retrieval_horizon": null,
+        "attribution_horizon": null,
+        "causal_horizon": null,
+        "threshold": 0.75,
+        "method": "maximum sampled qualifying distance; no interpolation",
+        "causal_threshold_0_1": null,
+        "distances": [
+          1,
+          3,
+          6,
+          11
+        ],
+        "accuracy": [
+          0.09375,
+          0.09375,
+          0.09375,
+          0.09375
+        ],
+        "ablation_delta": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "complexity": {
+        "bits": 30.83222831310269,
+        "bits_per_observation": 1.927014269568918,
+        "observations": 16,
+        "proxy": true,
+        "method": "prequential_predictive_code_length_proxy",
+        "limitation": "Excludes model/compute cost; not true epiplexity",
+        "compute_budget_updates": 16,
+        "seed": 0,
+        "structural_description_bits": null,
+        "probe": "online linear SGD",
+        "residual_predictive_bits": 30.832228660583496
+      }
+    }
+  }
+]

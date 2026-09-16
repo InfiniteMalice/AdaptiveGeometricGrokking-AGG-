@@ -1,0 +1,53 @@
+[
+  {
+    "step": 12,
+    "reason": "periodic",
+    "signals": {
+      "task": {
+        "loss": 0.39069828391075134,
+        "accuracy": 0.8695651888847351,
+        "balanced_accuracy": 0.5
+      },
+      "id": {
+        "loss": 0.41227108240127563,
+        "accuracy": 0.8600000143051147,
+        "balanced_accuracy": 0.5
+      },
+      "ood": {
+        "loss": 0.5376235842704773,
+        "accuracy": 0.800000011920929,
+        "balanced_accuracy": 0.5
+      },
+      "generalization": {
+        "score": 0.800000011920929,
+        "method": "held-out structural OOD accuracy"
+      },
+      "sparsity": {
+        "parameters": 17826,
+        "active_parameters": 17826
+      },
+      "memorization": {
+        "score": 0.9599999785423279,
+        "method": "training-representation 1NN agreement proxy"
+      },
+      "gates": {},
+      "horizon": {
+        "available": false,
+        "reason": "requires movable relevant memory"
+      },
+      "complexity": {
+        "bits": 9.925925201678735,
+        "bits_per_observation": 0.620370325104921,
+        "observations": 16,
+        "proxy": true,
+        "method": "prequential_predictive_code_length_proxy",
+        "limitation": "Excludes model/compute cost; not true epiplexity",
+        "compute_budget_updates": 16,
+        "seed": 0,
+        "structural_description_bits": null,
+        "probe": "online linear SGD",
+        "residual_predictive_bits": 9.925925232470036
+      }
+    }
+  }
+]
