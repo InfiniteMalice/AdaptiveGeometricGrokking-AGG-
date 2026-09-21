@@ -1,5 +1,16 @@
 # Telemetry glossary
 
+The separate controller `Observation` schema now writes `agg.controller/2` and
+loads v1 through explicit migration. Its `reasoning` category contains optional
+dispersion (squared representation units in the reference extractor), displacement
+(representation units), trajectory cosine [-1,1], predictive entropy (nats), active
+evidence fraction, Jaccard evidence turnover and host-defined signed progress.
+Entropy is not assumed normalized. Undefined direction and missing measurements
+are `None`. Hosts label proxies in `proxy_metrics`. See [definitions and shapes](state-of-thought.md).
+Temporal summaries differentiate measured scalars over `Observation.step`; these
+are distinct from the normalized-depth quantities below. IDs, routing choices,
+validity attestations and intervention labels are provenance/event records.
+
 `TelemetrySnapshot` schema `0.1` identifies `step`, `checkpoint`, optional `layer`, and `component`. `raw` and `derived` retain category-level values. `availability` distinguishes observed from missing values and `proxy` marks interpretive limitations. Missing categories are `null`, not zero. JSON serialization rejects NaN and infinity. Availability means that a category has data, not that every possible submetric has been observed.
 
 | Category | Current meaning |

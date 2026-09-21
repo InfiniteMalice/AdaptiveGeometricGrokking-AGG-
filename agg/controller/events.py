@@ -17,6 +17,8 @@ class EventType(StrEnum):
     ABSTRACTION = "AbstractionEvent"
     CURRICULUM = "CurriculumEvent"
     REGRESSION = "RegressionEvent"
+    EVIDENCE_ROUTING = "EvidenceRoutingEvent"
+    ROUTING_OUTCOME = "EvidenceRoutingOutcome"
 
 
 @dataclass(frozen=True)

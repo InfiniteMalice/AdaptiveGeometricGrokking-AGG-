@@ -52,6 +52,8 @@ class Action(StrEnum):
     TRIGGER_REGRESSION_SUITE = "trigger_regression_suite"
     TRIGGER_CONTINUAL_LEARNING_REPAIR = "trigger_continual_learning_repair"
     REQUEST_HUMAN_REVIEW = "request_human_review"
+    CONTINUE_REASONING = "continue_reasoning"
+    STOP_REASONING = "stop_reasoning"
 
 
 # Exhaustive action names are not execution authority. Only these numeric targets
@@ -146,7 +148,11 @@ class SlopeComputePolicy:
 class InterventionPolicy:
     def __init__(self, config: ControllerConfig, compute: ComputeAllocationPolicy | None = None):
         self.config = config
-        self.compute = compute or SlopeComputePolicy(config)
+        self.compute = compute or (
+            ReasoningComputePolicy(config)
+            if config.reasoning.enabled
+            else SlopeComputePolicy(config)
+        )
         self.failed_actions: dict[DiagnosisType, set[Action]] = {}
 
     def feedback(self, proposal: InterventionProposal, status: str) -> None:
@@ -211,7 +217,16 @@ class InterventionPolicy:
             D.MEMORIZATION_DOMINANCE: (Action.INCREASE_OOD_EXAMPLES, "performance.ood_score"),
         }
         if credible:
-            if diagnosis.kind in choices:
+            if c.reasoning.enabled and diagnosis.kind in {
+                D.PLATEAU,
+                D.HEALTHY_PROGRESS,
+                D.EXCESSIVE_REASONING,
+                D.INSUFFICIENT_REASONING,
+                D.EXPLORATION_COLLAPSE,
+                D.EXCESSIVE_EXPLORATION,
+            }:
+                action = self.compute.recommend(observation, temporal.get(target))
+            elif diagnosis.kind in choices:
                 action, target = choices[diagnosis.kind]
             elif diagnosis.kind == D.PLATEAU:
                 action = self.compute.recommend(observation, temporal.get(target))
@@ -252,3 +267,74 @@ class InterventionPolicy:
             evaluation_samples=c.evaluation_samples,
             baseline_provenance=observation.provenance,
         )
+
+
+class ReasoningComputePolicy:
+    """Opt-in recommendations using state, never reward shaping or execution.
+
+    Task progress supplies the existing temporal support/confidence gate. Missing
+    state abstains; proxy evidence remains confidence-capped. Stop/continue and
+    alternate retrieval are unsupported by current execution providers.
+    """
+
+    def __init__(self, config: ControllerConfig):
+        self.config = config
+
+    def recommend(self, observation: Observation, progress: TemporalSummary | None) -> Action:
+        c, r = self.config, self.config.reasoning
+        if not r.enabled:
+            return SlopeComputePolicy(c).recommend(observation, progress)
+        if observation.out_of_distribution or observation.contradictory:
+            return Action.OBSERVE_MORE
+        if (
+            observation.search.risk is not None
+            and observation.search.risk >= c.confidence_threshold
+        ):
+            return Action.REQUEST_HUMAN_REVIEW
+        if (
+            progress is None
+            or progress.samples < c.temporal.min_samples
+            or not 0 <= progress.confidence <= 1
+            or progress.confidence < c.confidence_threshold
+            or progress.trend in {"degrading", "unstable", "insufficient_evidence"}
+        ):
+            return Action.OBSERVE_MORE
+        if (
+            any(
+                name.startswith("reasoning.") or name == "performance.task_accuracy"
+                for name in observation.proxy_metrics
+            )
+            and c.proxy_confidence_cap < c.confidence_threshold
+        ):
+            return Action.OBSERVE_MORE
+        if (
+            observation.search.uncertainty is not None
+            and observation.search.uncertainty > c.confidence_threshold
+        ):
+            return Action.OBSERVE_MORE
+        state = observation.reasoning
+        entropy, displacement = state.predictive_entropy, state.state_displacement
+        direction, support = state.trajectory_cosine, state.active_evidence_fraction
+        if entropy is None or displacement is None or direction is None or support is None:
+            return Action.OBSERVE_MORE
+        if (
+            support < r.minimum_support
+            or direction < 0
+            or (
+                state.evidence_turnover is not None and state.evidence_turnover > r.maximum_turnover
+            )
+        ):
+            return Action.RETRIEVE_ALTERNATIVE_MEMORIES
+        if entropy >= r.entropy_high:
+            gain = observation.search.marginal_gain_per_compute
+            if gain is not None and gain < c.marginal_gain_threshold:
+                return Action.OBSERVE_MORE
+            return Action.INCREASE_REASONING_BUDGET
+        if (
+            entropy <= r.entropy_low
+            and displacement <= r.displacement_floor
+            and state.reasoning_progress is not None
+            and state.reasoning_progress <= 0
+        ):
+            return Action.STOP_REASONING if r.allow_stop else Action.DECREASE_REASONING_BUDGET
+        return Action.CONTINUE_REASONING

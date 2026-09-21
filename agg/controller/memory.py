@@ -77,6 +77,14 @@ class AbstractionRegistry:
     def get(self, identity: str) -> Abstraction:
         return copy.deepcopy(self._records[identity])
 
+    def snapshot(self) -> tuple[Abstraction, ...]:
+        """Read-only routing/audit input, including inactive and conflicting records.
+
+        Returning private copies prevents a selector from rewriting registry
+        knowledge through nested conditions or provenance dictionaries.
+        """
+        return tuple(copy.deepcopy(self._records[key]) for key in sorted(self._records))
+
     def retrieve(self, block: str, context: dict[str, Any]) -> list[Abstraction]:
         # Conditions are conjunctions. Any matched exclusion vetoes application.
         return [

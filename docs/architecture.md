@@ -4,6 +4,12 @@ The optional adaptive telemetry/control subsystem is described in
 [controller architecture and extension points](controller.md). It preserves the
 research pipeline below and shares its classifier evaluator and copy-based trials.
 
+The [SoT-inspired reasoning loop](state-of-thought.md) is a separate control
+timescale: compact state conditions ephemeral activation of existing valid
+evidence and bounded compute proposals. It does not merge the model/depth inner
+loop with the harness/audit loop. The registry retains knowledge; EventLog retains
+routing history; providers alone stage candidates under protected acceptance.
+
 The baseline `TinyTransformer` has no AGG dependency. It consumes token sequences,
 uses pre-normalization causal self-attention, and classifies the last position.
 An optional `AdaptedModel` applies a prototype-distance adapter to final hidden

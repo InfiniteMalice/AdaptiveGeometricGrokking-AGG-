@@ -93,6 +93,15 @@ The replay outcomes in this demo are synthetic. Real controller execution curren
 supports isolated learning-rate and regularization continuation trials; other
 mechanisms have explicit interfaces and unsupported-action reporting.
 
+The [SoT-inspired extension](docs/state-of-thought.md) adds compact reasoning
+telemetry, audited activation of externally valid evidence, causal ablations and
+opt-in bounded compute recommendations. It does not reproduce SoT or add an LLM
+reasoning engine. Compare absolute state and temporal dynamics on a synthetic fixture:
+
+```bash
+python -m agg.controller.reasoning_demo --output runs/sot-demo
+```
+
 ```bash
 python -m pytest -q
 python -m ruff check agg tests

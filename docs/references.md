@@ -1,5 +1,15 @@
 # References and provenance
 
+Gong, Z., Hou, Y., Zeng, Z., Xiao, M., Yuen, C., & Lim, W. Y. B. (2026).
+*State of thought enables endogenous reasoning* (arXiv:2609.16055). arXiv.
+https://arxiv.org/abs/2609.16055
+
+Checked 2026-09-21 against arXiv v1. Relationship: adapted motivation for compact
+state-conditioned evidence activation and continuation. AGG uses deterministic
+reference routing, richer named telemetry, protected trial acceptance and explicit
+audit boundaries. This is not a reproduction of the paper's learned controller,
+backbones, readout protocol, training method or empirical results.
+
 Primary source pages checked 2026-09-16. Categories distinguish implemented techniques, adapted motivations and AGG hypotheses. This list does not assert that AGG reproduces the papers' results.
 
 | Source | Relationship to AGG |

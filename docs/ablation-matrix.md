@@ -1,5 +1,14 @@
 # Ablation matrix
 
+The separate [SoT-inspired control ablations](state-of-thought.md) are host API
+hooks, not additions to the training `Features` presets below. They include
+coordinate zeroing/permutation, temporal scrambling, dynamics disabled, absolute
+state only, random/state-independent/fixed/full-history evidence, and
+counterfactual replay. `python -m agg.controller.reasoning_demo --output <new-dir>`
+compares absolute/first-order/second-order/independent controls on a labeled
+synthetic trajectory. Original observations remain separate from perturbed control;
+fixed/full-history baselines still exclude invalid or unavailable evidence.
+
 Ablations remove mechanisms declaratively through `agg.experiments.config.Features`. Its ordinary constructor enables all features; use `Features.baseline()` when constructing a control manually. Changes to observation flags must not accidentally change training randomness or optimization budgets.
 
 | Named family | Intended comparison |
