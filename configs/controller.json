@@ -1,0 +1,43 @@
+{
+  "temporal": {
+    "window": 9,
+    "min_samples": 5,
+    "ema_alpha": 0.3,
+    "plateau_slope": 0.001,
+    "acceleration_threshold": 0.0001,
+    "noise_threshold": 0.05,
+    "max_gap": 1000
+  },
+  "confidence_threshold": 0.7,
+  "expensive_confidence": 0.9,
+  "proxy_confidence_cap": 0.6,
+  "cooldown": 20,
+  "evaluation_window": 20,
+  "evaluation_samples": 2,
+  "minimum_gain": 0.005,
+  "max_fraction": 0.15,
+  "regression_slope": 0.002,
+  "rollback_threshold": 0.1,
+  "drift_threshold": 0.2,
+  "error_rate_threshold": 0.2,
+  "saturation_threshold": 0.95,
+  "coverage_threshold": 0.6,
+  "diversity_threshold": 0.2,
+  "marginal_gain_threshold": 0.001,
+  "abstraction_activation_threshold": 0.7,
+  "minimize_metrics": [
+    "performance.task_loss",
+    "geometry.representation_drift",
+    "abstraction.retrieval_miss_rate",
+    "abstraction.false_applicability_rate",
+    "abstraction.composition_failure_rate",
+    "abstraction.contradiction_rate"
+  ],
+  "protected_metrics": [
+    {
+      "name": "performance.ood_score",
+      "tolerance": 0.02,
+      "higher_is_better": true
+    }
+  ]
+}
