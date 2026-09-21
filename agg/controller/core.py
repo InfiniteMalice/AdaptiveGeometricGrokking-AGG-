@@ -1,7 +1,7 @@
 """Single-owner, one-candidate controller with explicit audit and trust boundaries.
 
 Providers are trusted host code. They must stage private state, retain a rollback
-snapshot until commit returns, and never modify evaluator, reward or security
+snapshot until outcome logging succeeds, and never modify evaluator, reward or security
 policy. Python interfaces alone cannot sandbox a malicious provider.
 """
 
@@ -34,6 +34,9 @@ class ExecutionProvider(Protocol):
     def evaluate(self) -> EvaluationWindow: ...
     def commit(self) -> None: ...
     def rollback(self) -> None: ...
+    def finalize(self) -> None:
+        """Release rollback state after the controller records a successful commit."""
+        ...
 
 
 @dataclass(frozen=True)
@@ -151,7 +154,7 @@ class Controller:
         )
         if self.blocked:
             return self._outcome(
-                proposal, "blocked", ["human review required after rollback failure"]
+                proposal, "blocked", ["human review required after transaction failure"]
             )
         if self.pending:
             return self._outcome(proposal, "rejected", ["one intervention is already pending"])
@@ -298,6 +301,12 @@ class Controller:
             result = self._outcome(proposal, "committed")
             self._pending = None
             self._last_intervention = self._clock
+            try:
+                pending.provider.finalize()
+            except Exception:
+                # The audited commit is already accepted. Stop reuse if cleanup fails.
+                self.blocked = True
+                raise
             return result
         except Exception as exc:
             if self._pending is None:

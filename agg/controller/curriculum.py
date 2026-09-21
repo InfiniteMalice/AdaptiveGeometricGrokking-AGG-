@@ -33,7 +33,11 @@ class CurriculumGate:
         if current not in self.thresholds:
             raise ValueError("current stage requires a configured threshold")
         selected = sorted(s for s in self.thresholds if s <= current)
-        missing = tuple(s for s in selected if s not in scores or not math.isfinite(scores[s]))
+        missing = tuple(
+            s
+            for s in selected
+            if s not in scores or not math.isfinite(scores[s]) or not 0 <= scores[s] <= 1
+        )
         failed = tuple(s for s in selected if s not in missing and scores[s] < self.thresholds[s])
         if missing:
             decision = CurriculumDecision("hold", current, failed, missing)

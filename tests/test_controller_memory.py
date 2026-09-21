@@ -1,6 +1,33 @@
 import pytest
 
 
+@pytest.mark.parametrize("score", [-0.1, 1.2, float("nan"), float("inf")])
+@pytest.mark.parametrize("current", [0, 1])
+def test_curriculum_holds_for_invalid_scores(score, current):
+    from agg.controller.curriculum import CurriculumGate
+
+    decision = CurriculumGate({0: 0.8, 1: 0.7}).evaluate(current, {0: score, 1: 0.9})
+    assert decision.action == "hold"
+    assert decision.missing_stages == (0,)
+
+
+@pytest.mark.parametrize("score", [0.0, 1.0])
+def test_curriculum_accepts_score_boundaries(score):
+    from agg.controller.curriculum import CurriculumGate
+
+    assert CurriculumGate({0: score}).evaluate(0, {0: score}).action == "complete"
+
+
+@pytest.mark.parametrize(
+    "invalid_ids,expected", [(("z",), "composition_failure"), (("a",), "bad_knowledge")]
+)
+def test_retrieval_only_relevant_invalid_ids_suppress_composition(invalid_ids, expected):
+    from agg.controller.memory import RetrievalEvidence, diagnose_retrieval
+
+    evidence = RetrievalEvidence(("a", "b"), ("a", "b"), invalid_ids, composition_success=False)
+    assert diagnose_retrieval(evidence) == (expected,)
+
+
 def test_curriculum_backtracks_to_shallowest_and_holds_for_missing():
     from agg.controller.curriculum import CurriculumGate
 

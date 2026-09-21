@@ -58,7 +58,13 @@ class SimulatedReplay:
         self.budget = self.candidate
 
     def rollback(self) -> None:
-        self.budget, self.candidate = self.before, None
+        if self.proposal is not None:
+            self.budget = self.before
+        self.finalize()
+
+    def finalize(self) -> None:
+        """Discard the simulated transaction without changing its accepted budget."""
+        self.candidate, self.proposal = None, None
 
 
 def run_demo(output: Path) -> dict[str, object]:

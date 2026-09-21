@@ -228,7 +228,8 @@ knowledge content. There is no live indexing backend in this repository.
 coactivation frequency, with a bounded budget. It never enumerates all subsets.
 
 `CurriculumGate` evaluates every configured stage up to the current stage. Missing
-or nonfinite required scores produce `hold`. Otherwise, any failing stage yields
+required scores, nonfinite scores, or scores outside `[0, 1]` produce `hold` and
+appear in `missing_stages`. Otherwise, any failing stage yields
 `backtrack` to the shallowest failure. All passing stages permit `advance`, or
 `complete` at the last stage. This is a decision interface; a host curriculum
 runner is responsible for executing it and reevaluating before advancement.
@@ -256,12 +257,18 @@ It is an interface for future System-1/System-2 routing, not an inference engine
 | Evaluation frequency, retrieval/index mutation, composition testing, parallelism, adapter allocation/merge, GRN, clipping, batch mix, checkpoint/explicit rollback, regression-suite launch and repair | Enum/interface only; `start` reports unsupported |
 
 To add execution, implement a trusted `ExecutionProvider` with `stage`, `evaluate`,
-`commit`, `rollback` and an action set. The current controller permits only its
+`commit`, `rollback`, `finalize` and an action set. The current controller permits only its
 explicit numeric configuration allow-list. Structural actions require a reviewed
 validator and allow-list extension, not merely adding a provider action name.
 
 Providers stage private state, snapshot the current accepted state before a
 fallible attempt, and retain rollback ability through commit and outcome logging.
+After recording a successful commit, the controller calls `finalize` to release
+the transaction snapshot and candidate metadata. A later `rollback` must leave
+the accepted state intact. If outcome logging fails, the controller rolls back
+before finalization. If finalization itself fails, the audited commit remains
+accepted, the error propagates, and the controller blocks further interventions
+until the host reviews the provider's state.
 They must report actual execution and evidence; an unsupported action is not a
 successful no-op. The host owns evaluator, protected suites, reward computation,
 ground truth, security/sandbox policy and audit storage. These objects are absent

@@ -210,14 +210,21 @@ class TrainingExecutor:
         )
 
     def commit(self) -> None:
+        """Adopt the candidate, retaining recovery state until outcome logging succeeds."""
         if self._candidate is None or self._candidate_config is None:
             raise ValueError("no staged training candidate")
         self.model, self.config = self._candidate.model, self._candidate_config
         self._candidate = None
 
     def rollback(self) -> None:
+        """Restore the active transaction, or do nothing once it has been finalized."""
         if self._before is not None:
             self.model, self.config = self._before
+        self.finalize()
+
+    def finalize(self) -> None:
+        """Release transaction state after a logged commit or completed rollback."""
         self._candidate = None
         self._candidate_config = None
         self._proposal = None
+        self._before = None

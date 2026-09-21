@@ -41,6 +41,13 @@ class BudgetBackend:
         self.accepted = self.before
         self.candidate = None
 
+    def finalize(self):
+        self.calls.append("finalize")
+        if self.fail == "finalize":
+            raise RuntimeError("cleanup failed")
+        self.before = self.accepted
+        self.candidate = None
+
 
 def setup_controller(tmp_path):
     from agg.controller.config import ControllerConfig
@@ -204,6 +211,22 @@ def test_commit_partial_failure_rolls_back(tmp_path):
     controller.start(proposal, backend)
     assert controller.finish().status == "rolled_back"
     assert backend.accepted == backend.before
+
+
+def test_finalization_failure_blocks_without_undoing_audited_commit(tmp_path):
+    controller, proposal, ledger = setup_controller(tmp_path)
+    backend = BudgetBackend(
+        proposal,
+        {"continual.retained_performance": 0.9, "performance.ood_score": 0.8},
+        fail="finalize",
+    )
+    controller.start(proposal, backend)
+    with pytest.raises(RuntimeError, match="cleanup failed"):
+        controller.finish()
+    assert controller.blocked and not controller.pending
+    assert backend.accepted["replay"] > 0.2
+    assert backend.calls == ["stage", "commit", "finalize"]
+    assert ledger.read()[-1]["payload"]["status"] == "committed"
 
 
 def test_audit_failure_does_not_execute_provider(tmp_path):

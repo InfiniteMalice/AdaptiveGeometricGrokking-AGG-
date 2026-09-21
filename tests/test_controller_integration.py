@@ -14,14 +14,15 @@ def test_four_phase_synthetic_demo(tmp_path):
 
 
 @pytest.mark.parametrize(
-    "samples,task,score",
+    "samples,task,score,audit_failure",
     [
-        (2, "modular", "accuracy"),
-        (3, "hierarchy", "balanced_accuracy"),
-        (3, "hierarchy", "accuracy"),
+        (2, "modular", "accuracy", False),
+        (3, "hierarchy", "balanced_accuracy", False),
+        (3, "hierarchy", "accuracy", False),
+        (2, "modular", "accuracy", True),
     ],
 )
-def test_training_callback_and_real_copy_based_trial(tmp_path, samples, task, score):
+def test_training_callback_and_real_copy_based_trial(tmp_path, samples, task, score, audit_failure):
     import torch
 
     from agg.consolidation import state_hash
@@ -76,6 +77,21 @@ def test_training_callback_and_real_copy_based_trial(tmp_path, samples, task, sc
     assert state_hash(result.model) == original
     assert torch.equal(rng, torch.get_rng_state())
     assert backend.evaluate().samples >= samples
+    if audit_failure:
+        ledger = controller.events.ledger
+        append = ledger.append
+
+        def fail_committed_outcome(record):
+            if record["payload"].get("status") == "committed":
+                raise OSError("commit audit unavailable")
+            append(record)
+
+        ledger.append = fail_committed_outcome
+        assert controller.finish().status == "rolled_back"
+        assert backend.model is result.model and backend.config is training
+        assert state_hash(backend.model) == original
+        assert ledger.read()[-1]["payload"]["status"] == "rolled_back"
+        return
     assert controller.finish().status == "committed"
     assert backend.model is not result.model
     assert state_hash(result.model) == original
@@ -99,6 +115,10 @@ def test_training_callback_and_real_copy_based_trial(tmp_path, samples, task, sc
     from dataclasses import replace
 
     accepted = backend.model
+    accepted_config = backend.config
+    backend.rollback()
+    backend.rollback()
+    assert backend.model is accepted and backend.config is accepted_config
     with pytest.raises(ValueError):
         backend.stage(replace(proposal, id="next", parameters={"fraction": 0.9}))
     backend.rollback()

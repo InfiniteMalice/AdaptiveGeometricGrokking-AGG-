@@ -172,9 +172,10 @@ def diagnose_retrieval(evidence: RetrievalEvidence) -> tuple[str, ...]:
         findings.append("miss")
     if retrieved - correct:
         findings.append("false_positive")
-    if set(evidence.invalid_ids) & (correct | retrieved):
+    relevant_invalid = set(evidence.invalid_ids) & (correct | retrieved)
+    if relevant_invalid:
         findings.append("bad_knowledge")
-    if correct and correct <= retrieved and not evidence.invalid_ids:
+    if correct and correct <= retrieved and not relevant_invalid:
         if evidence.composition_success is False:
             findings.append("composition_failure")
     for name in ("low_separation", "poor_specificity", "poor_faithfulness", "ambiguous_match"):
