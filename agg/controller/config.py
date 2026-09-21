@@ -39,6 +39,37 @@ class MetricGuard:
 
 
 @dataclass(frozen=True)
+class ReasoningPolicyConfig:
+    """Reference-policy thresholds; entropy uses producer units (default nats)."""
+
+    enabled: bool = False
+    entropy_low: float = 0.2
+    entropy_high: float = 1.0
+    displacement_floor: float = 0.01
+    minimum_support: float = 0.25
+    maximum_turnover: float = 0.75
+    allow_stop: bool = False
+
+    def __post_init__(self) -> None:
+        if type(self.enabled) is not bool or type(self.allow_stop) is not bool:
+            raise ValueError("reasoning enabled and allow_stop must be booleans")
+        for name in (
+            "entropy_low",
+            "entropy_high",
+            "displacement_floor",
+            "minimum_support",
+            "maximum_turnover",
+        ):
+            value = getattr(self, name)
+            if type(value) not in (int, float) or not math.isfinite(value) or value < 0:
+                raise ValueError(f"{name} must be finite and nonnegative")
+        if self.entropy_high <= self.entropy_low:
+            raise ValueError("entropy_high must exceed entropy_low")
+        if self.minimum_support > 1 or self.maximum_turnover > 1:
+            raise ValueError("support and turnover thresholds must be in [0,1]")
+
+
+@dataclass(frozen=True)
 class ControllerConfig:
     temporal: TemporalConfig = field(default_factory=TemporalConfig)
     confidence_threshold: float = 0.7
@@ -67,8 +98,11 @@ class ControllerConfig:
         "abstraction.contradiction_rate",
     )
     protected_metrics: tuple[MetricGuard, ...] = (MetricGuard("performance.ood_score"),)
+    reasoning: ReasoningPolicyConfig = field(default_factory=ReasoningPolicyConfig)
 
     def __post_init__(self) -> None:
+        if not isinstance(self.reasoning, ReasoningPolicyConfig):
+            raise ValueError("reasoning must be ReasoningPolicyConfig")
         if any(
             type(n) is not int
             for n in (self.cooldown, self.evaluation_window, self.evaluation_samples)
@@ -113,6 +147,7 @@ class ControllerConfig:
     def from_dict(cls, value: dict[str, Any]) -> "ControllerConfig":
         raw = dict(value)
         raw["temporal"] = TemporalConfig(**raw.get("temporal", {}))
+        raw["reasoning"] = ReasoningPolicyConfig(**raw.get("reasoning", {}))
         if "minimize_metrics" in raw:
             raw["minimize_metrics"] = tuple(raw["minimize_metrics"])
         if "protected_metrics" in raw:

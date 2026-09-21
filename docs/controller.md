@@ -33,12 +33,20 @@ EventLog <- Controller validation -> ExecutionProvider.stage (private candidate)
 ```
 
 `agg.telemetry.controller.Observation` is the canonical typed controller schema,
-version `agg.controller/1`. The existing `agg.telemetry.TelemetrySnapshot` remains
+version `agg.controller/2`, with an explicit v1 loader. The existing
+`agg.telemetry.TelemetrySnapshot` remains
 version `0.1`. `Observation.from_legacy(snapshot)` maps task/ID/OOD accuracy and
 loss, effective rank and memorization observations. It retains the complete
 legacy record in provenance. Unmapped observations remain available there;
 conversion does not invent retention measurements or reinterpret retrieval
 ablation effects as retrieval-miss rates.
+
+The optional [SoT-inspired extension](state-of-thought.md) adds `Reasoning`,
+read-only state-conditioned evidence activation, immutable decision snapshots,
+turnover diagnostics and an opt-in `ReasoningComputePolicy`. Old configs leave
+that policy disabled. Routing changes active IDs, never abstraction validity or
+stored knowledge. Stop/continue/retrieval recommendations have no new execution
+authority; existing protected acceptance and rollback remain the only mutation path.
 
 `agg.controller.temporal` summarizes each scalar signal on the training-step
 axis. `agg.depth` continues to describe the independent layer-depth axis.

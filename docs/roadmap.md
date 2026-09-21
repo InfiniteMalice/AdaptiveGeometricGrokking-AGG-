@@ -6,6 +6,7 @@ The current release is a CPU-runnable research scaffold. Implementation availabi
 |---|---|---|
 | Grokking reproduction | Modular task, causal Transformer and training checkpoints | Replicated delayed generalization curves under a published protocol |
 | Telemetry | Versioned snapshots, spectra, depth derivatives and JSONL | Stability, redundancy and sensitivity studies across seeds/samples |
+| SoT-inspired reasoning control | Versioned compact state, pure readouts, audited evidence routing, perturbation/replay hooks and synthetic dynamics comparison | Calibrated host/LLM readouts, externally validated relevance/validity, learned/JEV routers, real reasoning/retrieval execution providers and held-out causal outcomes |
 | Retrieval crossing | Independent evidence scores, executed probes and sustained crossings | Probe calibration controls and a replicated factorial phase surface |
 | Geometry | Euclidean/Poincare/product distance adapters and dimension candidates | Matched-budget hierarchy advantage, distortion and sufficiency curves |
 | Gate causality | Fixed/learned gates and exact zero bypass | Gate sweeps controlling weights, initialization and training exposure |

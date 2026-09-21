@@ -115,6 +115,37 @@ class Search:
     risk: float | None = None
 
 
+@dataclass(frozen=True)
+class Reasoning:
+    """Compact host-supplied control state plus optional routing diagnostics.
+
+    Units belong to the producer; entropy is not assumed normalized. Progress
+    may be signed. IDs/decisions belong in provenance or routing events.
+    """
+
+    representation_dispersion: float | None = None
+    state_displacement: float | None = None
+    trajectory_cosine: float | None = None
+    predictive_entropy: float | None = None
+    active_evidence_fraction: float | None = None
+    evidence_turnover: float | None = None
+    reasoning_progress: float | None = None
+
+    def __post_init__(self) -> None:
+        for name, value in asdict(self).items():
+            if value is None:
+                continue
+            if type(value) not in (float, int) or not math.isfinite(value):
+                raise ValueError(f"reasoning.{name} must be a finite numeric measurement")
+            if name in {"representation_dispersion", "state_displacement", "predictive_entropy"}:
+                if value < 0:
+                    raise ValueError(f"reasoning.{name} must be nonnegative")
+            if name == "trajectory_cosine" and not -1 <= value <= 1:
+                raise ValueError("trajectory_cosine must be in [-1,1]")
+            if name in {"active_evidence_fraction", "evidence_turnover"} and not 0 <= value <= 1:
+                raise ValueError(f"reasoning.{name} must be in [0,1]")
+
+
 CATEGORY_TYPES = {
     "performance": Performance,
     "geometry": Geometry,
@@ -124,6 +155,7 @@ CATEGORY_TYPES = {
     "continual": Continual,
     "abstraction": AbstractionSignals,
     "search": Search,
+    "reasoning": Reasoning,
 }
 
 
@@ -144,13 +176,16 @@ class Observation:
     proxy_metrics: tuple[str, ...] = ()
     out_of_distribution: bool = False
     contradictory: bool = False
-    schema_version: str = "agg.controller/1"
+    schema_version: str = "agg.controller/2"
+    reasoning: Reasoning = field(default_factory=Reasoning)
 
     def __post_init__(self) -> None:
         if type(self.step) is not int or self.step < 0 or not self.component:
             raise ValueError("step must be a nonnegative integer and component must be named")
-        if self.schema_version != "agg.controller/1":
+        if self.schema_version not in {"agg.controller/1", "agg.controller/2"}:
             raise ValueError("unsupported controller telemetry schema")
+        if self.schema_version == "agg.controller/1" and self.reasoning != Reasoning():
+            raise ValueError("reasoning telemetry requires agg.controller/2")
         for name, kind in CATEGORY_TYPES.items():
             category = getattr(self, name)
             if not isinstance(category, kind):
@@ -163,11 +198,20 @@ class Observation:
         json.dumps(self.to_dict(), allow_nan=False)
 
     def to_dict(self) -> dict[str, Any]:
-        return asdict(self)
+        raw = asdict(self)
+        if self.schema_version == "agg.controller/1":
+            del raw["reasoning"]
+        return raw
 
     @classmethod
     def from_dict(cls, value: dict[str, Any]) -> "Observation":
         raw = dict(value)
+        version = raw.get("schema_version", "agg.controller/1")
+        if version not in {"agg.controller/1", "agg.controller/2"}:
+            raise ValueError("unsupported controller telemetry schema")
+        if version == "agg.controller/1" and "reasoning" in raw:
+            raise ValueError("v1 observations cannot contain a reasoning category")
+        raw["schema_version"] = "agg.controller/2"
         for name, kind in CATEGORY_TYPES.items():
             fields = dict(raw.get(name, {}))
             if name == "geometry" and "singular_values" in fields:

@@ -10,6 +10,8 @@ AGG is a small research harness for **Understand → Restructure → Compress �
 | Geometry suits task structure | Compare Euclidean, hyperbolic and product adapters with the same dimension, prototype count, fitting steps and gate | Curved adapters do not beat matched Euclidean controls |
 | Depth derivatives add information | Predict held-out consolidation outcomes with raw telemetry versus raw telemetry plus derivatives | No out-of-seed predictive improvement |
 | Gates mediate useful adapted computation | Sweep forced gate values while holding learned weights fixed | Gate changes have no causal performance effect |
+| Compact reasoning telemetry helps evidence activation | Compare state-conditioned, random, fixed, full-history and state-independent routing with independent relevance labels and retained conflicting evidence | No held-out precision/compute benefit, or narrower support harms protected outcomes |
+| Temporal dynamics add control information beyond absolute state | Zero/permute/scramble control coordinates and compare state, first-order and second-order contexts at matched budgets | Gains vanish under budget matching or dynamics increase unnecessary routing changes |
 | Compact learnable structure predicts opportunity | Test online coding proxy against independent candidate acceptance outcomes | Proxy correlates only with accuracy, ordering or probe compute |
 | Verified outcomes improve credit assignment | Compare verified, teacher, process and mixed signals under deliberate conflicts | Strong independent evidence loses to incorrect auxiliary signals |
 
