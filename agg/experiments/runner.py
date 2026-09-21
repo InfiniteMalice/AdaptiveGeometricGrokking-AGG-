@@ -7,9 +7,8 @@ from typing import Any
 import torch
 from torch import nn
 
-from agg.attribution import linear_cka
 from agg.consolidation import InterventionPolicy, Proposal, state_hash, trial
-from agg.evaluation import Evaluation
+from agg.evaluation.model import make_evaluator
 from agg.gating import ScalarGate
 from agg.geometry import AdaptedModel, GeometryAdapter
 from agg.ledger import Ledger
@@ -183,28 +182,7 @@ def run_experiment(config: ExperimentConfig, output: Path) -> dict[str, Any]:
     with torch.no_grad():
         _, baseline_hidden = model(data.id.x, return_hidden=True)
         reference_hidden = baseline_hidden[-1][:, -1].detach().clone()
-    metric = "balanced_accuracy" if config.task == "hierarchy" else "accuracy"
-
-    def evaluator(candidate: nn.Module) -> Evaluation:
-        previous_mode = candidate.training
-        candidate.eval()
-        try:
-            with torch.no_grad():
-                first, hidden = candidate(data.id.x, return_hidden=True)
-                second = candidate(data.id.x)
-                mechanism = linear_cka(reference_hidden, hidden[-1][:, -1])
-                stable = all(bool(torch.isfinite(p).all()) for p in candidate.parameters())
-                stable &= bool(torch.isfinite(first).all())
-                return Evaluation(
-                    evaluate(candidate, data.id)[metric],
-                    evaluate(candidate, data.ood)[metric],
-                    mechanism,
-                    cost=float(sum(int(torch.count_nonzero(p)) for p in candidate.parameters())),
-                    stable=stable,
-                    reproducible=torch.equal(first, second),
-                )
-        finally:
-            candidate.train(previous_mode)
+    evaluator = make_evaluator(model, data)
 
     anchor = evaluator(model)
     retained = model

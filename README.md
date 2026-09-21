@@ -80,6 +80,19 @@ bitmap plus packed signs, with no external compatibility claim.
 
 ## Verification and documentation
 
+The opt-in [Adaptive Geometry-Guided controller](docs/controller.md) adds typed
+temporal telemetry, diagnosis, bounded proposals, protected-metric acceptance,
+and rollback. It reuses the existing training callbacks and model trials.
+Run its synthetic demonstration without training a model:
+
+```bash
+python -m agg.controller.demo --output runs/controller-demo
+```
+
+The replay outcomes in this demo are synthetic. Real controller execution currently
+supports isolated learning-rate and regularization continuation trials; other
+mechanisms have explicit interfaces and unsupported-action reporting.
+
 ```bash
 python -m pytest -q
 python -m ruff check agg tests
