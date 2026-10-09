@@ -131,4 +131,5 @@ Independent oracle-validated interventions: [causal evaluation](docs/causal-eval
 Versioned progress hypotheses: [milestone diagnostics](docs/milestones.md).
 
 Lagged task-rule curation and matched learning: [block-summary benchmark](docs/block-learning.md).
-`docs/resource-control.md` describes the opt-in measured four-arm resource controller benchmark.
+[docs/resource-control.md](docs/resource-control.md) describes the opt-in measured
+four-arm resource controller benchmark.
