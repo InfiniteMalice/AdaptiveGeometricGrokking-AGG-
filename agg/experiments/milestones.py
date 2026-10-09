@@ -83,7 +83,8 @@ def milestone_report(output: Path) -> dict[str, Any]:
     if (output / "audit-report.json").exists():
         audit = json.loads((output / "audit-report.json").read_text())
         if (
-            audit.get("schema_version") != "agg.independent-report/1"
+            audit.get("schema_version")
+            not in {"agg.independent-report/1", "agg.independent-report/2"}
             or audit.get("manifest_sha256") != manifest_hash
             or audit.get("role") != "audit"
         ):

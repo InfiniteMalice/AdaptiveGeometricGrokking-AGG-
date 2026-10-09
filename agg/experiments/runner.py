@@ -1,5 +1,6 @@
 import copy
 import json
+import time
 from dataclasses import asdict, replace
 from pathlib import Path
 from typing import Any
@@ -229,8 +230,38 @@ def run_experiment(config: ExperimentConfig, output: Path) -> dict[str, Any]:
         write_json(output / "triggers.json", triggers)
         # Equal additional-update comparator for distillation and representation fitting.
         if config.features.distillation or config.features.geometry or config.features.dimension:
-            control = fit_candidate(copy.deepcopy(model), model, data, config, False)
+            control_start = time.perf_counter()
+            control = fit_candidate(
+                copy.deepcopy(model),
+                model,
+                data,
+                config,
+                False,
+                optimizer_observer=(
+                    lambda payload: torch.save(payload, output / "continued-optimizer.pt")
+                )
+                if config.independent_evaluation
+                else None,
+            )
             write_json(output / "continued_baseline.json", asdict(evaluator(control)))
+            if config.independent_evaluation:
+                save_model(control, output / "continued-state.pt")
+                examples = config.candidate_steps * min(
+                    config.training.batch_size, len(data.train.y)
+                )
+                write_json(
+                    output / "continued-cost.json",
+                    {
+                        "schema_version": "agg.continued-control/1",
+                        "training_updates": config.candidate_steps,
+                        "training_examples": examples,
+                        "training_tokens": examples * data.train.x.shape[1],
+                        "optimizer": "fresh AdamW; same batches as candidate fitting",
+                        "wall_seconds": time.perf_counter() - control_start,
+                        "wall_scope": "fit, selection evaluation and checkpoint serialization",
+                        "compute_flops": None,
+                    },
+                )
 
         def measured(candidate: nn.Module) -> dict[str, Any]:
             mode = config.telemetry_mode

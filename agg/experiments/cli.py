@@ -59,7 +59,52 @@ def main() -> None:
     multistep = sub.add_parser("multistep", help="run executed finite-MDP credit comparison")
     multistep.add_argument("--config", type=Path)
     multistep.add_argument("--output", type=Path, required=True)
+    integration = sub.add_parser("integration", help="run fixed matched-control integration study")
+    integration.add_argument("--config", type=Path)
+    integration.add_argument("--output", type=Path, required=True)
+    bundle = sub.add_parser("evidence-bundle", help="copy and hash explicitly named source runs")
+    bundle.add_argument("--sources", type=Path, required=True)
+    bundle.add_argument("--output", type=Path, required=True)
+    prepare = sub.add_parser(
+        "prepare-release", help="freeze final evaluation scope without inference"
+    )
+    prepare.add_argument("--run", type=Path, action="append", required=True)
+    prepare.add_argument("--output", type=Path, required=True)
+    final = sub.add_parser("release-final", help="evaluate an explicitly authorized frozen release")
+    final.add_argument("--manifest", type=Path, required=True)
+    final.add_argument("--authorization", required=True)
+    final.add_argument("--sha256", required=True)
     args = parser.parse_args()
+    if args.command in {"integration", "evidence-bundle", "prepare-release", "release-final"}:
+        from .integration import (
+            IntegrationConfig,
+            build_bundle,
+            prepare_release,
+            release_final,
+            run_integration,
+        )
+
+        if args.command == "integration":
+            cfg_integrated = (
+                IntegrationConfig.from_dict(json.loads(args.config.read_text()))
+                if args.config
+                else IntegrationConfig()
+            )
+            result_integrated = run_integration(cfg_integrated, args.output)
+        elif args.command == "evidence-bundle":
+            sources = {
+                key: (args.sources.parent / value).resolve()
+                for key, value in json.loads(args.sources.read_text()).items()
+            }
+            result_integrated = build_bundle(sources, args.output)
+        elif args.command == "prepare-release":
+            result_integrated = prepare_release(args.run, args.output)
+        else:
+            result_integrated = release_final(
+                args.manifest, authorization=args.authorization, digest=args.sha256
+            )
+        print(json.dumps(result_integrated, indent=2))
+        return
     if args.command == "multistep":
         from .multistep import MultistepConfig, run_multistep
 

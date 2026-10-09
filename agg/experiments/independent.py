@@ -319,8 +319,29 @@ def report_run(
                     "missing_reason": error or (record["reason"] if measured is None else None),
                 }
             )
+        continued = None
+        selected_vs_continued = None
+        if "continued-state.pt" in manifest["artifacts"]:
+            continued = measure("continued-state.pt")
+            control = load_model(output / "continued-state.pt")
+            selected_model = load_model(output / "selected-state.pt")
+            selected_vs_continued = {
+                name: paired_cluster_comparison(
+                    correct(control, getattr(data, name)),
+                    correct(selected_model, getattr(data, name)),
+                    getattr(data, name + "_clusters"),
+                    seed=bootstrap_seed,
+                    labels=getattr(data, name).y.tolist()
+                    if metric == "balanced_accuracy"
+                    else None,
+                    expected_classes=list(range(protocol.classes))
+                    if metric == "balanced_accuracy"
+                    else None,
+                )
+                for name in ("id", "ood")
+            }
         report = {
-            "schema_version": "agg.independent-report/1",
+            "schema_version": "agg.independent-report/2",
             "role": role,
             "manifest_sha256": actual_hash,
             "authorization": authorization,
@@ -330,6 +351,11 @@ def report_run(
             "selection_reuse_cycles": len(candidates),
             "baseline": measure("baseline-state.pt"),
             "selected": measure("selected-state.pt"),
+            "continued": continued,
+            "selected_vs_continued": selected_vs_continued,
+            "continued_missing_reason": None
+            if continued is not None
+            else "no frozen continued-control checkpoint in this run",
             "candidates": candidates,
             "final_test": "this authorized report" if role == "final" else None,
             "scientific_status": (
