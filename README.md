@@ -134,3 +134,4 @@ Lagged task-rule curation and matched learning: [block-summary benchmark](docs/b
 `docs/resource-control.md` describes the opt-in measured four-arm resource controller benchmark.
 `docs/scaling-analysis.md` documents controlled geometry scaling, held-out larger-model extrapolation and explicit compute limits.
 `docs/multistep-credit.md` describes the isolated finite-MDP k-step objective and its inconclusive coupling results.
+`docs/integrated-evidence.md` connects the research matrix, reproducible audit runs, portable evidence bundles and explicit final-release gate.

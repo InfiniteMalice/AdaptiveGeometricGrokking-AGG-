@@ -5,6 +5,7 @@ Run from the installed repository: python scripts/reproduce_research_matrix.py -
 
 import argparse
 import json
+from dataclasses import replace
 from pathlib import Path
 
 from agg.experiments.blocks import BlockConfig, audit_blocks, run_blocks
@@ -39,7 +40,7 @@ def main():
     selection = args.output / "selection"
     for seed in (11, 13):
         cfg = ExperimentConfig.from_dict(read("independent-smoke.json"))
-        cfg.training.seed = seed
+        cfg.training = replace(cfg.training, seed=seed)
         for arm, variant in selection_comparison(cfg).items():
             root = selection / f"{arm}-{seed}"
             run_experiment(variant, root)
