@@ -56,7 +56,20 @@ def main() -> None:
     )
     scaling_audit.add_argument("--run", type=Path, required=True)
     scaling_audit.add_argument("--seed", type=int, default=0)
+    multistep = sub.add_parser("multistep", help="run executed finite-MDP credit comparison")
+    multistep.add_argument("--config", type=Path)
+    multistep.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
+    if args.command == "multistep":
+        from .multistep import MultistepConfig, run_multistep
+
+        config_credit = (
+            MultistepConfig.from_dict(json.loads(args.config.read_text()))
+            if args.config
+            else MultistepConfig()
+        )
+        print(json.dumps(run_multistep(config_credit, args.output), indent=2))
+        return
     if args.command in {"scaling", "scaling-audit"}:
         from .scaling import ScalingConfig, audit_scaling, run_scaling
 
