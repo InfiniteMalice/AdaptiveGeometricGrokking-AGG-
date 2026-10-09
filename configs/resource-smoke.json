@@ -1,0 +1,28 @@
+{
+  "tasks": [
+    "retrieval",
+    "modular"
+  ],
+  "seeds": [
+    17,
+    19
+  ],
+  "data_seed": 137,
+  "samples": 32,
+  "initial_steps": 2,
+  "intervention_steps": 3,
+  "batch_size": 16,
+  "width": 8,
+  "repeats": 9,
+  "profile": {
+    "min_id": 0.05,
+    "min_ood": 0.05,
+    "max_latency_ms": 50,
+    "max_model_bytes": 100000,
+    "max_peak_memory_bytes": null,
+    "max_inference_cpu_ms": null,
+    "max_parameters": 25000,
+    "max_training_updates": 3,
+    "max_training_tokens": null
+  }
+}

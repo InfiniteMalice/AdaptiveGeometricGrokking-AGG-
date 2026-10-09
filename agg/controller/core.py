@@ -24,6 +24,7 @@ from .policy import (
     InterventionPolicy,
     InterventionProposal,
 )
+from .resources import ResourceProfile
 from .temporal import TemporalTelemetry
 
 
@@ -223,6 +224,27 @@ class Controller:
                 proposal, "rejected", ["baseline or protected evidence unavailable"]
             )
         # Write intent before any side effect. An unavailable audit sink prevents stage.
+        if c.resources is not None and (
+            c.resources.max_training_updates is not None
+            or c.resources.max_training_tokens is not None
+        ):
+            limits = ResourceProfile(
+                max_training_updates=c.resources.max_training_updates,
+                max_training_tokens=c.resources.max_training_tokens,
+            )
+            preflight = getattr(provider, "preflight_resources", None)
+            try:
+                assessment = limits.assess(preflight(proposal) if callable(preflight) else {})
+            except Exception as exc:
+                return self._outcome(proposal, "rejected", [f"resource preflight failed: {exc}"])
+            self.events.emit(
+                EventType.EXECUTION,
+                self._clock,
+                {"status": "resource_preflight", "assessment": assessment},
+                proposal.id,
+            )
+            if not assessment["joint_feasible"]:
+                return self._outcome(proposal, "rejected", ["training budget preflight failed"])
         self.events.emit(
             EventType.EXECUTION,
             self._clock,
@@ -292,6 +314,19 @@ class Controller:
                 proposal.higher_is_better,
                 c.minimum_gain,
             )
+            if c.resources is not None:
+                assessment = c.resources.assess(window.metrics)
+                self.events.emit(
+                    EventType.EXECUTION,
+                    self._clock,
+                    {"status": "resource_evaluated", "assessment": assessment},
+                    proposal.id,
+                )
+                reasons.extend(
+                    f"resource requirement failed: {name}"
+                    for name, requirement in assessment["requirements"].items()
+                    if not requirement["passed"]
+                )
             if reasons:
                 return self._rollback(reasons, regression=True)
             self.events.emit(

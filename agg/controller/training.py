@@ -15,6 +15,7 @@ import torch
 from torch import nn
 
 from agg.consolidation import Proposal, trial
+from agg.consolidation.trials import TrialRecorder
 from agg.evaluation import Constraints, Evaluation
 from agg.ledger import Ledger
 from agg.tasks import TaskData
@@ -98,12 +99,14 @@ class TrainingExecutor:
         output: Path,
         max_fraction: float = 0.15,
         score: str = "accuracy",
+        recorder: TrialRecorder | None = None,
     ):
         if not math.isfinite(max_fraction) or not 0 < max_fraction < 1:
             raise ValueError("training provider max_fraction must be in (0,1)")
         if score not in {"accuracy", "balanced_accuracy"}:
             raise ValueError("score must be accuracy or balanced_accuracy")
         self.score = score
+        self.recorder = recorder
         self.model, self.data, self.config = model, data, config
         self.evaluator, self.constraints, self.ledger = evaluator, constraints, ledger
         self.output, self.max_fraction = Path(output), max_fraction
@@ -112,6 +115,14 @@ class TrainingExecutor:
         self._proposal: InterventionProposal | None = None
         self._candidate_config: TrainConfig | None = None
         self._before: tuple[nn.Module, TrainConfig] | None = None
+
+    def preflight_resources(self, proposal: InterventionProposal) -> dict[str, float]:
+        return {
+            "resources.training_updates": proposal.evaluation_window,
+            "resources.training_tokens": proposal.evaluation_window
+            * self.config.batch_size
+            * self.data.train.x.shape[1],
+        }
 
     def stage(self, proposal: InterventionProposal) -> None:
         if self._candidate is not None:
@@ -166,7 +177,18 @@ class TrainingExecutor:
             checked = trial(
                 self.model,
                 Proposal(
-                    proposal.action.value, proposal.target_component, proposal.to_dict(), apply
+                    proposal.action.value,
+                    proposal.target_component,
+                    {
+                        **proposal.to_dict(),
+                        "steps": self._candidate_config.steps,
+                        "optimizer_artifact": str(
+                            self.output
+                            / proposal.id
+                            / f"checkpoint-{self._candidate_config.steps}.pt"
+                        ),
+                    },
+                    apply,
                 ),
                 self.evaluator,
                 self.constraints,
@@ -174,6 +196,7 @@ class TrainingExecutor:
                 run_id="controller-training",
                 step=proposal.step,
                 reference=self.anchor,
+                recorder=self.recorder,
             )
         finally:
             torch.set_num_threads(threads)
