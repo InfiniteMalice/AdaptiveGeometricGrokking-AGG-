@@ -120,7 +120,7 @@ class TrainingExecutor:
         return {
             "resources.training_updates": proposal.evaluation_window,
             "resources.training_tokens": proposal.evaluation_window
-            * self.config.batch_size
+            * min(self.config.batch_size, len(self.data.train.y))
             * self.data.train.x.shape[1],
         }
 

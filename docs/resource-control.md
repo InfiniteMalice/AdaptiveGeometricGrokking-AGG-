@@ -85,7 +85,7 @@ remeasured it on the target model. No modular rule was eligible for reuse.
 All four arms had identical audit OOD accuracy within each cell: retrieval seeds
 17/19 = 0.1875/0.0; modular seeds 17/19 = 0.25/0.0. These tiny strata do not support
 a benefit claim. Model tensor storage was 5,456 bytes (retrieval) and 3,748 bytes
-(modular). The 16 retained-arm median selection latencies ranged 0.335–0.773 ms
+(modular). The 16 retained-arm median selection latencies ranged 0.335-0.773 ms
 while other verification work ran on the same CPU; variation does not establish
 resource savings. Same architectures and precision give no storage reduction.
 Audit can disagree with selection feasibility; independently measured conditions

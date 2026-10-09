@@ -102,7 +102,7 @@ def test_controller_resource_gate_preserves_anchor(tmp_path, cost, ood, expected
         assert "commit" not in backend.calls
 
 
-@pytest.mark.parametrize("batch_size", [8, 128])
+@pytest.mark.parametrize("batch_size", [8, None, 128], ids=["smaller", "equal", "larger"])
 def test_measured_training_provider_records_rejected_copy_and_budget(tmp_path, batch_size):
     from agg.consolidation import state_hash
     from agg.controller.config import ControllerConfig, MetricGuard
@@ -118,6 +118,8 @@ def test_measured_training_provider_records_rejected_copy_and_budget(tmp_path, b
     from agg.training import TrainConfig, evaluate, train
 
     data = make_protocol("retrieval", seed=7, samples=16, length=8, distance=2).development()
+    if batch_size is None:
+        batch_size = len(data.train.y)
     training = TrainConfig(steps=1, width=8, heads=2, layers=1, batch_size=batch_size, eval_every=1)
     initial = train(data, training, tmp_path / "initial").model
     original = state_hash(initial)
@@ -126,7 +128,10 @@ def test_measured_training_provider_records_rejected_copy_and_budget(tmp_path, b
         evaluation_samples=2,
         minimum_gain=1e-9,
         protected_metrics=(MetricGuard("performance.ood_score", 1),),
-        resources=ResourceProfile(max_model_bytes=1),
+        resources=ResourceProfile(
+            max_model_bytes=1,
+            max_training_tokens=2 * min(batch_size, len(data.train.y)) * 8,
+        ),
     )
     controller = Controller(
         config,
@@ -158,6 +163,9 @@ def test_measured_training_provider_records_rejected_copy_and_budget(tmp_path, b
     assert controller.finish().status == "rolled_back"
     assert state_hash(backend.model) == original
     assert backend.measurement["metrics"]["resources.training_updates"] == 2
+    assert backend.preflight_resources(observer.latest)["resources.training_tokens"] == (
+        backend.measurement["metrics"]["resources.training_tokens"]
+    )
     assert (
         backend.measurement["metrics"]["resources.training_tokens"]
         == 2 * min(batch_size, len(data.train.y)) * 8
