@@ -1,8 +1,10 @@
 import json
-from dataclasses import asdict
+from dataclasses import asdict, replace
+from pathlib import PurePosixPath
 
 import pytest
 
+from agg.experiments.config import ExperimentConfig, Features
 from agg.experiments.independent import file_hash
 from agg.experiments.integration import (
     IntegrationConfig,
@@ -11,6 +13,22 @@ from agg.experiments.integration import (
     release_final,
     run_integration,
 )
+from agg.experiments.runner import run_experiment
+from agg.training import TrainConfig
+
+
+def standard_fixture(root):
+    run_experiment(
+        ExperimentConfig(
+            independent_evaluation=True,
+            data_seed=223,
+            dimensions=(4,),
+            candidate_steps=1,
+            training=TrainConfig(steps=1, width=8, heads=2, layers=1),
+            features=replace(Features.baseline(), consolidation=True, distillation=True),
+        ),
+        root,
+    )
 
 
 def test_small_integrated_study_bundle_and_explicit_one_use_release(tmp_path):
@@ -36,6 +54,8 @@ def test_small_integrated_study_bundle_and_explicit_one_use_release(tmp_path):
     root = study / report["cells"][0]["id"]
     release = prepare_release([root], tmp_path / "release.json")
     assert release["runs"][0]["manifest_sha256"] == file_hash(root / "selection-frozen.json")
+    assert "\\" not in release["runs"][0]["path"]
+    assert PurePosixPath(release["runs"][0]["path"]).parts == ("study", "modular-23")
     with pytest.raises(ValueError, match="authorization"):
         release_final(tmp_path / "release.json", authorization="", digest="bad")
     with pytest.raises(ValueError, match="digest"):
@@ -65,17 +85,7 @@ def test_release_preflights_all_runs_before_any_final_access(tmp_path, monkeypat
     roots = []
     for i in range(2):
         root = tmp_path / str(i)
-        root.mkdir()
-        (root / "experiment.json").write_text("{}")
-        (root / "selection-frozen.json").write_text(
-            json.dumps(
-                {
-                    "schema_version": "agg.frozen-selection/1",
-                    "selection_closed": True,
-                    "artifacts": {"experiment.json": file_hash(root / "experiment.json")},
-                }
-            )
-        )
+        standard_fixture(root)
         roots.append(root)
     prepare_release(roots, tmp_path / "release.json")
     (roots[1] / "experiment.json").write_text("tamper")
@@ -90,4 +100,39 @@ def test_release_preflights_all_runs_before_any_final_access(tmp_path, monkeypat
             authorization="unit-fixture-only",
             digest=file_hash(tmp_path / "release.json"),
         )
+    assert not (tmp_path / "release-attempt.json").exists()
+
+
+def test_prepare_refuses_custom_frozen_source(tmp_path):
+    from agg.experiments.independent import freeze_run
+
+    root = tmp_path / "custom-block-study"
+    root.mkdir()
+    (root / "block-config.json").write_text("{}")
+    freeze_run(root, {})
+    with pytest.raises(ValueError, match="standard"):
+        prepare_release([root], tmp_path / "release.json")
+
+
+def test_mixed_release_checks_all_standard_contracts_before_first_report(tmp_path, monkeypatch):
+    from agg.experiments import integration
+    from agg.experiments.independent import freeze_run
+
+    rows = []
+    for name in ("valid-standard", "custom-block-study"):
+        root = tmp_path / name
+        if name == "valid-standard":
+            standard_fixture(root)
+        else:
+            root.mkdir()
+            (root / "block-config.json").write_text("{}")
+            freeze_run(root, {})
+        rows.append({"path": name, "manifest_sha256": file_hash(root / "selection-frozen.json")})
+    path = tmp_path / "release.json"
+    path.write_text(json.dumps({"schema_version": "agg.final-release/1", "runs": rows}))
+    calls = []
+    monkeypatch.setattr(integration, "report_run", lambda *a, **k: calls.append(1) or {})
+    with pytest.raises(ValueError, match="standard"):
+        release_final(path, authorization="unit-fixture-only", digest=file_hash(path))
+    assert calls == []
     assert not (tmp_path / "release-attempt.json").exists()

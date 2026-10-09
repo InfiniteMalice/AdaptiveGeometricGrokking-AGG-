@@ -229,17 +229,45 @@ def build_bundle(sources: dict[str, Path], output: Path) -> dict[str, Any]:
     return bundle_manifest
 
 
+def _standard_release_run(root: Path) -> None:
+    """Validate the registered standard comparison, without protected inference."""
+    manifest = validate_frozen_run(root)
+    required = {
+        "experiment.json",
+        "baseline-state.pt",
+        "selected-state.pt",
+        "continued-state.pt",
+        "continued-optimizer.pt",
+        "continued-cost.json",
+        "candidate-attempts.jsonl",
+    }
+    if not required.issubset(manifest["artifacts"]):
+        raise ValueError("Final release requires a standard run with frozen continued control")
+    cfg = ExperimentConfig.from_dict(json.loads((root / "experiment.json").read_text()))
+    if not cfg.independent_evaluation:
+        raise ValueError("Final release requires standard independent evaluation")
+    if evaluation_protocol(cfg).manifest() != manifest.get("partitions"):
+        raise ValueError("Standard run partitions differ from frozen manifest")
+    if manifest.get("selected_checkpoint") != "selected-state.pt":
+        raise ValueError("Standard selected endpoint differs from frozen manifest")
+    from .checkpoints import load_model
+
+    # Detect unavailable registered endpoints across all runs before opening any final role.
+    for name in ("baseline-state.pt", "selected-state.pt", "continued-state.pt"):
+        load_model(root / name)
+    if (root / "final-attempt.json").exists() or (root / "final-report.json").exists():
+        raise ValueError("source final evaluation already attempted")
+
+
 def prepare_release(roots: list[Path], path: Path) -> dict[str, Any]:
     if not roots or len({p.resolve() for p in roots}) != len(roots):
         raise ValueError("Unique nonempty final-release runs required")
     rows = []
     for root in roots:
-        validate_frozen_run(root)
-        if (root / "final-attempt.json").exists():
-            raise ValueError("final evaluation already attempted")
+        _standard_release_run(root)
         rows.append(
             {
-                "path": os.path.relpath(root.resolve(), path.parent.resolve()),
+                "path": os.path.relpath(root.resolve(), path.parent.resolve()).replace("\\", "/"),
                 "manifest_sha256": file_hash(root / "selection-frozen.json"),
             }
         )
@@ -278,9 +306,7 @@ def release_final(path: Path, *, authorization: str, digest: str) -> dict[str, A
     for root, row in zip(roots, manifest["runs"], strict=True):
         if file_hash(root / "selection-frozen.json") != row["manifest_sha256"]:
             raise ValueError("Frozen source manifest changed")
-        validate_frozen_run(root)
-        if (root / "final-attempt.json").exists() or (root / "final-report.json").exists():
-            raise ValueError("source final evaluation already attempted")
+        _standard_release_run(root)
     result: dict[str, Any] = {
         "schema_version": "agg.final-release-result/1",
         "authorization": authorization,

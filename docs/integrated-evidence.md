@@ -148,9 +148,17 @@ claim across all mechanisms. These remain audit-only.
 
 Before final inference, require explicit researcher authorization naming this
 release and its SHA256. `release-final --manifest ... --authorization ... --sha256 ...`
-validates every source first, records a one-use attempt before inference, and
+validates every source's standard-run configuration, partitions and loadable
+baseline/selected/continued endpoints first, records a one-use attempt before inference, and
 preserves failures without retries. The authorization is a trusted-host attestation,
 not an authentication service. Unit tests authorize disposable fixtures only.
 The scientific release has not been authorized or evaluated. Prior exploratory
 audits informed infrastructure development; neither those audits nor eventual
-small final measurements warrant confirmatory general claims.
+small final measurements warrant confirmatory general claims. Relative release
+paths use forward slashes for portability across Windows and POSIX systems.
+
+The complete reproduction script was executed through all six components and
+evidence packaging: four integrated cells, eight selection audits, 74 block
+candidates, four resource cells, 120 completed scaling cells and 24 completed
+credit runs. The repeated integrated audit scores and paired effects exactly
+matched the reported four-cell study. No scientific final attempts were made.
