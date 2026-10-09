@@ -117,4 +117,7 @@ See [verification](docs/verification.md) for executed checks and their limits,
 
 The [approved research brief](docs/specs/approved-research-brief.md) preserves the
 full scientific program. Its aspirations are not a list of established results.
+The [research integration baseline](docs/research-integration-audit.md) and
+[staged integration contract](docs/specs/research-integration.md) define the
+independent-evaluation prerequisites for the next research stages.
 Contributions follow [CONTRIBUTING.md](CONTRIBUTING.md). MIT licensed.
