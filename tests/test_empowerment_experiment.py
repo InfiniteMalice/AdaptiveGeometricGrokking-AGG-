@@ -54,3 +54,24 @@ def test_report_replay_scope_reward_controls_and_rng(tmp_path):
 def test_config_rejects_invalid_settings(kwargs):
     with pytest.raises(ValueError):
         EmpowermentConfig(**kwargs)
+
+
+def test_reciprocal_overflow_is_distinct_from_absent_support(tmp_path):
+    result = run_empowerment(
+        EmpowermentConfig(
+            fixtures=("gateway",), exhaustive_fixtures=(), gamma=1e-52, all_starts=False
+        ),
+        tmp_path / "tiny",
+    )
+    row = result["environments"][0]["starts"][0]
+    reasons = row["rollout_hitting_unavailable_reasons"]
+    assert "exceeds_float64_range" in reasons
+    for count, log_count, reason in zip(
+        row["independent_rollout_hitting_counts"],
+        row["log_independent_rollout_hitting_counts"],
+        reasons,
+        strict=True,
+    ):
+        if reason == "exceeds_float64_range":
+            assert count is None and np.isfinite(log_count) and log_count > 709
+    assert (tmp_path / "tiny" / "summary.json").exists()

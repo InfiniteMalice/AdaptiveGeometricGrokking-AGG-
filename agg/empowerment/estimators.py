@@ -51,12 +51,14 @@ def discounted_occupancy(
 
 
 def _divergences(channel: NDArray[np.float64], prior: NDArray[np.float64]) -> NDArray[np.float64]:
-    marginal = prior @ channel
-    logs = np.zeros_like(channel)
+    # Sum in log space: a positive prior*channel product can underflow to zero
+    # even though its logarithm and the resulting information remain finite.
+    logs = np.full_like(channel, -np.inf)
     present = channel > 0
     np.log(channel, out=logs, where=present)
-    log_marginal = np.full_like(marginal, -np.inf)
-    np.log(marginal, out=log_marginal, where=marginal > 0)
+    log_prior = np.full_like(prior, -np.inf)
+    np.log(prior, out=log_prior, where=prior > 0)
+    log_marginal = np.logaddexp.reduce(log_prior[:, None] + logs, axis=0)
     terms = np.zeros_like(channel)
     np.subtract(logs, log_marginal, out=terms, where=present)
     np.multiply(channel, terms, out=terms, where=present)

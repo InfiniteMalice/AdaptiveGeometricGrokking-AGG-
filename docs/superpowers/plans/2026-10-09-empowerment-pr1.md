@@ -31,13 +31,13 @@ Interfaces: `FiniteEnvironment.step`, `distances`, `goal_policies`;
 `channel_capacity(channel,tolerance,max_iterations)`,
 `potential_empowerment(env,start,gamma,mode,max_policies)`.
 
-- [ ] Write tests: fork MI = gamma*ln(2); alternating-chain analytic occupancy;
+- [x] Write tests: fork MI = gamma*ln(2); alternating-chain analytic occupancy;
   gamma=0; invalid probability/indices; immutable transitions; disconnected BFS;
   asymmetric channel capacity ln(1.25), redundant rows, nonconvergence and cap.
-- [ ] Run `python -m pytest tests/test_empowerment.py -q`; observe missing module.
-- [ ] Implement immutable deterministic table, grid/gateway/central/distractor
+- [x] Run `python -m pytest tests/test_empowerment.py -q`; observe missing module.
+- [x] Implement immutable deterministic table, grid/gateway/central/distractor
   fixtures, BFS and graph betweenness, float64 resolvent and channel solver.
-- [ ] Run focused tests, Ruff/mypy, and commit this independently testable unit.
+- [x] Run focused tests, Ruff/mypy, and commit this independently testable unit.
 
 ## Task 2: opt-in report and documentation
 
@@ -45,13 +45,14 @@ Files: `agg/experiments/empowerment.py`, CLI, example config, tests, references,
 `docs/empowerment.md`.
 Interface: `EmpowermentConfig.from_dict`, `run_empowerment(config, output)`.
 
-- [ ] Write report tests: schema roundtrip, deterministic numeric replay, unavailable
+- [x] Write report tests: schema roundtrip, deterministic numeric replay, unavailable
   unreachable distances, actual protocol/cost labels, reward anisotropy, no overwrite.
-- [ ] Observe failing tests, then implement strict config/report with hashes,
+- [x] Observe failing tests, then implement strict config/report with hashes,
   occupancies, priors, reward comparisons and capacity bounds. No training metrics.
-- [ ] Run new CPU smoke twice, compare numerical results, then full pytest/Ruff/mypy.
-- [ ] One fresh whole-branch review; fix material findings with failing regression
+- [x] Run new CPU smoke twice, compare numerical results, then full pytest/Ruff/mypy.
+- [x] One fresh whole-branch review; fix material findings with failing regression
   tests, update actual result documentation, commit and publish stacked PR 1.
 
 Self-review: all PR 1 requirements mapped; optional Gaussian width omitted and
 explicitly scoped; six-stage requirements retained in the linked spec.
+

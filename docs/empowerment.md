@@ -67,7 +67,13 @@ solves and capacity iterations are counted separately. Wall time is observationa
 Seeds, model/partition hashes and sampling uncertainty are unavailable with
 reasons: no model, split or sampling exists here. Deterministic repetitions do not
 provide independent scientific uncertainty. The estimators never access accepted
-models or global RNG. No checkpoint migration or acceptance change is needed.
+models or global RNG. Tiny positive channel probabilities use log-domain marginal
+summation to avoid false zero support. Overflowing reciprocal occupancy is `null`
+with reason `exceeds_float64_range`; its natural logarithm remains available.
+Zero computed occupancy has reason `zero_occupancy_in_float64`, distinct from the
+graph's proof of unreachability. Very small discounted path mass can underflow in
+the float64 occupancy solve; graph reachability remains separately recorded.
+No checkpoint migration or acceptance change is needed.
 
 Direct mathematics: discounted occupancy and finite channel MI/capacity.
 Adapted experiments: topology and anisotropy controls. Graph centrality and rounded

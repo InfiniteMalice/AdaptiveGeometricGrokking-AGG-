@@ -60,6 +60,17 @@ def test_zero_probabilities_and_redundant_skills_are_finite():
     assert channel_capacity([[1]]).converged
 
 
+def test_subnormal_positive_support_never_becomes_infinite_information():
+    tiny = np.nextafter(0.0, 1.0)
+    channel = [[1.0, tiny], [1.0, 0.0]]
+    assert 0 <= effective_information(channel) <= math.log(2)
+    result = channel_capacity(channel)
+    assert np.isfinite(result.upper_nats)
+    assert result.converged
+    value = effective_information([[1, 0, 0], [0, 0.5, 0.5]], [1.0, tiny])
+    assert 0 <= value <= -tiny * math.log(tiny) * 1.01
+
+
 @pytest.mark.parametrize(
     "channel", [[], [[0, 0]], [[-1, 2]], [[float("nan"), 1]], [[0.2, 0.2]], [[1, 0], [1]]]
 )

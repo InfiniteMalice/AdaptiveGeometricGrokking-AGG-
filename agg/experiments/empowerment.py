@@ -83,6 +83,20 @@ def run_empowerment(config: EmpowermentConfig, output: Path) -> dict[str, Any]:
             )
             channel = np.asarray(estimate.occupancies)
             marginal = channel.mean(axis=0)
+            hitting_counts: list[float | None] = []
+            log_counts: list[float | None] = []
+            hitting_reasons: list[str | None] = []
+            for mass in marginal:
+                if mass == 0:
+                    hitting_counts.append(None)
+                    log_counts.append(None)
+                    hitting_reasons.append("zero_occupancy_in_float64")
+                    continue
+                log_counts.append(float(-np.log(mass)))
+                with np.errstate(over="ignore"):
+                    reciprocal = float(1 / mass)
+                hitting_counts.append(reciprocal if np.isfinite(reciprocal) else None)
+                hitting_reasons.append(None if np.isfinite(reciprocal) else "exceeds_float64_range")
             reachable = np.isfinite(distance[start])
             outcome_support = (channel > 0).any(axis=0)
             task_reward = np.zeros(env.n_states)
@@ -98,9 +112,9 @@ def run_empowerment(config: EmpowermentConfig, output: Path) -> dict[str, Any]:
                     "reachable_outcome_coverage": float(outcome_support.sum() / reachable.sum()),
                     "distinct_occupancy_rows": len(np.unique(np.round(channel, 12), axis=0)),
                     "distinct_row_protocol": "float64 occupancies rounded to 12 decimals",
-                    "independent_rollout_hitting_counts": [
-                        float(1 / mass) if mass > 0 else None for mass in marginal
-                    ],
+                    "independent_rollout_hitting_counts": hitting_counts,
+                    "log_independent_rollout_hitting_counts": log_counts,
+                    "rollout_hitting_unavailable_reasons": hitting_reasons,
                     "bottleneck_centrality": float(centrality[start]),
                     "task_reward_vector": task_reward.tolist(),
                     "per_skill_normalized_reward": returns.tolist(),
