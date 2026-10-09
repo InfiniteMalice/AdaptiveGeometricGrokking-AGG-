@@ -12,6 +12,8 @@ def fit_scaling(rows: list[dict[str, Any]], *, seed: int = 0, draws: int = 200) 
     for row in rows:
         if row["fit_role"] not in {"fit", "extrapolation"}:
             raise ValueError("explicit fit/extrapolation role required")
+        if row["parameters"] is None and row["error"] is None:
+            continue
         if (
             type(row["parameters"]) not in (int, float)
             or not math.isfinite(row["parameters"])
@@ -26,10 +28,12 @@ def fit_scaling(rows: list[dict[str, Any]], *, seed: int = 0, draws: int = 200) 
             raise ValueError("error rates must be finite in [0,1] or explicit missing")
     declared_fit = [r for r in rows if r["fit_role"] == "fit"]
     declared_test = [r for r in rows if r["fit_role"] == "extrapolation"]
+    known_fit = [r["parameters"] for r in declared_fit if r["parameters"] is not None]
+    known_test = [r["parameters"] for r in declared_test if r["parameters"] is not None]
     if (
         not declared_fit
         or not declared_test
-        or min(r["parameters"] for r in declared_test) <= max(r["parameters"] for r in declared_fit)
+        or (known_fit and known_test and min(known_test) <= max(known_fit))
     ):
         raise ValueError("held-out configurations must be larger than every fit configuration")
     fitted = [r for r in declared_fit if r["error"] is not None]
