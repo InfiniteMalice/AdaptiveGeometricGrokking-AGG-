@@ -1,0 +1,41 @@
+{
+  "task": "retrieval",
+  "independent_evaluation": true,
+  "data_seed": 73,
+  "training": {
+    "steps": 6,
+    "eval_every": 2,
+    "width": 8,
+    "layers": 1,
+    "heads": 2,
+    "seed": 11,
+    "batch_size": 32
+  },
+  "samples": 32,
+  "context_length": 8,
+  "distance": 2,
+  "dimensions": [
+    4
+  ],
+  "geometries": [
+    "euclidean"
+  ],
+  "candidate_steps": 1,
+  "features": {
+    "telemetry": true,
+    "consolidation": true,
+    "geometry": false,
+    "dimension": false,
+    "gating": false,
+    "distillation": true,
+    "epiplexity": false,
+    "pruning": true,
+    "quantization": false,
+    "storage": false,
+    "executable": false,
+    "teacher": false,
+    "process": false,
+    "verified": false
+  },
+  "telemetry_mode": "attribution"
+}

@@ -125,3 +125,5 @@ The [research integration baseline](docs/research-integration-audit.md) and
 [staged integration contract](docs/specs/research-integration.md) define the
 independent-evaluation prerequisites for the next research stages.
 Contributions follow [CONTRIBUTING.md](CONTRIBUTING.md). MIT licensed.
+
+Independent oracle-validated interventions: [causal evaluation](docs/causal-evaluation.md).

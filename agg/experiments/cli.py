@@ -31,7 +31,15 @@ def main() -> None:
     independent.add_argument("--authorization")
     independent.add_argument("--manifest-sha256")
     independent.add_argument("--bootstrap-seed", type=int, default=0)
+    causal = sub.add_parser("causal", help="report oracle-validated frozen audit interventions")
+    causal.add_argument("--run", type=Path, required=True)
+    causal.add_argument("--seed", type=int, default=0)
     args = parser.parse_args()
+    if args.command == "causal":
+        from .causal import causal_report
+
+        print(json.dumps(causal_report(args.run, seed=args.seed), indent=2))
+        return
     if args.command == "independent":
         from .independent import report_run
 

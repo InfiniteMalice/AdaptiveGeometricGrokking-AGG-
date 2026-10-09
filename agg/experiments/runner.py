@@ -140,6 +140,10 @@ def run_experiment(config: ExperimentConfig, output: Path) -> dict[str, Any]:
     policy = InterventionPolicy(config.training.steps)
 
     def on_checkpoint(step: int, current: nn.Module, metrics: dict[str, Any]) -> None:
+        if config.independent_evaluation:
+            from .checkpoints import save_model
+
+            save_model(current, output / "training" / f"inference-{step}.pt")
         raw: dict[str, Any] = {"task": metrics["train"], "id": metrics["id"], "ood": metrics["ood"]}
         hidden = None
         if config.features.telemetry:
