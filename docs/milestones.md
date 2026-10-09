@@ -79,12 +79,12 @@ contract and tests: [specification](specs/milestones.md).
 ## Executed bounded fixtures
 
 Starting from `configs/causal-smoke.json`, run retrieval with data/model seeds
-83/13 and modular with 84/14, leaving the six-update budget, evaluation interval2
+83/13 and modular with 84/14, leaving the six-update budget, evaluation interval 2
 and two-candidate search unchanged. Freeze both selections before any audit;
-then run causal and independent reports with seed29, followed by milestones.
+then run causal and independent reports with seed 29, followed by milestones.
 These are separate task fixtures, not a matched cross-task superiority comparison.
 
-All four milestones are censored at step6 in both runs. Retrieval milestones
+All four milestones are censored at step 6 in both runs. Retrieval milestones
 remain false; modular retrieval evidence is unavailable because that task has no
 distractor-context intervention. Compression has one terminal observation and
 does not satisfy the definition. No rewards are authorized.
