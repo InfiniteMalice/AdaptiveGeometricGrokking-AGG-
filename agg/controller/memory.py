@@ -54,6 +54,36 @@ class Abstraction:
         json.dumps(asdict(self), allow_nan=False)
 
 
+@dataclass(frozen=True)
+class TransferEvidence:
+    future_block: int
+    standalone: float | None
+    marginal: float | None
+    marginal_lower: float | None
+    source: str
+    feasible: bool
+    oracle_valid: bool
+    role: str = "selection"
+
+    def __post_init__(self) -> None:
+        if (
+            type(self.future_block) is not int
+            or self.future_block < 0
+            or not self.source
+            or type(self.feasible) is not bool
+            or type(self.oracle_valid) is not bool
+            or self.role != "selection"
+        ):
+            raise ValueError(
+                "transfer updates require future selection evidence and explicit validity"
+            )
+        for value in (self.standalone, self.marginal, self.marginal_lower):
+            if value is not None and (
+                type(value) not in (int, float) or not math.isfinite(value) or not -1 <= value <= 1
+            ):
+                raise ValueError("transfer effects and bounds must be finite in [-1,1]")
+
+
 class AbstractionRegistry:
     def __init__(self, activation_threshold: float = 0.7, events: EventLog | None = None):
         if not math.isfinite(activation_threshold) or not 0 <= activation_threshold <= 1:
@@ -130,6 +160,57 @@ class AbstractionRegistry:
             step,
         )
         self._negative_controls[identity] = (false, total)
+
+    def record_transfer(self, identity: str, evidence: TransferEvidence) -> None:
+        """Lagged development curation; activation grants no model mutation authority."""
+        record = self.get(identity)
+        origin = record.provenance.get("source_block")
+        if type(origin) is not int or evidence.future_block <= origin:
+            raise ValueError("transfer must be measured on a later block than its source")
+        if record.status in {"retired", "superseded"}:
+            raise ValueError("retired lessons require a new candidate identity")
+        history = list(record.provenance.get("transfer_history", []))
+        if history and evidence.future_block <= history[-1]["future_block"]:
+            raise ValueError("transfer evaluation blocks must increase")
+        positive = (
+            evidence.standalone is not None
+            and evidence.standalone > 0
+            and evidence.marginal is not None
+            and evidence.marginal > 0
+            and evidence.marginal_lower is not None
+            and evidence.marginal_lower > 0
+            and evidence.feasible
+            and evidence.oracle_valid
+            and bool(record.source_episodes)
+        )
+        negative = evidence.marginal is not None and evidence.marginal < 0
+        status = (
+            "active"
+            if positive
+            else "retired"
+            if negative or not evidence.oracle_valid
+            else "experimental"
+        )
+        history.append({"schema_version": "agg.lagged-transfer/1", **asdict(evidence)})
+        support = record.supporting_episodes + ((evidence.source,) if positive else ())
+        conflict = record.contradicting_episodes + ((evidence.source,) if negative else ())
+        self._write(
+            replace(
+                record,
+                status=status,
+                transfer_utility=evidence.marginal,
+                confidence=1.0 if positive else 0.0,
+                supporting_episodes=tuple(dict.fromkeys(support)),
+                contradicting_episodes=tuple(dict.fromkeys(conflict)),
+                provenance={
+                    **record.provenance,
+                    "transfer_history": history,
+                    "confidence_definition": "binary activation gate; not calibrated probability",
+                },
+                version=record.version + 1,
+            ),
+            evidence.future_block,
+        )
 
     def to_dict(self) -> dict[str, Any]:
         return {
