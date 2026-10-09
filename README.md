@@ -127,3 +127,5 @@ independent-evaluation prerequisites for the next research stages.
 Contributions follow [CONTRIBUTING.md](CONTRIBUTING.md). MIT licensed.
 
 Independent oracle-validated interventions: [causal evaluation](docs/causal-evaluation.md).
+
+Versioned progress hypotheses: [milestone diagnostics](docs/milestones.md).

@@ -128,6 +128,18 @@ def causal_report(output: Path, *, seed: int = 0) -> dict[str, Any]:
                     .int()
                     .tolist()
                 )
+                balanced = (
+                    paired_cluster_comparison(
+                        [0] * len(correct),
+                        correct,
+                        list(getattr(audit, name + "_clusters")),
+                        seed=seed,
+                        labels=getattr(audit, name).y.tolist(),
+                        expected_classes=list(range(protocol.classes)),
+                    )
+                    if config.task == "hierarchy"
+                    else None
+                )
                 measured[name] = {
                     **row,
                     "structural_accuracy": {
@@ -135,6 +147,11 @@ def causal_report(output: Path, *, seed: int = 0) -> dict[str, Any]:
                         "numerator": sum(correct),
                         "denominator": len(correct),
                         "missing_reason": None,
+                        "balanced_value": balanced["effect"] if balanced else None,
+                        "balanced_uncertainty": balanced,
+                        "balanced_missing_reason": (
+                            balanced["unavailable_reason"] if balanced else "not requested for task"
+                        ),
                         "uncertainty": paired_cluster_comparison(
                             [0] * len(correct),
                             correct,
