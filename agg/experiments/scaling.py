@@ -416,7 +416,7 @@ def audit_scaling(output: Path, *, seed: int = 0) -> dict[str, Any]:
                         },
                     }
                 )
-            except (RuntimeError, ValueError, FloatingPointError) as exc:
+            except Exception as exc:
                 row["missing_reason"] = f"{type(exc).__name__}: {exc}"
             finally:
                 if hook is not None:

@@ -101,6 +101,39 @@ def test_constructor_failure_is_recorded_and_does_not_abort_grid(tmp_path, monke
     assert all(not f["available"] for f in failed_group["fit"]["forms"].values())
 
 
+@pytest.mark.parametrize("error_type", [OSError, KeyError, TypeError])
+def test_unexpected_audit_cell_failure_is_recorded_and_later_cells_run(
+    tmp_path, monkeypatch, error_type
+):
+    import json
+
+    import agg.experiments.scaling as scaling
+
+    run = tmp_path / "cell-failure"
+    grid = run_scaling(small_config(geometries=("euclidean", "product")), run)
+    original = scaling.load_model
+    attempted = []
+
+    def failing_load(path):
+        attempted.append(path.name)
+        if path == run / grid["cells"][0]["checkpoint"]:
+            raise error_type("checkpoint unavailable")
+        return original(path)
+
+    monkeypatch.setattr(scaling, "load_model", failing_load)
+    report = audit_scaling(run)
+    failed, *remaining = report["cells"]
+    assert len(attempted) == len(grid["cells"]) == len(report["cells"])
+    assert failed["measurement"] is None and failed["error"] is None
+    assert failed["missing_reason"].startswith(error_type.__name__ + ":")
+    assert "checkpoint unavailable" in failed["missing_reason"]
+    assert failed["audit_budget"]["forward_calls"] == 0
+    assert all(row["measurement"] is not None and row["error"] is not None for row in remaining)
+    assert report["geometry_contrasts"][0]["paired_accuracy"] is None
+    assert json.loads((run / "scaling-audit.json").read_text()) == report
+    assert not (run / "scaling-audit-failure.json").exists()
+
+
 def test_diagnostic_failure_preserves_primary_fit_population(tmp_path, monkeypatch):
     import agg.experiments.scaling as scaling
 

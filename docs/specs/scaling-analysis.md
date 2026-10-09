@@ -29,11 +29,11 @@ freeze/audit protection and actual count tests; 3 CLI/docs CPU smoke, full check
 fresh reviewer, one fix pass, stacked PR. No new dependencies.
 
 
-Concrete default grid: fit widths8/12/16/20, held-out width24; geometry3; seeds17/19;
-training volume16/64 rows from one seed149 protocol; budgets4/8updates; batch16,
-context8, adapterdimension4, fixedgate0.5, learnedcurvature true with matched
-Euclidean bandwidthscalar. 120 independently initialized cells,720updates,92160
-trainingtokens. Default primary response auditOODerror; predeclare forms power
-(log(error)=a+b log(parameters)) and log-linear(error=a+b log(parameters)). Positive-
-error domain failure explicit; no zero substitution. Whole-seed bootstrap200draws;
-with<3seeds intervals descriptive and sparse support explicitlywarned.
+Concrete default grid: fit widths 8/12/16/20, held-out width 24; geometry 3; seeds 17/19;
+training volume 16/64 rows from one seed 149 protocol; budgets 4/8 updates; batch 16,
+context 8, adapter dimension 4, fixed gate 0.5, learned curvature true with matched
+Euclidean bandwidth scalar. 120 independently initialized cells, 720 updates, 92160
+training tokens. Default primary response audit OOD error; predeclare forms power
+(log(error)=a+b log(parameters)) and log-linear (error=a+b log(parameters)). Positive-
+error domain failure explicit; no zero substitution. Whole-seed bootstrap 200 draws;
+with <3 seeds intervals descriptive and sparse support explicitly warned.
