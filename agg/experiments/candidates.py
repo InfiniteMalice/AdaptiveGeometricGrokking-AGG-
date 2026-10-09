@@ -1,6 +1,7 @@
 """Explicit candidate construction and equal-budget fitting."""
 
 import copy
+from collections.abc import Callable
 from typing import Any
 
 import torch
@@ -18,7 +19,12 @@ from .config import ExperimentConfig
 
 
 def fit_candidate(
-    student: nn.Module, teacher: nn.Module, data: TaskData, config: ExperimentConfig, distill: bool
+    student: nn.Module,
+    teacher: nn.Module,
+    data: TaskData,
+    config: ExperimentConfig,
+    distill: bool,
+    optimizer_observer: Callable[[dict[str, Any]], None] | None = None,
 ) -> nn.Module:
     modes = [(module, module.training) for module in teacher.modules()]
     optimizer = torch.optim.AdamW(
@@ -50,6 +56,18 @@ def fit_candidate(
     finally:
         for module, mode in modes:
             module.training = mode
+        if optimizer_observer is not None:
+            optimizer_observer(
+                {
+                    "schema_version": "agg.candidate-optimizer/1",
+                    "optimizer": optimizer.state_dict(),
+                    "model": student.state_dict(),
+                    "batch_rng": generator.get_state(),
+                    "torch_rng": torch.get_rng_state(),
+                    "optimizer_kind": "AdamW",
+                    "resumed_parent_optimizer": False,
+                }
+            )
     return student
 
 
@@ -72,7 +90,13 @@ class ActivationPrecisionModel(nn.Module):
         return (logits, [*hidden[:-1], rounded]) if return_hidden else logits
 
 
-def proposals(model: nn.Module, data: TaskData, config: ExperimentConfig) -> list[Proposal]:
+def proposals(
+    model: nn.Module,
+    data: TaskData,
+    config: ExperimentConfig,
+    *,
+    optimizer_observer: Callable[[dict[str, Any]], None] | None = None,
+) -> list[Proposal]:
     result = []
     f = config.features
     if f.distillation:
@@ -82,7 +106,7 @@ def proposals(model: nn.Module, data: TaskData, config: ExperimentConfig) -> lis
                 "self_distillation",
                 "model",
                 {"steps": config.candidate_steps},
-                lambda m: fit_candidate(m, teacher, data, config, True),
+                lambda m: fit_candidate(m, teacher, data, config, True, optimizer_observer),
             )
         )
     if f.geometry or f.dimension or f.gating:
@@ -111,7 +135,9 @@ def proposals(model: nn.Module, data: TaskData, config: ExperimentConfig) -> lis
                     if not isinstance(m, TinyTransformer):
                         raise TypeError("geometry candidate requires TinyTransformer")
                     student = AdaptedModel(m, adapter)
-                    return fit_candidate(student, model, data, config, f.distillation)
+                    return fit_candidate(
+                        student, model, data, config, f.distillation, optimizer_observer
+                    )
 
                 result.append(
                     Proposal(

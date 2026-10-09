@@ -5,7 +5,7 @@ import math
 import random
 from collections.abc import Callable
 from dataclasses import asdict, dataclass
-from typing import Any
+from typing import Any, Protocol
 
 import numpy as np
 import torch
@@ -30,6 +30,12 @@ class TrialResult:
     reason: str
     before: Evaluation
     after: Evaluation | None
+
+
+class TrialRecorder(Protocol):
+    def begin(self, model: nn.Module, proposal: Proposal, *, run_id: str, step: int) -> int: ...
+    def finish(self, attempt: int, record: dict[str, Any], candidate: nn.Module | None) -> None: ...
+    def fail(self, attempt: int, error: Exception) -> None: ...
 
 
 class InterventionPolicy:
@@ -102,12 +108,20 @@ def trial(
     reference: Evaluation | None = None,
     telemetry_before: dict[str, Any] | None = None,
     observer: Callable[[nn.Module], dict[str, Any]] | None = None,
+    recorder: TrialRecorder | None = None,
+    selection_gain_floor: float | None = None,
 ) -> TrialResult:
     """Evaluate a copy. Rejection never changes the original object or optimizer.
 
     Pass a fixed reference across a sequential sweep to prevent tolerance drift.
     Evaluators should be deterministic and restore train/eval mode.
     """
+    if selection_gain_floor is not None and (
+        type(selection_gain_floor) not in (int, float)
+        or not math.isfinite(selection_gain_floor)
+        or selection_gain_floor < 0
+    ):
+        raise ValueError("selection gain floor must be a finite nonnegative number")
     rng = (random.getstate(), np.random.get_state(), torch.get_rng_state())
     digest_before = state_hash(model)
     after = None
@@ -116,7 +130,10 @@ def trial(
     observed_before = copy.deepcopy(telemetry_before)
     observed_after = None
     cuda_rng = torch.cuda.get_rng_state_all() if torch.cuda.is_available() else None
+    attempt = None
     try:
+        if recorder is not None:
+            attempt = recorder.begin(model, proposal, run_id=run_id, step=step)
         # Reference failures are genuine experiment failures, not candidate rejections.
         # A fresh local measurement is needed even with a fixed acceptance anchor.
         before = evaluator(copy.deepcopy(model))
@@ -129,10 +146,19 @@ def trial(
             if observer is not None:
                 observed_after = copy.deepcopy(observer(copy.deepcopy(candidate)))
             reasons = constraints.violations(anchor, after)
+            if selection_gain_floor is not None:
+                for name in ("id_accuracy", "ood_accuracy"):
+                    gain = getattr(after, name) - getattr(before, name)
+                    if not math.isfinite(gain) or gain <= selection_gain_floor:
+                        reasons.append(f"selection gain does not exceed floor: {name}")
             accepted = not reasons
             reason = "; ".join(reasons) if reasons else "all configured constraints satisfied"
         except Exception as exc:
             reason = f"candidate error: {type(exc).__name__}: {exc}"
+    except Exception as exc:
+        if recorder is not None and attempt is not None:
+            recorder.fail(attempt, exc)
+        raise
     finally:
         random.setstate(rng[0])
         np.random.set_state(rng[1])
@@ -181,6 +207,8 @@ def trial(
     }
     record.update(_observation_deltas(observed_before, observed_after, proposal))
     ledger.append(_finite_json(record))
+    if recorder is not None and attempt is not None:
+        recorder.finish(attempt, _finite_json(record), candidate)
     return TrialResult(retained, accepted, reason, before, after)
 
 

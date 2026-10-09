@@ -23,7 +23,27 @@ def main() -> None:
     matrix.add_argument("--output", type=Path, required=True)
     matrix.add_argument("--execute", action="store_true")
     matrix.add_argument("--steps", type=int, default=100)
+    independent = sub.add_parser(
+        "independent", help="report on frozen audit or authorized final data"
+    )
+    independent.add_argument("--run", type=Path, required=True)
+    independent.add_argument("--role", choices=["audit", "final"], default="audit")
+    independent.add_argument("--authorization")
+    independent.add_argument("--manifest-sha256")
+    independent.add_argument("--bootstrap-seed", type=int, default=0)
     args = parser.parse_args()
+    if args.command == "independent":
+        from .independent import report_run
+
+        report = report_run(
+            args.run,
+            role=args.role,
+            authorization=args.authorization,
+            manifest_sha256=args.manifest_sha256,
+            bootstrap_seed=args.bootstrap_seed,
+        )
+        print(json.dumps(report, indent=2))
+        return
     if args.command == "matrix":
         configs = retrieval_factorial(steps=args.steps)
         args.output.mkdir(parents=True, exist_ok=False)
