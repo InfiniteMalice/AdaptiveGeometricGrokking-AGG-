@@ -23,7 +23,11 @@ Retrieval permutes irrelevant positions (holding the relevant distance fixed) or
 replaces the relevant value. Modular invariance swaps operands; decisive pairs
 replace one operand. Hierarchy pairs replace one queried node, with an unchanged
 or changed ancestry answer. Non-retrieval replacements must exist in the same
-private audit stratum. The hierarchy model has no edge-list input, so arbitrary
+private audit stratum. Generic one-input replacements also require the source
+row's structural cluster; if no eligible same-cluster row exists, the source is
+recorded as missing. In the modular protocol, each cluster is an unordered
+operand pair, so decisive replacements are unavailable under this restriction.
+The hierarchy model has no edge-list input, so arbitrary
 edge edits and graph renaming are unsupported. Context extension is also outside
 this benchmark's fixed positional capacity. No-op rows are missing, never successes.
 

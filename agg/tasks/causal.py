@@ -98,11 +98,14 @@ def intervention_pairs(
             if tuple(candidate.tolist()) not in support:
                 candidate = row.clone()
         else:
-            # Change exactly one operative input, within this private stratum.
+            # Keep replacements inside the source's structural cluster and stratum.
             different = (split.x[:, :2] != row[:2]).sum(1) == 1
             label_match = split.y == split.y[index]
+            same_cluster = torch.tensor(
+                [cluster == clusters[index] for cluster in clusters], device=split.x.device
+            )
             eligible = torch.where(
-                different & (label_match if kind == "invariant" else ~label_match)
+                same_cluster & different & (label_match if kind == "invariant" else ~label_match)
             )[0]
             if len(eligible):
                 choice = int(torch.randint(len(eligible), (), generator=generator))

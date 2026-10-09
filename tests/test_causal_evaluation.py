@@ -150,8 +150,57 @@ def test_frozen_causal_trajectory_is_report_only_and_one_use(tmp_path, monkeypat
 def test_shared_transformation_endpoints_merge_statistical_clusters():
     from agg.tasks.synthetic import Split
 
-    split = Split(torch.tensor([[0, 0, 5], [0, 1, 5], [0, 2, 5]]), torch.tensor([0, 1, 2]))
+    split = Split(torch.tensor([[0, 1, 5], [1, 0, 5]]), torch.tensor([1, 1]))
     pairs = intervention_pairs(
-        split, ("a", "b", "c"), {"task": "modular", "modulus": 5}, kind="decisive", seed=2
+        split, ("a", "b"), {"task": "modular", "modulus": 5}, kind="invariant", seed=2
     )
+    assert len(pairs.original.y) == 2
     assert len(set(pairs.clusters)) == 1
+
+
+@pytest.mark.parametrize(
+    "metadata,kind,rows",
+    [
+        ({"task": "modular", "modulus": 5}, "decisive",
+         [[0, 0, 5], [0, 1, 5], [0, 2, 5], [0, 3, 5]]),
+        ({"task": "hierarchy", "branching": 2, "depth": 2}, "invariant",
+         [[0, 1, 7], [0, 2, 7], [0, 3, 7], [0, 4, 7]]),
+        ({"task": "hierarchy", "branching": 2, "depth": 2}, "decisive",
+         [[1, 3, 7], [1, 2, 7], [1, 4, 7], [1, 5, 7]]),
+    ],
+)
+def test_generic_replacements_use_only_same_cluster_candidates(metadata, kind, rows):
+    from agg.tasks.synthetic import Split
+
+    x = torch.tensor(rows)
+    split = Split(x, oracle(x, metadata))
+    clusters = ("a", "a", "b", "b")
+    for seed in range(8):
+        pairs = intervention_pairs(split, clusters, metadata, kind=kind, seed=seed)
+        assert pairs.source_indices == [0, 1, 2, 3]
+        assert torch.equal(pairs.transformed.x, x[[1, 0, 3, 2]])
+        assert pairs.clusters == clusters
+        assert pairs.missing == []
+
+    # Keep semantically eligible alternatives, but put each in a different cluster.
+    missing = intervention_pairs(split, ("a", "b", "c", "d"), metadata, kind=kind, seed=0)
+    assert missing.attempted == 4
+    assert missing.source_indices == []
+    assert missing.clusters == ()
+    assert len(missing.transformed.y) == 0
+    assert missing.missing == [
+        {"source_index": i, "reason": "no nontrivial supported transform"} for i in range(4)
+    ]
+
+
+def test_modular_decisive_pairs_are_missing_under_unordered_pair_clusters():
+    protocol = make_protocol("modular", seed=31)
+    data = protocol.evaluation("audit")
+    for stratum in ("id", "ood"):
+        split = getattr(data, stratum)
+        pairs = intervention_pairs(
+            split, getattr(data, stratum + "_clusters"), protocol.metadata,
+            kind="decisive", seed=9,
+        )
+        assert len(pairs.original.y) == 0
+        assert len(pairs.missing) == pairs.attempted == len(split.y)
