@@ -36,7 +36,27 @@ def main() -> None:
     causal.add_argument("--seed", type=int, default=0)
     milestones = sub.add_parser("milestones", help="diagnose milestones from frozen audit reports")
     milestones.add_argument("--run", type=Path, required=True)
+    blocks = sub.add_parser("blocks", help="run guarded executable-summary curriculum")
+    blocks.add_argument("--config", type=Path)
+    blocks.add_argument("--output", type=Path, required=True)
+    block_audit = sub.add_parser("block-audit", help="audit a frozen block curriculum")
+    block_audit.add_argument("--run", type=Path, required=True)
+    block_audit.add_argument("--seed", type=int, default=0)
     args = parser.parse_args()
+    if args.command in {"blocks", "block-audit"}:
+        from .blocks import BlockConfig, audit_blocks, run_blocks
+
+        if args.command == "blocks":
+            block_config = (
+                BlockConfig.from_dict(json.loads(args.config.read_text()))
+                if args.config
+                else BlockConfig()
+            )
+            result = run_blocks(block_config, args.output)
+        else:
+            result = audit_blocks(args.run, seed=args.seed)
+        print(json.dumps(result, indent=2))
+        return
     if args.command == "milestones":
         from .milestones import milestone_report
 

@@ -82,3 +82,5 @@ Scientific gate: template-based summaries may prove useless or harmful. Do not
 claim cumulative knowledge accelerates learning from a tiny fixture. Source
 inspiration is Knowledge Weaver's lagged curation idea; no mutual-information
 objective or paper reproduction is claimed.
+
+Cross-depth hierarchy encoding reserves one fixed query symbol above all configured node IDs; raw task oracles retain their native encoding.
