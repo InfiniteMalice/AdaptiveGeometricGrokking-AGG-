@@ -4,6 +4,8 @@ import math
 from dataclasses import asdict, dataclass, field
 from typing import Any
 
+from .resources import ResourceProfile
+
 
 @dataclass(frozen=True)
 class TemporalConfig:
@@ -71,6 +73,7 @@ class ReasoningPolicyConfig:
 
 @dataclass(frozen=True)
 class ControllerConfig:
+    resources: ResourceProfile | None = None
     temporal: TemporalConfig = field(default_factory=TemporalConfig)
     confidence_threshold: float = 0.7
     expensive_confidence: float = 0.9
@@ -101,6 +104,8 @@ class ControllerConfig:
     reasoning: ReasoningPolicyConfig = field(default_factory=ReasoningPolicyConfig)
 
     def __post_init__(self) -> None:
+        if self.resources is not None and not isinstance(self.resources, ResourceProfile):
+            raise ValueError("resources must be ResourceProfile or None")
         if not isinstance(self.reasoning, ReasoningPolicyConfig):
             raise ValueError("reasoning must be ReasoningPolicyConfig")
         if any(
@@ -146,6 +151,8 @@ class ControllerConfig:
     @classmethod
     def from_dict(cls, value: dict[str, Any]) -> "ControllerConfig":
         raw = dict(value)
+        if raw.get("resources") is not None:
+            raw["resources"] = ResourceProfile(**raw["resources"])
         raw["temporal"] = TemporalConfig(**raw.get("temporal", {}))
         raw["reasoning"] = ReasoningPolicyConfig(**raw.get("reasoning", {}))
         if "minimize_metrics" in raw:

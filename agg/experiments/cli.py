@@ -42,7 +42,27 @@ def main() -> None:
     block_audit = sub.add_parser("block-audit", help="audit a frozen block curriculum")
     block_audit.add_argument("--run", type=Path, required=True)
     block_audit.add_argument("--seed", type=int, default=0)
+    resources = sub.add_parser("resources", help="run measured resource controller comparison")
+    resources.add_argument("--config", type=Path)
+    resources.add_argument("--output", type=Path, required=True)
+    resource_audit = sub.add_parser("resource-audit", help="audit frozen resource comparison")
+    resource_audit.add_argument("--run", type=Path, required=True)
+    resource_audit.add_argument("--seed", type=int, default=0)
     args = parser.parse_args()
+    if args.command in {"resources", "resource-audit"}:
+        from .resources import ResourceConfig, audit_resources, run_resources
+
+        if args.command == "resources":
+            resource_config = (
+                ResourceConfig.from_dict(json.loads(args.config.read_text()))
+                if args.config
+                else ResourceConfig()
+            )
+            result = run_resources(resource_config, args.output)
+        else:
+            result = audit_resources(args.run, seed=args.seed)
+        print(json.dumps(result, indent=2))
+        return
     if args.command in {"blocks", "block-audit"}:
         from .blocks import BlockConfig, audit_blocks, run_blocks
 
