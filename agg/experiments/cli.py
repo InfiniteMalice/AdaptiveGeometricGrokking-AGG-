@@ -40,7 +40,14 @@ def main() -> None:
     causal = sub.add_parser("causal", help="report oracle-validated frozen audit interventions")
     causal.add_argument("--run", type=Path, required=True)
     causal.add_argument("--seed", type=int, default=0)
+    milestones = sub.add_parser("milestones", help="diagnose milestones from frozen audit reports")
+    milestones.add_argument("--run", type=Path, required=True)
     args = parser.parse_args()
+    if args.command == "milestones":
+        from .milestones import milestone_report
+
+        print(json.dumps(milestone_report(args.run), indent=2))
+        return
     if args.command == "causal":
         from .causal import causal_report
 
