@@ -1,0 +1,18 @@
+{
+  "data_seed": 101,
+  "model_seed": 17,
+  "samples": 16,
+  "steps": 2,
+  "batch_size": 16,
+  "width": 8,
+  "heads": 2,
+  "bootstrap_seed": 31,
+  "blocks": [
+    {"task": "retrieval", "length": 8, "distance": 2, "density": 0.2},
+    {"task": "retrieval", "length": 10, "distance": 3, "density": 0.8},
+    {"task": "retrieval", "length": 12, "distance": 4, "density": 0.5},
+    {"task": "hierarchy", "depth": 4},
+    {"task": "hierarchy", "depth": 5},
+    {"task": "modular", "modulus": 17}
+  ]
+}

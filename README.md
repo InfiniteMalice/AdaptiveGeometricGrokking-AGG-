@@ -129,3 +129,5 @@ Contributions follow [CONTRIBUTING.md](CONTRIBUTING.md). MIT licensed.
 Independent oracle-validated interventions: [causal evaluation](docs/causal-evaluation.md).
 
 Versioned progress hypotheses: [milestone diagnostics](docs/milestones.md).
+
+Lagged task-rule curation and matched learning: [block-summary benchmark](docs/block-learning.md).
