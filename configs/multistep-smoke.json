@@ -1,0 +1,1 @@
+{"horizons":[3,5],"seeds":[3,5,7],"episodes":64,"rounds":8,"inner_steps":8,"gamma":0.9,"delta":0.02}

@@ -133,3 +133,4 @@ Versioned progress hypotheses: [milestone diagnostics](docs/milestones.md).
 Lagged task-rule curation and matched learning: [block-summary benchmark](docs/block-learning.md).
 `docs/resource-control.md` describes the opt-in measured four-arm resource controller benchmark.
 `docs/scaling-analysis.md` documents controlled geometry scaling, held-out larger-model extrapolation and explicit compute limits.
+`docs/multistep-credit.md` describes the isolated finite-MDP k-step objective and its inconclusive coupling results.
