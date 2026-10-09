@@ -140,6 +140,13 @@ def run_experiment(config: ExperimentConfig, output: Path) -> dict[str, Any]:
     policy = InterventionPolicy(config.training.steps)
 
     def on_checkpoint(step: int, current: nn.Module, metrics: dict[str, Any]) -> None:
+        """Record enabled telemetry and consolidation triggers at a training step.
+
+        ``step`` counts completed optimizer updates, including zero before
+        training; ``metrics`` supplies train, ID, and OOD evaluations. Independent
+        evaluation also saves ``training/inference-{step}.pt`` for later audits.
+        Snapshot validation and write errors propagate to the training caller.
+        """
         if config.independent_evaluation:
             from .checkpoints import save_model
 

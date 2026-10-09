@@ -17,6 +17,24 @@ def intervention_metrics(
     kind: str,
     seed: int,
 ) -> dict[str, Any]:
+    """Measure aligned predictions against oracle labels in one ID/OOD stratum.
+
+    ``before`` and ``after`` are predictions for original and transformed rows;
+    ``original`` and ``transformed`` are their correct labels. ``kind`` requires
+    equal labels for ``invariant`` pairs and different labels for ``decisive``
+    pairs. ``clusters`` names dependent rows; a nonnegative integer ``seed``
+    controls whole-cluster bootstrap resampling.
+
+    Rates are fractions with explicit counts and descriptive uncertainty.
+    Required updates condition transformed correctness on original correctness;
+    failure recovery conditions it on original error. An empty conditional
+    denominator gives a None value and a missing reason. Inapplicable metrics
+    are None, and fewer than two eligible clusters leaves intervals unavailable.
+    Paired accuracy change is transformed minus original accuracy.
+
+    Raise ValueError for empty or misaligned inputs, invalid classes or label
+    relations, or invalid cluster names or seed passed to the bootstrap helper.
+    """
     if (
         kind not in {"invariant", "decisive"}
         or not original
@@ -33,6 +51,7 @@ def intervention_metrics(
     flip = p != q
 
     def rate(values, mask=None):
+        """Summarize eligible binary outcomes, retaining empty-denominator missingness."""
         mask = np.ones(len(y), dtype=bool) if mask is None else mask
         selected = values[mask].astype(int).tolist()
         selected_clusters = np.asarray(clusters)[mask].tolist()

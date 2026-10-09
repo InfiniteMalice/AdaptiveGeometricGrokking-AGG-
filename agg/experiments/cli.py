@@ -10,6 +10,12 @@ from .runner import run_experiment, write_json
 
 
 def main() -> None:
+    """Parse process arguments and run an experiment, matrix, or frozen report.
+
+    Commands write artifacts to the requested directory and print a JSON
+    result or matrix status. Argument parsing exits for help or invalid usage;
+    configuration, execution, and reporting errors propagate to the caller.
+    """
     parser = argparse.ArgumentParser(description="Adaptive Geometric Grokking research harness")
     sub = parser.add_subparsers(dest="command", required=True)
     run = sub.add_parser("run", help="run one declarative experiment")

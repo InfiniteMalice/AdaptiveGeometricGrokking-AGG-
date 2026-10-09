@@ -10,6 +10,18 @@ from .synthetic import Split
 
 
 def oracle(x: Tensor, metadata: dict[str, Any]) -> Tensor:
+    """Decode one semantic label per token row without using stored labels.
+
+    ``metadata`` supplies ``task`` and its parameters: ``modulus`` for modular
+    sums, ``branching`` and ``depth`` for strict ancestry in a fixed tree, or
+    ``keys`` and ``values`` for retrieval of the unique queried memory's value.
+    Rows must be nonempty, two-dimensional ``torch.long`` inputs with the task's
+    query token in the last column. Hierarchy labels use the default device.
+
+    Raise ValueError for unsupported tasks, rejected token layouts or ranges,
+    or retrieval rows without exactly one relevant memory. Missing metadata
+    keys propagate KeyError.
+    """
     if x.ndim != 2 or x.dtype != torch.long or len(x) == 0:
         raise ValueError("oracle requires nonempty integer token rows")
     task = metadata["task"]
@@ -69,6 +81,24 @@ class InterventionPairs:
 def intervention_pairs(
     split: Split, clusters: tuple[str, ...], metadata: dict[str, Any], *, kind: str, seed: int
 ) -> InterventionPairs:
+    """Build oracle-validated pairs that preserve or change the correct answer.
+
+    ``kind`` is ``invariant`` or ``decisive``; ``seed`` controls random choices.
+    ``clusters`` aligns with source rows and identifies structural groups.
+    Retrieval permutes irrelevant positions or cycles the relevant value;
+    modular invariance swaps operands only when the result is in ``split``.
+    Other cases replace one input using a row with the required label relation
+    in the same source cluster. The source tensors are left unchanged.
+
+    Return retained pairs, source indices, and a missing entry for each row
+    without a nontrivial transform; all rows count toward ``attempted``.
+    Non-retrieval pairs merge clusters connected by transformation endpoints.
+    If no transforms qualify, the returned splits and clusters are empty.
+
+    Raise ValueError for an invalid kind, misaligned clusters, source labels
+    that disagree with the oracle, or a failed transformed-label check.
+    Oracle and random-generator errors propagate.
+    """
     if kind not in {"invariant", "decisive"} or len(clusters) != len(split.y):
         raise ValueError("aligned clusters and invariant/decisive kind required")
     original_labels = oracle(split.x, metadata)
@@ -131,6 +161,7 @@ def intervention_pairs(
     parents = {cluster: cluster for cluster in clusters}
 
     def root(cluster: str) -> str:
+        """Return the representative of a connected group of source clusters."""
         while parents[cluster] != cluster:
             cluster = parents[cluster]
         return cluster

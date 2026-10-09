@@ -18,6 +18,14 @@ from .independent import file_hash, validate_frozen_run
 
 
 def phase_checkpoints(steps: list[int], crossing: dict[str, Any] | None) -> dict[str, Any]:
+    """Map available training steps to phases around a confirmed proxy crossing.
+
+    ``steps`` should be chronological: choose the last entry strictly before
+    ``stable_crossing``, the first in the inclusive onset-to-confirmation window,
+    and the first strictly after ``confirmation_step``. Preserve ``crossing``
+    in the result. Missing onset, confirmation, or eligible checkpoints yields
+    None steps with reasons; no crossing is inferred from the available steps.
+    """
     result: dict[str, Any] = {"crossing": crossing, "proxy": True}
     onset = crossing.get("stable_crossing") if crossing else None
     confirmed = crossing.get("confirmation_step") if crossing else None
@@ -41,6 +49,11 @@ def phase_checkpoints(steps: list[int], crossing: dict[str, Any] | None) -> dict
 
 @torch.no_grad()
 def _predictions(model: nn.Module, x: torch.Tensor) -> list[int]:
+    """Return argmax classes without gradients, leaving the model in eval mode.
+
+    Raise FloatingPointError for nonfinite logits; model execution errors
+    propagate.
+    """
     model.eval()
     logits = model(x)
     if not bool(torch.isfinite(logits).all()):
@@ -49,6 +62,12 @@ def _predictions(model: nn.Module, x: torch.Tensor) -> list[int]:
 
 
 def _measure(model: nn.Module, pairs: InterventionPairs, seed: int) -> dict[str, Any]:
+    """Return pair metrics, raw observations, and transformation missingness.
+
+    Empty pairs yield None metrics and observations without running the model.
+    Otherwise leave the model in eval mode and use ``seed`` for uncertainty.
+    Prediction and metric-validation errors propagate to the caller.
+    """
     metrics = None
     observations = None
     if len(pairs.original.y):
@@ -78,6 +97,24 @@ def _measure(model: nn.Module, pairs: InterventionPairs, seed: int) -> dict[str,
 
 
 def causal_report(output: Path, *, seed: int = 0) -> dict[str, Any]:
+    """Audit a frozen run's inference checkpoints and selected model once.
+
+    ``output`` is an existing independent-evaluation run directory. ``seed``
+    controls intervention choices and bootstrap uncertainty. Return the report
+    also written to ``causal-report.json``, using audit ID/OOD data only.
+    Phase links use successfully measured training checkpoints; runs without
+    inference snapshots retain a selected-model measurement and missing trajectory.
+
+    Create ``causal-attempt.json`` before accessing audit data; it prevents
+    retries even after failure. Raise ValueError for a seed that is not a
+    nonnegative integer, an existing attempt/report, invalid frozen artifacts,
+    or mismatched partitions. Configuration and file-access errors propagate.
+
+    ValueError, RuntimeError, and FloatingPointError from individual trajectory
+    measurements become missing results. Selected-model failures and other
+    errors after the attempt is written are recorded in ``causal-failures.jsonl``
+    and re-raised; failure-recording errors can also propagate.
+    """
     from .runner import evaluation_protocol
 
     if type(seed) is not int or seed < 0:
@@ -116,6 +153,11 @@ def causal_report(output: Path, *, seed: int = 0) -> dict[str, Any]:
         }
 
         def measure(filename: str) -> dict[str, Any]:
+            """Load a frozen artifact and return audit ID/OOD intervention metrics.
+
+            Raise ValueError if the relative filename is absent from the manifest;
+            loading and measurement errors propagate for the caller to handle.
+            """
             if filename not in manifest["artifacts"]:
                 raise ValueError("checkpoint not frozen")
             model = load_model(output / filename)
@@ -217,4 +259,9 @@ def causal_report(output: Path, *, seed: int = 0) -> dict[str, Any]:
 
 
 def _predictions_tensor(model: nn.Module, x: torch.Tensor) -> torch.Tensor:
+    """Return class predictions as a new tensor on the default device.
+
+    Leave the model in eval mode; propagate prediction errors, including
+    FloatingPointError for nonfinite logits.
+    """
     return torch.tensor(_predictions(model, x))
