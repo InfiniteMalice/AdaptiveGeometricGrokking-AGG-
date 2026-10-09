@@ -52,9 +52,16 @@ def evaluation_protocol(config: ExperimentConfig):
     if not config.independent_evaluation or config.data_seed is None:
         raise ValueError("independent evaluation and data_seed must be configured")
     return make_protocol(
-        config.task, seed=config.data_seed, modulus=config.modulus, depth=config.tree_depth,
-        samples=config.samples, length=config.context_length, distance=config.distance,
-        density=config.density, hard=config.hard_distractors,
+        config.task,
+        seed=config.data_seed,
+        modulus=config.modulus,
+        depth=config.tree_depth,
+        samples=config.samples,
+        length=config.context_length,
+        distance=config.distance,
+        density=config.density,
+        hard=config.hard_distractors,
+        selection_samples=config.selection_samples,
     )
 
 
@@ -200,6 +207,15 @@ def run_experiment(config: ExperimentConfig, output: Path) -> dict[str, Any]:
     evaluator = make_evaluator(model, data)
 
     anchor = evaluator(model)
+    recorder = None
+    if config.independent_evaluation:
+        from .checkpoints import save_model
+        from .independent import CandidateRecorder
+
+        save_model(model, output / "baseline-state.pt")
+        recorder = CandidateRecorder(
+            output, parent_checkpoint=output / "training" / f"checkpoint-{config.training.steps}.pt"
+        )
     retained = model
     ledger = Ledger(output / "ledger.jsonl")
     candidate_gates: list[dict[str, Any]] = []
@@ -259,6 +275,8 @@ def run_experiment(config: ExperimentConfig, output: Path) -> dict[str, Any]:
                 step=config.training.steps,
                 reference=anchor,
                 observer=measured if config.features.telemetry else None,
+                recorder=recorder,
+                selection_gain_floor=config.selection_gain_floor,
             )
             if proposal.kind == "geometry" and result.accepted and config.features.gating:
                 candidate_gates.extend(
@@ -267,11 +285,19 @@ def run_experiment(config: ExperimentConfig, output: Path) -> dict[str, Any]:
                 )
             return result
 
+        def stage_proposals(base: nn.Module, stage: ExperimentConfig):
+            return proposals(
+                base,
+                data,
+                stage,
+                optimizer_observer=recorder.record_optimizer if recorder is not None else None,
+            )
+
         # Every stage compares to the original capability anchor. Within a stage,
         # independent candidates share the same input checkpoint and random state.
         if config.features.distillation:
             stage = replace(config, features=replace(Features.baseline(), distillation=True))
-            for proposal in proposals(retained, data, stage):
+            for proposal in stage_proposals(retained, stage):
                 result = execute(proposal, retained)
                 retained = result.model
         if config.features.geometry or config.features.dimension or config.features.gating:
@@ -282,7 +308,7 @@ def run_experiment(config: ExperimentConfig, output: Path) -> dict[str, Any]:
                 ),
             )
             candidates = []
-            for proposal in proposals(retained, data, stage):
+            for proposal in stage_proposals(retained, stage):
                 result = execute(proposal, retained)
                 if result.accepted:
                     candidates.append((proposal.state["dimension"], result))
@@ -299,12 +325,12 @@ def run_experiment(config: ExperimentConfig, output: Path) -> dict[str, Any]:
                 )[1].model
         if config.features.pruning:
             stage = replace(config, features=replace(Features.baseline(), pruning=True))
-            for proposal in proposals(retained, data, stage):
+            for proposal in stage_proposals(retained, stage):
                 retained = execute(proposal, retained).model
         if config.features.quantization:
             stage = replace(config, features=replace(Features.baseline(), quantization=True))
             grouped: dict[str, list[Proposal]] = {}
-            for proposal in proposals(retained, data, stage):
+            for proposal in stage_proposals(retained, stage):
                 grouped.setdefault(proposal.component, []).append(proposal)
             precision_order = {
                 "FP32": 32.0,
@@ -463,4 +489,8 @@ def run_experiment(config: ExperimentConfig, output: Path) -> dict[str, Any]:
         "scientific_status": "software smoke/research run; hypotheses unestablished",
     }
     write_json(output / "summary.json", summary)
+    if config.independent_evaluation:
+        from .independent import freeze_run
+
+        freeze_run(output, evaluation_protocol(config).manifest())
     return summary

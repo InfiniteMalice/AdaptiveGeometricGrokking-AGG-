@@ -59,8 +59,12 @@ class EvaluationProtocol:
 
         selection = self.evaluation("selection")
         return TaskData(
-            copy.deepcopy(self._roles["training"].combined()), selection.id, selection.ood,
-            self.vocab_size, self.classes, copy.deepcopy(self.metadata),
+            copy.deepcopy(self._roles["training"].combined()),
+            selection.id,
+            selection.ood,
+            self.vocab_size,
+            self.classes,
+            copy.deepcopy(self.metadata),
         )
 
     def manifest(self) -> dict[str, Any]:
@@ -106,22 +110,39 @@ def _grouped(
         parts = []
         clusters = []
         for is_ood in (False, True):
-            indices = [i for i in usable if assignments[str(groups[i])] == role
-                       and bool(ood[i]) == is_ood]
+            indices = [
+                i for i in usable if assignments[str(groups[i])] == role and bool(ood[i]) == is_ood
+            ]
             if not indices and not (modular and role == "training" and is_ood):
                 raise ValueError("too few structures in an ID/OOD stratum")
             parts.append(Split(source.x[indices], source.y[indices]))
             clusters.append(tuple(str(groups[i]) for i in indices))
         result[role] = RoleData(parts[0], parts[1], clusters[0], clusters[1])
-    return EvaluationProtocol(result, data.vocab_size, data.classes, {
-        **data.metadata, "evaluation_protocol": "structural-four-role/1", "data_seed": seed,
-        "group_rule": "unordered operand pair" if modular else "disjoint depth-two subtrees",
-    })
+    return EvaluationProtocol(
+        result,
+        data.vocab_size,
+        data.classes,
+        {
+            **data.metadata,
+            "evaluation_protocol": "structural-four-role/1",
+            "data_seed": seed,
+            "group_rule": "unordered operand pair" if modular else "disjoint depth-two subtrees",
+        },
+    )
 
 
 def make_protocol(
-    task: str, *, seed: int, modulus: int = 17, depth: int = 3, samples: int = 128,
-    length: int = 12, distance: int = 3, density: float = 0.5, hard: bool = False,
+    task: str,
+    *,
+    seed: int,
+    modulus: int = 17,
+    depth: int = 3,
+    samples: int = 128,
+    length: int = 12,
+    distance: int = 3,
+    density: float = 0.5,
+    hard: bool = False,
+    selection_samples: int | None = None,
 ) -> EvaluationProtocol:
     if type(seed) is not int or not 0 <= seed < 2**32 - 4:
         raise ValueError("data seed must be an integer in [0, 2**32-4)")
@@ -132,8 +153,8 @@ def make_protocol(
         ood = (source.x[:, :2] >= int(0.8 * modulus)).all(1)
         return _grouped(data, groups, ood, seed, modular=True)
     if task == "hierarchy":
-        if depth < 3:
-            raise ValueError("protected hierarchy requires depth >= 3")
+        if depth < 4:
+            raise ValueError("protected hierarchy requires depth >= 4 for both ID classes")
         data = hierarchy(depth=depth, seed=seed)
         source = _join([data.train, data.id, data.ood])
 
@@ -161,9 +182,19 @@ def make_protocol(
     role_data = {}
     metadata = {}
     for index, role in enumerate(ROLES):
-        keys = key_order[4 * index:4 * index + 4]
-        data = retrieval(samples=samples, length=length, distance=distance, density=density,
-                         hard=hard, seed=seed + index, keys=4)
+        keys = key_order[4 * index : 4 * index + 4]
+        count = (
+            selection_samples if role == "selection" and selection_samples is not None else samples
+        )
+        data = retrieval(
+            samples=count,
+            length=length,
+            distance=distance,
+            density=density,
+            hard=hard,
+            seed=seed + index,
+            keys=4,
+        )
         id_split = _join([data.train, data.id])
         ood_split = data.ood
         clusters = []
@@ -178,10 +209,17 @@ def make_protocol(
                 split.x[local_query == local, -1] = 65 + global_key
         role_data[role] = RoleData(id_split, ood_split, *clusters)
         metadata = data.metadata
-    return EvaluationProtocol(role_data, 81, 4, {
-        **metadata, "keys": 16, "data_seed": seed,
-        "evaluation_protocol": "structural-four-role/1",
-        "group_rule": "disjoint query and distractor key vocabularies",
-        "id_rule": "unseen role keys at configured distance; mixed values",
-        "ood_rule": "same role keys at longer distance; generator reserved values",
-    })
+    return EvaluationProtocol(
+        role_data,
+        81,
+        4,
+        {
+            **metadata,
+            "keys": 16,
+            "data_seed": seed,
+            "evaluation_protocol": "structural-four-role/1",
+            "group_rule": "disjoint query and distractor key vocabularies",
+            "id_rule": "unseen role keys at configured distance; mixed values",
+            "ood_rule": "same role keys at longer distance; generator reserved values",
+        },
+    )

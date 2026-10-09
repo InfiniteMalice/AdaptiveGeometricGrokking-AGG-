@@ -40,13 +40,13 @@ Produces: role-tagged `EvaluationProtocol`, `RoleData`, deterministic factory,
 development `TaskData`, serializable partition manifest; separate `data_seed`.
 Consumes: existing synthetic generators and tensor types.
 
-- [ ] Write tests for reproducibility, disjoint commuted modular groups, disjoint
+- [x] Write tests for reproducibility, disjoint commuted modular groups, disjoint
   hierarchy subtrees, retrieval keys including distractors, inadequate groups,
   and no protected tensors in the development interface.
-- [ ] Run focused tests and observe missing API failure.
-- [ ] Implement deterministic grouping and typed opt-in config; leave legacy
+- [x] Run focused tests and observe missing API failure.
+- [x] Implement deterministic grouping and typed opt-in config; leave legacy
   `make_data` unchanged when disabled. Use structural strata for ID/OOD.
-- [ ] Run focused tests, then full pytest, Ruff and mypy; commit.
+- [x] Run focused tests, then full pytest, Ruff and mypy; commit.
 
 ### Task 2: Candidate attempt records and frozen checkpoints
 
@@ -57,13 +57,13 @@ Produces: append-only attempt/result records, candidate checkpoint artifacts,
 frozen run manifest; parent/optimizer/budget provenance and reuse counts.
 Consumes: existing `trial`, `state_hash`, `save_model`, `Ledger`.
 
-- [ ] Test accepted, rejected, apply-failed and baseline-evaluator-failed attempts;
+- [x] Test accepted, rejected, apply-failed and baseline-evaluator-failed attempts;
   verify the original checkpoint/hash and RNG remain unchanged.
-- [ ] Observe failure; add optional attempt sink and candidate snapshot hook.
+- [x] Observe failure; add optional attempt sink and candidate snapshot hook.
   Persist intent before work and outcomes without changing legacy ledger schema.
-- [ ] Freeze all artifact hashes after the selector completes. Serialize failures
+- [x] Freeze all artifact hashes after the selector completes. Serialize failures
   as null scores with reasons. Validate manifest integrity before reporting.
-- [ ] Run focused tests and complete repository checks; commit.
+- [x] Run focused tests and complete repository checks; commit.
 
 ### Task 3: Independent paired reporting and explicit final evaluation
 
@@ -73,14 +73,14 @@ CLI, protocol tests and `docs/independent-evaluation.md`; add small config.
 Produces: selection/audit gaps, paired cluster-bootstrap summaries, separate
 authorized final report. Consumes: frozen manifests, checkpoint loader, role data.
 
-- [ ] Test an oracle, constant-wrong predictions, unequal cluster sizes, one
+- [x] Test an oracle, constant-wrong predictions, unequal cluster sizes, one
   cluster, paired ordering, final authorization denial, stale artifacts, and audit
   invariance of selected checkpoint.
-- [ ] Observe failures; implement reports with explicit estimand, seed, counts,
+- [x] Observe failures; implement reports with explicit estimand, seed, counts,
   uncertainty and missingness. Prevent final access without authorization.
-- [ ] Train a tiny real model, run bounded candidates and independent audit,
+- [x] Train a tiny real model, run bounded candidates and independent audit,
   validate rejected/failed accounting, then explicitly evaluate fixture final data.
-- [ ] Record commands/results/limits, run full checks and a fresh branch review;
+- [x] Record commands/results/limits, run full checks and a fresh branch review;
   commit and open PR-1 against PR-0. No automatic merge.
 
 ### Later-stage handoff

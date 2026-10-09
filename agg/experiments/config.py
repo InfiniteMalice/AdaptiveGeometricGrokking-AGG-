@@ -57,6 +57,8 @@ class ExperimentConfig:
     storage_objective: str = "bytes"
     independent_evaluation: bool = False
     data_seed: int | None = None
+    selection_samples: int | None = None
+    selection_gain_floor: float | None = None
 
     def __post_init__(self) -> None:
         if type(self.independent_evaluation) is not bool:
@@ -67,6 +69,20 @@ class ExperimentConfig:
             type(self.data_seed) is not int or not 0 <= self.data_seed < 2**32 - 4
         ):
             raise ValueError("data_seed must be an integer in [0, 2**32-4)")
+        if self.selection_samples is not None and (
+            not self.independent_evaluation
+            or self.task != "retrieval"
+            or type(self.selection_samples) is not int
+            or self.selection_samples < 10
+        ):
+            raise ValueError("selection_samples requires independent retrieval and count >= 10")
+        if self.selection_gain_floor is not None and (
+            not self.independent_evaluation
+            or type(self.selection_gain_floor) not in (int, float)
+            or not math.isfinite(self.selection_gain_floor)
+            or self.selection_gain_floor < 0
+        ):
+            raise ValueError("selection_gain_floor requires independent evaluation and finite >= 0")
         if self.task not in {"modular", "hierarchy", "retrieval"}:
             raise ValueError("task must be modular, hierarchy, or retrieval")
         if not self.dimensions or any(d < 1 or d > self.training.width for d in self.dimensions):

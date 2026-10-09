@@ -20,7 +20,12 @@ def test_modular_commuted_structures_never_cross_roles():
     assert protocol.manifest() == make_protocol("modular", seed=31, modulus=17).manifest()
     assert protocol.manifest() != make_protocol("modular", seed=32, modulus=17).manifest()
     assert set(vars(protocol.development())) == {
-        "train", "id", "ood", "vocab_size", "classes", "metadata"
+        "train",
+        "id",
+        "ood",
+        "vocab_size",
+        "classes",
+        "metadata",
     }
 
 
@@ -52,8 +57,11 @@ def test_retrieval_all_keys_including_distractors_respect_roles(density):
         query_keys = split.x[:, -1] - 65
         key_sets.append(set(memory_keys.tolist()) | set(query_keys.tolist()))
         for row, target, key in zip(split.x, split.y, query_keys, strict=True):
-            found = [int((token - 1) % 4) for token in row[:-1]
-                     if token > 0 and int((token - 1) // 4) == int(key)]
+            found = [
+                int((token - 1) % 4)
+                for token in row[:-1]
+                if token > 0 and int((token - 1) // 4) == int(key)
+            ]
             assert found == [int(target)]
     assert all(not a & b for a, b in combinations(key_sets, 2))
     for role in ("selection", "audit", "final"):
@@ -67,6 +75,8 @@ def test_too_few_structures_fail_instead_of_random_row_fallback():
         make_protocol("modular", seed=1, modulus=5)
     with pytest.raises(ValueError, match="depth"):
         make_protocol("hierarchy", seed=1, depth=2)
+    with pytest.raises(ValueError, match="depth"):
+        make_protocol("hierarchy", seed=1, depth=3)
 
 
 def test_data_seed_is_independent_and_legacy_defaults_preserved():

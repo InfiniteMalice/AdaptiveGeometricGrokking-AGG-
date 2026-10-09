@@ -57,6 +57,10 @@ zero-distractor cases cannot reuse exact training rows as held-out observations.
 
 These ID/OOD partitions are **development validation sets** used by candidate
 selection. Final scientific claims require untouched test sets and new seeds.
+The opt-in [independent evaluation protocol](docs/independent-evaluation.md)
+adds structural training/selection/audit/final roles, separate task/model seeds,
+complete attempt accounting and frozen checkpoint reports. Legacy runs retain
+the development partitions described above.
 
 ## What a run records
 
