@@ -48,7 +48,29 @@ def main() -> None:
     resource_audit = sub.add_parser("resource-audit", help="audit frozen resource comparison")
     resource_audit.add_argument("--run", type=Path, required=True)
     resource_audit.add_argument("--seed", type=int, default=0)
+    scaling = sub.add_parser("scaling", help="train controlled small/larger geometry grid")
+    scaling.add_argument("--config", type=Path)
+    scaling.add_argument("--output", type=Path, required=True)
+    scaling_audit = sub.add_parser(
+        "scaling-audit", help="audit frozen grid and fit small-only scaling forms"
+    )
+    scaling_audit.add_argument("--run", type=Path, required=True)
+    scaling_audit.add_argument("--seed", type=int, default=0)
     args = parser.parse_args()
+    if args.command in {"scaling", "scaling-audit"}:
+        from .scaling import ScalingConfig, audit_scaling, run_scaling
+
+        if args.command == "scaling":
+            scaling_config = (
+                ScalingConfig.from_dict(json.loads(args.config.read_text()))
+                if args.config
+                else ScalingConfig()
+            )
+            result = run_scaling(scaling_config, args.output)
+        else:
+            result = audit_scaling(args.run, seed=args.seed)
+        print(json.dumps(result, indent=2))
+        return
     if args.command in {"resources", "resource-audit"}:
         from .resources import ResourceConfig, audit_resources, run_resources
 
