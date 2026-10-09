@@ -29,17 +29,32 @@ def write_json(path: Path, value: Any) -> None:
 
 
 def make_data(config: ExperimentConfig) -> TaskData:
+    if config.independent_evaluation:
+        return evaluation_protocol(config).development()
+    data_seed = config.training.seed if config.data_seed is None else config.data_seed
     if config.task == "modular":
-        return modular_addition(config.modulus, seed=config.training.seed)
+        return modular_addition(config.modulus, seed=data_seed)
     if config.task == "hierarchy":
-        return hierarchy(depth=config.tree_depth, seed=config.training.seed)
+        return hierarchy(depth=config.tree_depth, seed=data_seed)
     return retrieval(
         samples=config.samples,
         length=config.context_length,
         distance=config.distance,
         density=config.density,
         hard=config.hard_distractors,
-        seed=config.training.seed,
+        seed=data_seed,
+    )
+
+
+def evaluation_protocol(config: ExperimentConfig):
+    from agg.tasks.protocol import make_protocol
+
+    if not config.independent_evaluation or config.data_seed is None:
+        raise ValueError("independent evaluation and data_seed must be configured")
+    return make_protocol(
+        config.task, seed=config.data_seed, modulus=config.modulus, depth=config.tree_depth,
+        samples=config.samples, length=config.context_length, distance=config.distance,
+        density=config.density, hard=config.hard_distractors,
     )
 
 
