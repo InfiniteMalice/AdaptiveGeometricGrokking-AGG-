@@ -12,6 +12,9 @@ from .runner import run_experiment, write_json
 def main() -> None:
     parser = argparse.ArgumentParser(description="Adaptive Geometric Grokking research harness")
     sub = parser.add_subparsers(dest="command", required=True)
+    empowerment = sub.add_parser("empowerment", help="calculate finite-MDP empowerment references")
+    empowerment.add_argument("--config", type=Path)
+    empowerment.add_argument("--output", type=Path, required=True)
     run = sub.add_parser("run", help="run one declarative experiment")
     run.add_argument("--config", type=Path)
     run.add_argument("--task", choices=["modular", "hierarchy", "retrieval"])
@@ -75,6 +78,15 @@ def main() -> None:
     final.add_argument("--authorization", required=True)
     final.add_argument("--sha256", required=True)
     args = parser.parse_args()
+    if args.command == "empowerment":
+        from .empowerment import EmpowermentConfig, run_empowerment
+
+        empowerment_config = (
+            EmpowermentConfig.from_dict(json.loads(args.config.read_text()))
+            if args.config else EmpowermentConfig()
+        )
+        print(json.dumps(run_empowerment(empowerment_config, args.output), indent=2))
+        return
     if args.command in {"integration", "evidence-bundle", "prepare-release", "release-final"}:
         from .integration import (
             IntegrationConfig,

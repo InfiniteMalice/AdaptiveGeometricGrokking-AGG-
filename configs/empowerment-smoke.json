@@ -1,0 +1,9 @@
+{
+  "fixtures": ["fork", "grid", "gateway", "central", "distractors"],
+  "exhaustive_fixtures": ["fork"],
+  "gamma": 0.9,
+  "all_starts": true,
+  "max_policies": 4096,
+  "capacity_tolerance": 1e-9,
+  "capacity_iterations": 20000
+}

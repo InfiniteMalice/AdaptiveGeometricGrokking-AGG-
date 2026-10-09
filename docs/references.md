@@ -123,6 +123,27 @@ relevant stage. No empirical paper result below is claimed for AGG.
     below was based on v1; the new registry records v2 without retroactively
     claiming that implementation reproduced v2.
 
+## Empowerment and exploratory learning extension
+
+12. Ji, C., Myers, V., Levine, S., & Eysenbach, B. (2026).
+    *The geometry of empowerment* (arXiv:2610.07796v2). arXiv.
+    https://arxiv.org/abs/2610.07796v2
+
+    Direct mathematics: discounted occupancy and finite channel information in
+    `agg/empowerment/estimators.py`. Adapted controls and limits appear in
+    [empowerment.md](empowerment.md). This is not a full experimental reproduction.
+
+13. Cloos, N., Norelli, A., Durbin, D., Andreas, J., Rus, D., & Isola, P. (2026).
+    *Is this machine playing?* (arXiv:2610.07130v1). arXiv.
+    https://arxiv.org/abs/2610.07130v1
+
+    Adapted motivation for bounded exploration and causal memory tests in the
+    [staged design](specs/empowerment-play.md). External memory and weight updates
+    remain distinct. PR 1 implements no play or memory mechanism and claims no
+    reproduction of Eko or Clawblox.
+
+Checked 2026-10-09: main papers, methods, limitations and relevant appendices.
+
 ## Earlier implementation provenance
 
 Gong, Z., Hou, Y., Zeng, Z., Xiao, M., Yuen, C., & Lim, W. Y. B. (2026).
