@@ -2,6 +2,9 @@
 
 **Understand → Restructure → Compress → Verify**
 
+Opt-in [finite empowerment references](docs/empowerment.md) begin the
+[six-stage empowerment and exploratory-learning plan](docs/specs/empowerment-play.md).
+
 AGG is a small PyTorch research framework for testing whether deliberate
 consolidation helps models discover reusable representations and whether those
 representations tolerate geometry changes and compression. Capability preservation
