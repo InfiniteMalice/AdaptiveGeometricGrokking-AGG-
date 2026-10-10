@@ -39,3 +39,4 @@ Sweep dimensions `{8, 16, 32, 64, 128}` only where width permits; the compact de
 ## Reporting
 
 Retain configs, seeds, environment versions, checkpoints, telemetry, ledger decisions and storage timings. Report effect distributions, compute cost, missing observations and independent test results. `candidate_changes` supplies exploratory adjacent-window shifts, `telemetry_redundancy` supplies Pearson correlations, and `phase_surface` retains seed censoring. These helpers do not establish transitions or causal effects. Multi-seed grokking reproduction and trained-agent credit comparisons remain scientific experiments.
+`integrated-evidence.md` records the executed PR0–PR8 fixtures, exact contrasts and protected release procedure; these short runs do not establish the substantive hypotheses above.
