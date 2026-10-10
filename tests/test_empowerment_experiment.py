@@ -1,10 +1,47 @@
 import json
 import random
+from dataclasses import replace
 
 import numpy as np
 import pytest
 
 from agg.experiments.empowerment import EmpowermentConfig, run_empowerment
+
+
+def test_policy_cap_rejects_before_output_and_allows_retry(tmp_path):
+    output = tmp_path / "nested" / "run"
+    config = EmpowermentConfig(
+        fixtures=("grid", "fork"),
+        exhaustive_fixtures=("fork",),
+        max_policies=7,
+        all_starts=False,
+    )
+    with pytest.raises(ValueError, match="8 policies exceed enumeration cap 7"):
+        run_empowerment(config, output)
+    assert not output.exists()
+    assert not (output / "config.json").exists()
+    assert not output.parent.exists()
+
+    result = run_empowerment(replace(config, max_policies=8), output)
+    assert result["environments"][1]["starts"][0]["policy_count"] == 8
+    assert (output / "summary.json").exists()
+
+
+def test_all_exhaustive_caps_are_checked_before_measurements(tmp_path, monkeypatch):
+    import agg.experiments.empowerment as empowerment
+
+    def unexpected_measurement(*args, **kwargs):
+        pytest.fail("measurement started before all policy caps were checked")
+
+    monkeypatch.setattr(empowerment, "potential_empowerment", unexpected_measurement)
+    config = EmpowermentConfig(
+        fixtures=("fork", "grid"), exhaustive_fixtures=("fork", "grid"), max_policies=8
+    )
+    output = tmp_path / "run"
+    with pytest.raises(ValueError, match="15625 policies exceed enumeration cap 8"):
+        run_empowerment(config, output)
+    assert not output.exists()
+    assert not (output / "config.json").exists()
 
 
 def test_report_replay_scope_reward_controls_and_rng(tmp_path):

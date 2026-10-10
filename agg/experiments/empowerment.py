@@ -61,6 +61,11 @@ class EmpowermentConfig:
 
 
 def run_empowerment(config: EmpowermentConfig, output: Path) -> dict[str, Any]:
+    for name in config.exhaustive_fixtures:
+        env = fixture(name)
+        total = env.n_actions**env.n_states
+        if total > config.max_policies:
+            raise ValueError(f"{total} policies exceed enumeration cap {config.max_policies}")
     output.mkdir(parents=True, exist_ok=False)
     write_json(output / "config.json", config.to_dict())
     started = time.perf_counter()
